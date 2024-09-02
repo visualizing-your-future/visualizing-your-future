@@ -13,7 +13,7 @@ const NavBar = () => {
   const { currentUser } = useTracker(() => ({
     currentUser: Meteor.user() ? Meteor.user().username : '',
   }), []);
-  const menuStyle = { marginBottom: '10px' };
+  const menuStyle = { marginBottom: '0px' };
   return (
     <Navbar bg="light" expand="lg" style={menuStyle}>
       <Container>
