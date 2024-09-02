@@ -1,22 +1,29 @@
 import React from 'react';
-import { Col, Container, Image, Row } from 'react-bootstrap';
+import { Col, Container, Row, Button } from 'react-bootstrap';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
-/* A simple static component to render some text for the landing page. */
-const Landing = () => (
-  <Container id={PAGE_IDS.LANDING} className="py-3">
-    <Row className="align-middle text-center">
-      <Col xs={4}>
-        <Image roundedCircle src="/images/meteor-logo.png" width="150px" />
-      </Col>
+const Landing = () => {
+  const landingStyle = {
+    backgroundImage: 'url(/images/LandingPageBackground.png)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    height: '100',
+    color: 'black',
+  };
 
-      <Col xs={8} className="d-flex flex-column justify-content-center">
-        <h1>Welcome to Spire</h1>
-        <p>Work in Progress...</p>
-      </Col>
-
-    </Row>
-  </Container>
-);
+  return (
+    <Container id={PAGE_IDS.LANDING} style={landingStyle} fluid>
+      <Row className="align-items-center text-center vh-100">
+        <Col xs={12}>
+          <h1 className="mt-4">Welcome to Spire</h1>
+          <p className="lead">Discover. Innovate. Grow.</p>
+          <Button variant="primary" size="lg" className="button-square mt-3" id="button-square">
+            Learn More
+          </Button>
+        </Col>
+      </Row>
+    </Container>
+  );
+};
 
 export default Landing;

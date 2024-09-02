@@ -26,3 +26,22 @@ body {
   padding-top: 10px;
   padding-bottom: 20px;
 }
+
+
+/* Button Styles for Landing Page*/
+#button-square {
+  background-color: #e64b37; /* Your desired button background color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 0; /* This makes the button square */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Adds a shadow */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+#button-square:hover {
+  background-color: #C9302C !important; /* Darker shade on hover */
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important; /* Slightly larger shadow on hover */
+}
