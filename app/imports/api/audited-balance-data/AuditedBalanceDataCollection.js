@@ -94,7 +94,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
   /**
    * Subscription method for AuditedBalanceData owned by the current user.
    */
-  subscribeStuff() {
+  subscribeABD() {
     if (Meteor.isClient) {
       return Meteor.subscribe(auditedBalanceDataPublications.auditedBalanceData);
     }
@@ -105,7 +105,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
    * Subscription method for admin users.
    * It subscribes to the entire collection.
    */
-  subscribeStuffAdmin() {
+  subscribeABDAdmin() {
     if (Meteor.isClient) {
       return Meteor.subscribe(auditedBalanceDataPublications.auditedBalanceDataAdmin);
     }

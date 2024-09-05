@@ -2,19 +2,19 @@ import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { NumField } from 'uniforms-bootstrap5';
 import { useTracker } from 'meteor/react-meteor-data';
-import { Stuffs } from '../../api/stuff/StuffCollection';
-import StuffItem from '../components/StuffItem';
+import { AuditedBalanceData } from '../../api/audited-balance-data/AuditedBalanceDataCollection';
+// import StuffItem from '../components/StuffItem';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
 const DataInput = () => {
   // useTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker
-  const { ready, stuffs } = useTracker(() => {
-    const subscription = Stuffs.subscribeStuff();
+  const { ready, abd } = useTracker(() => {
+    const subscription = AuditedBalanceData.subscribeABD();
     const rdy = subscription.ready();
-    const stuffItems = Stuffs.find({}, { sort: { name: 1 } }).fetch();
+    const abdItems = AuditedBalanceData.find({}, { sort: { name: 1 } }).fetch();
     return {
-      stuffs: stuffItems,
+      abd: abdItems,
       ready: rdy,
     };
   }, []);
@@ -53,6 +53,9 @@ const DataInput = () => {
           </Row>
         </Col>
         <Col className="col-lg-9">
+          <Row className="pt-4">
+            Test
+          </Row>
         </Col>
       </Row>
     </Container>
