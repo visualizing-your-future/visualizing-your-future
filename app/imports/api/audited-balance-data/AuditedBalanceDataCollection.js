@@ -133,6 +133,13 @@ class AuditedBalanceDataCollection extends BaseCollection {
     const owner = doc.owner;
     return { cashStuff, owner };
   }
+
+  sum(arr) {
+    if (Array.isArray(arr)) {
+      return arr.reduce((acc, num) => acc + num, 0);
+    }
+    throw new Error('Input must be an array of numbers.');
+  }
 }
 
 /**
