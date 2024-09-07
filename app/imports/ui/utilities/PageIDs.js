@@ -4,6 +4,7 @@ export const PAGE_IDS = {
   EDIT_STUFF: 'edit-stuff',
   LANDING: 'landing',
   LIST_STUFF: 'list-stuff',
+  DATA_STUFF: 'data-stuff',
   LIST_STUFF_ADMIN: 'list-stuff-admin',
   MANAGE_DATABASE: 'manage-database',
   NOT_AUTHORIZED: 'not-authorized',
