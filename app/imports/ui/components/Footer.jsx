@@ -11,7 +11,7 @@ const Footer = () => {
           Department of Information and Computer Sciences <br />
           University of Hawaii<br />
           Honolulu, HI 96822 <br />
-          <a href="http://ics-software-engineering.github.io/meteor-application-template-production">Template Home Page</a>
+          <a href="https://visualizing-your-future.github.io/">Visualizing Your Future- Home Page</a>
         </Col>
       </Container>
     </footer>
