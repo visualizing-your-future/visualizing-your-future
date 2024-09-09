@@ -6,6 +6,7 @@ export const PAGE_IDS = {
   LIST_STUFF: 'list-stuff',
   DATA_STUFF: 'data-stuff',
   LIST_STUFF_ADMIN: 'list-stuff-admin',
+  LIST_PROFILES: 'list-profiles',
   MANAGE_DATABASE: 'manage-database',
   NOT_AUTHORIZED: 'not-authorized',
   NOT_FOUND: 'not-found',
