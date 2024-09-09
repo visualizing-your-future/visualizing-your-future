@@ -29,7 +29,11 @@ Important functionalities include:
   `meteor --version`
 
 ## Installation
-1) Clone the repository.
+
+### *** IMPORTANT ***<br><br>The default admin login is very weak.  We highly recommend creating a new admin account and deleting the default admin.
+### Default admin account login:<br><br>`username: admin@foo.com`<br><br> `password: changeme`<br><br>
+
+1) Clone this repository.
 2) Open a command prompt.
 3) Go into the "app" directory.<br>
 `cd app`
@@ -37,7 +41,7 @@ Important functionalities include:
 `npm run start`<br>
 "start" is a script that runs the following command:<br>
 `meteor --no-release-check --exclude-archs web.browser.legacy,web.cordova --settings ../config/settings.development.json`
-5) If you wish to revert to a clean install, type the following:<br>
+6) If you wish to revert to a clean install, type the following:<br>
 `meteor reset`
 
 ## Uploading Excel Files
