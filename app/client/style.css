@@ -26,3 +26,105 @@ body {
   padding-top: 10px;
   padding-bottom: 20px;
 }
+/* Landing page container */
+#landing-page-container {
+  position: relative;
+  justify-content: center;
+  text-align: center;
+  z-index: 1;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 50vh; /* Remove height constraints */
+  padding-bottom: 0;
+}
+
+/* Apply opacity to the background image only using ::before */
+#landing-page-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Cover the entire container */
+  background-image: url('/images/LandingPageBackground.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.4; /* 40% opacity */
+  z-index: 0;
+}
+
+/* Ensure content appears on top of the background */
+#landing-page-container .container {
+  position: relative;
+  z-index: 1; /* Make sure content is on top of the background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 0;
+  color: black;
+}
+
+/* Why Spire Section with better spacing */
+.why-spire-section {
+  background-color: #f9f9f9;
+  padding: 40px 0; /* Increase padding for breathing room */
+  text-align: center;
+}
+
+/* Text styling for headings */
+.why-spire-section h2 {
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.why-spire-section p {
+  color: #666;
+  margin-bottom: 0;
+  line-height: 1.6; /* Better readability */
+}
+
+/* Service Column */
+.service-column {
+
+  padding-top: 20px;
+  text-align: center; /* Center the content horizontally */
+}
+
+/* Center the bullet points */
+.service-column ul {
+  list-style-position: inside; /* Keep bullets inside the content */
+  display: inline-block; /* Allows the content to be treated as a block */
+  text-align: left; /* Align the text within the block */
+  padding-left: 0; /* Remove default padding */
+  margin: 0 auto; /* Ensure the block is centered */
+}
+
+.service-column ul li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #555;
+}
+
+
+/* Button Styles for Landing Page*/
+#button-square {
+  background-color: #e64b37; /* Your desired button background color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 0; /* This makes the button square */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Adds a shadow */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+}
+
+#button-square:hover {
+  background-color: #C9302C !important; /* Darker shade on hover */
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important; /* Slightly larger shadow on hover */
+}
