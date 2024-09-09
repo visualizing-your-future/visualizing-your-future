@@ -25,7 +25,7 @@ const ClientDataImport = () => {
     <Row className="justify-content-center">
       <Col lg={12}>
         <Col className="text-center">
-          <h2>Client Data</h2>
+          <h1>Client Data</h1>
         </Col>
         <FileInput />
       </Col>

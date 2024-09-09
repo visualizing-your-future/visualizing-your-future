@@ -45,13 +45,13 @@ const FileInput = () => {
       <Container fluid>
         <Row>
           <Col>
-            <h2>Import file</h2>
+            <h3>Import file</h3>
             <input type="file" accept=".xlsm, .xslx" onChange={handleFileChange} />
           </Col>
           <Col>
             {fileSelected && (
               <>
-                <h2>Select sheet</h2>
+                <h3>Select sheet</h3>
                 {sheetNames.length > 0 && (
                   <select onChange={handleSheetChange} value={selectedSheet}>
                     {sheetNames.map((name) => (
