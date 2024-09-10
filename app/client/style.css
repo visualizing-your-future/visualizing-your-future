@@ -1,81 +1,119 @@
-/* Use Open Sans as the default sans serif font. */
+/* Import Fonts */
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,700|Source+Code+Pro:300,400,500,700");
 
-/* Set up some CSS variables to theme the application. */
+/* Variables */
 :root {
-  --matr-navbar-bg: #ECECEC;
-  --matr-navbar-bg-rgb: 236, 236, 236;
+  --matr-navbar-bg: #ffffff;
 }
 
-/* Change bootstrap variable values.
- See https://getbootstrap.com/docs/5.2/customize/css-variables/
- */
+/* Align logo and text horizontally */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+/* Style text next to logo */
+.navbar-brand .logo-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: 'Open Sans', sans-serif;
+  color: #333;
+}
+
+/* Red button for login dropdown */
+.custom-login-button .dropdown-toggle {
+  background-color: #e64b37;
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  width: 150px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.custom-login-button .dropdown-toggle:hover {
+  background-color: #C9302C;
+}
+
+/* Dropdown styling */
+.custom-login-button .dropdown-menu {
+  border: none;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.custom-login-button .dropdown-item {
+  padding: 10px 20px;
+  font-weight: bold;
+}
+
+.custom-login-button .dropdown-item.active {
+  background-color: #e64b37 !important;
+  color: white;
+}
+
+/* Global Bootstrap Variable */
 body {
   --bs-light-rgb: var(--matr-navbar-bg-rgb);
 }
 
-/* Set the SignIn and SignUp alerts background. */
+/* Set alerts background for SignIn/SignUp */
 #signin-page .alert-light, #signup-page .alert-light {
   --bs-alert-bg: var(--matr-navbar-bg);
 }
 
-/* Define custom styles */
+/* General Gray Background Style */
 .gray-background {
   background-color: var(--bs-gray-200);
   color: var(--bs-dark);
-  padding-top: 10px;
-  padding-bottom: 20px;
+  padding: 10px 0;
 }
-/* Landing page container */
+
+/* Landing page container styling */
 #landing-page-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   text-align: center;
   z-index: 1;
   color: black;
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  min-height: 50vh; /* Remove height constraints */
-  padding-bottom: 0;
+  min-height: 50vh;
 }
 
-/* Apply opacity to the background image only using ::before */
 #landing-page-container::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%; /* Cover the entire container */
-  background-image: url('/images/LandingPageBackground.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.4; /* 40% opacity */
+  height: 100%;
+  background: url('/images/LandingPageBackground.png') center/cover no-repeat;
+  opacity: 0.4;
   z-index: 0;
 }
 
-/* Ensure content appears on top of the background */
 #landing-page-container .container {
   position: relative;
-  z-index: 1; /* Make sure content is on top of the background */
+  z-index: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding-bottom: 0;
   color: black;
 }
 
-/* Why Spire Section with better spacing */
+/* Why Spire Section */
 .why-spire-section {
   background-color: #f9f9f9;
-  padding: 40px 0; /* Increase padding for breathing room */
+  padding: 40px 0;
   text-align: center;
 }
 
-/* Text styling for headings */
 .why-spire-section h2 {
   color: #333;
   font-size: 2rem;
@@ -85,23 +123,21 @@ body {
 .why-spire-section p {
   color: #666;
   margin-bottom: 0;
-  line-height: 1.6; /* Better readability */
+  line-height: 1.6;
 }
 
-/* Service Column */
+/* Service Column with centered bullet points */
 .service-column {
-
   padding-top: 20px;
-  text-align: center; /* Center the content horizontally */
+  text-align: center;
 }
 
-/* Center the bullet points */
 .service-column ul {
-  list-style-position: inside; /* Keep bullets inside the content */
-  display: inline-block; /* Allows the content to be treated as a block */
-  text-align: left; /* Align the text within the block */
-  padding-left: 0; /* Remove default padding */
-  margin: 0 auto; /* Ensure the block is centered */
+  list-style-position: inside;
+  display: inline-block;
+  text-align: left;
+  padding-left: 0;
+  margin: 0 auto;
 }
 
 .service-column ul li {
@@ -110,21 +146,20 @@ body {
   color: #555;
 }
 
-
-/* Button Styles for Landing Page*/
+/* Button Styles for Landing Page */
 #button-square {
-  background-color: #e64b37; /* Your desired button background color */
+  background-color: #e64b37;
   color: white;
   border: none;
   padding: 10px 20px;
   text-transform: uppercase;
   font-weight: bold;
-  border-radius: 0; /* This makes the button square */
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Adds a shadow */
-  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+  border-radius: 0;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 #button-square:hover {
-  background-color: #C9302C !important; /* Darker shade on hover */
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important; /* Slightly larger shadow on hover */
+  background-color: #C9302C !important;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
 }
