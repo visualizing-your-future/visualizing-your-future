@@ -5,23 +5,29 @@ import { UserProfiles } from '../../api/user/UserProfileCollection';
 import ProfileItem from '../components/ProfileItem';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
+import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 
 /* Renders a table containing all of the Users documents. Use <StuffItemAdmin> to render each row. */
 const ListProfiles = () => {
   // useTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker
-  const { profiles, ready } = useTracker(() => {
-    // Get access to Users documents.
-    const subscription = UserProfiles.subscribeProfileAdmin();
-    // Determine if the subscription is ready
-    const rdy = subscription.ready();
+  const { userProfileItems, adminProfileItems, userSubReady, adminSubReady } = useTracker(() => {
+    // Get access to Users and Admins documents.
+    const userSub = UserProfiles.subscribeProfileAdmin();
+    const adminSub = AdminProfiles.subscribeAdmin();
+    // Determine if subscriptions are ready
+    const userSubRdy = userSub.ready();
+    const adminSubRdy = adminSub.ready();
     // Get the Users documents
-    const items = UserProfiles.find({}).fetch();
+    const usrProfiles = UserProfiles.find({}).fetch();
+    const admProfiles = AdminProfiles.find({}).fetch();
     return {
-      profiles: items,
-      ready: rdy,
+      userProfileItems: usrProfiles,
+      adminProfileItems: admProfiles,
+      userSubReady: userSubRdy,
+      adminSubReady: adminSubRdy,
     };
   }, []);
-  return (ready ? (
+  return ((userSubReady && adminSubReady) ? (
     <Container id={PAGE_IDS.LIST_PROFILES} className="py-3">
       <Row className="justify-content-center">
         <Col md={7}>
@@ -35,7 +41,8 @@ const ListProfiles = () => {
               </tr>
             </thead>
             <tbody>
-              {profiles.map((profile) => <ProfileItem key={profile._id} profile={profile} />)}
+              {userProfileItems.map((profile) => <ProfileItem key={profile._id} profile={profile} />)}
+              {adminProfileItems.map((profile) => <ProfileItem key={profile._id} profile={profile} />)}
             </tbody>
           </Table>
         </Col>

@@ -96,6 +96,17 @@ class UserProfileCollection extends BaseProfileCollection {
   }
 
   /**
+   * Subscription method for users.
+   * It subscribes to the entire collection?
+   */
+  subscribeProfileUser() {
+    if (Meteor.isClient) {
+      return Meteor.subscribe(profilePublications.profile);
+    }
+    return null;
+  }
+
+  /**
    * Subscription method for admin users.
    * It subscribes to the entire collection.
    */
