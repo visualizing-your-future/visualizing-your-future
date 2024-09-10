@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Alert, Card, Col, Container, FormLabel, Row } from 'react-bootstrap';
+import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import { AutoForm, ErrorsField, SubmitField, TextField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, SubmitField, TextField, RadioField } from 'uniforms-bootstrap5';
 /* import select from 'uniforms-bootstrap5/src/SelectField'; */
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
@@ -18,14 +18,31 @@ import { defineMethod } from '../../api/base/BaseCollection.methods';
 const SignUp = () => {
   const [error, setError] = useState('');
   const [redirectToReferer, setRedirectToRef] = useState(false);
+  const [accountType, setAccountType] = useState(''); // State to track selected account type
+  const handleAccountTypeChange = (Client) => {
+    setAccountType(Client); // Update account type when a radio option is selected
+  };
 
   const schema = new SimpleSchema({
     firstName: String,
     lastName: String,
     email: String,
-    type: String,
-    client_key: String,
     password: String,
+    accountType: {
+      type: String,
+      allowedValues: ['Accountant', 'Client'],
+      label: 'Account Type: ',
+    },
+    clientKey: {
+      type: String,
+      optional: true, // Make clientKey optional initially
+      custom() {
+        if (this.field('accountType').value === 'Client' && !this.value) {
+          return 'required';
+        }
+        return undefined;
+      },
+    },
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
@@ -33,6 +50,12 @@ const SignUp = () => {
   const submit = (doc) => {
     const collectionName = UserProfiles.getCollectionName();
     const definitionData = doc;
+
+    if (doc.accountType === 'Client' && !doc.clientKey) {
+      setError('Client key is required for account type Client');
+      return; // Stop submission if clientKey is missing
+    }
+
     // create the new UserProfile
     defineMethod.callPromise({ collectionName, definitionData })
       .then(() => {
@@ -68,15 +91,20 @@ const SignUp = () => {
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME} name="firstName" placeholder="First name" />
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME} name="lastName" placeholder="Last name" />
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL} name="email" placeholder="E-mail address" />
-                <RatioField></RatioField>
-                <FormLabel id={COMPONENT_IDS.SIGN_UP_ACCOUNT_TYPE} name="accountType">
-                  <span>Account Type: </span>
-                  <select name="account-type">
-                    <option value="Client">Client</option>
-                    <option value="Accountant">Accountant</option>
-                  </select>
-                </FormLabel>
-                options={[{ label: 'Client', value: 'client' }, { label: 'Accountant', value: 'accountant' }]}
+
+                <RadioField
+                  id={COMPONENT_IDS.SIGN_UP_FORM_ACCOUNT_TYPE_OPTION}
+                  name="accountType"
+                  onChange={handleAccountTypeChange}
+                />
+                {accountType === 'Client' && (
+                  <TextField
+                    id={COMPONENT_IDS.SIGN_UP_FORM_CLIENT_KEY}
+                    name="clientKey"
+                    placeholder="ex: EKIJTODS"
+                  />
+                )}
+
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_PASSWORD} name="password" placeholder="Password" type="password" />
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SIGN_UP_FORM_SUBMIT} />
