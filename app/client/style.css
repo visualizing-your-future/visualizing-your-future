@@ -27,4 +27,82 @@ body {
   padding-bottom: 20px;
 }
 
+/* Footer Styles */
+.footer {
+  background-color: #f9f9f9;
+  padding: 40px 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.footer h5 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.footer ul {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.footer ul li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #555;
+}
+
+.footer a {
+  color: #e64b37;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: #C9302C;
+}
+
+.footer .list-inline-item a {
+  font-size: 1.5rem;
+  color: #555;
+}
+
+.footer .list-inline-item a:hover {
+  color: #e64b37;
+}
+
+.footer-logo {
+  width: 80px;
+  height: auto;
+  margin: 10px;
+  transition: transform 0.3s ease;
+}
+
+.footer-logo:hover {
+  transform: scale(1.1);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.footer address {
+  font-style: normal;
+  color: #666;
+}
+
+.footer hr {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.footer .py-3 {
+  color: #666;
+  font-size: 0.9rem;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.footer img {
+  max-width: 100%;
+}
 
