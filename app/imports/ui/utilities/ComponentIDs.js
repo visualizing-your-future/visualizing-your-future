@@ -24,7 +24,6 @@ export const COMPONENT_IDS = {
   SIGN_UP_FORM_EMAIL: 'sign-up-form-email',
   SIGN_UP_FORM_PASSWORD: 'sign-up-form-password',
   SIGN_UP_FORM_SUBMIT: 'sign-up-form-submit',
-
   CHANGE_ACCOUNT_FIRST_NAME: 'change-account-first-name',
   CHANGE_ACCOUNT_LAST_NAME: 'change-account-last-name',
   SAVE_ACCOUNT_CHANGES: 'save-account-changes',
