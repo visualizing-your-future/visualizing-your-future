@@ -30,12 +30,12 @@ const Home = () => {
           <div>See details per client here.</div>
           <Row className="d-flex justify-content-center">
             <Col xs={4}>
-              <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary">
+              <Button id="importDataButton" onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary">
                 Import Data
               </Button>
             </Col>
             <Col xs={4}>
-              <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary">
+              <Button id="viewDataButton" onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary">
                 View Financials
               </Button>
             </Col>
