@@ -11,7 +11,8 @@ import { COMPONENT_IDS } from '../imports/ui/utilities/ComponentIDs';
 /** Credentials for one of the sample users defined in settings.development.json. */
 const credentials = { username: 'john@foo.com', password: 'changeme' };
 const adminCredentials = { username: 'admin@foo.com', password: 'changeme' };
-const newCredentials = { username: 'jane@foo.com', password: 'changeme' };
+const newCredentialsAccountant = { username: 'jane@foo.com', password: 'changeme', accountType: 'Accountant', clientKey: '' };
+const newCredentialsClient = { username: 'howdy@foo.com', password: 'changeme', accountType: 'Client', clientKey: 'EKIJTODS' };
 
 fixture('meteor-application-template-production localhost test with default db')
   .page('http://localhost:3000');
@@ -40,15 +41,26 @@ test('Test that user pages show up', async () => {
   const editLinks = await Selector(`.${COMPONENT_IDS.LIST_STUFF_EDIT}`);
   await t.click(editLinks.nth(0));
   await editStuffPage.isDisplayed();
+  // await navBar.gotoClientDataPage();
+  // await clientDataPage.isDisplayed();
   await navBar.logout();
   await signOutPage.isDisplayed();
 });
 
-test('Test that sign up and sign out work', async () => {
+test('Test that sign up for accountant and sign out work', async () => {
   await navBar.gotoSignUpPage();
   await signUpPage.isDisplayed();
-  await signUpPage.signupUser(newCredentials.username, newCredentials.password);
-  await navBar.isLoggedIn(newCredentials.username);
+  await signUpPage.signupUser(newCredentialsAccountant.username, newCredentialsAccountant.password, newCredentialsAccountant.accountType, newCredentialsAccountant.clientKey);
+  await navBar.isLoggedIn(newCredentialsAccountant.username);
+  await navBar.logout();
+  await signOutPage.isDisplayed();
+});
+
+test('Test that sign up for client and sign out work', async () => {
+  await navBar.gotoSignUpPage();
+  await signUpPage.isDisplayed();
+  await signUpPage.signupUser(newCredentialsClient.username, newCredentialsClient.password, newCredentialsClient.accountType, newCredentialsClient.clientKey);
+  await navBar.isLoggedIn(newCredentialsClient.username);
   await navBar.logout();
   await signOutPage.isDisplayed();
 });

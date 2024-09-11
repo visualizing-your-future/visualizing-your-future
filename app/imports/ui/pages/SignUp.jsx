@@ -93,7 +93,7 @@ const SignUp = () => {
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME} name="lastName" placeholder="Last name" />
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL} name="email" placeholder="E-mail address" />
 
-                <RadioField id={COMPONENT_IDS.SIGN_UP_FORM_ACCOUNT_TYPE_OPTION} name="accountType" />
+                <RadioField id={COMPONENT_IDS.SIGN_UP_FORM_ACCOUNT_TYPE_OPTION} name="accountType" type="radio" />
 
                 {formModel.accountType === 'Client' && (
                   <TextField

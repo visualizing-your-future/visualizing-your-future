@@ -3,7 +3,7 @@ export const PAGE_IDS = {
   ADD_STUFF: 'add-stuff',
   EDIT_STUFF: 'edit-stuff',
   LANDING: 'landing',
-  HOME: 'home',
+  HOME: 'my-home',
   LIST_STUFF: 'list-stuff',
   DATA_STUFF: 'data-stuff',
   LIST_STUFF_ADMIN: 'list-stuff-admin',
@@ -14,4 +14,6 @@ export const PAGE_IDS = {
   SIGN_IN: 'sign-in',
   SIGN_OUT: 'sign-out',
   SIGN_UP: 'sign-up',
+  DATA_INPUT: 'data-input',
+  CLIENT_DATA: 'client-data',
 };
