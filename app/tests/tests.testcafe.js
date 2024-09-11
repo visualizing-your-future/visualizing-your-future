@@ -35,6 +35,11 @@ test.only('Test that the home page can be navigated to and is functional', async
   await navBar.isLoggedIn(credentials.username);
   await navBar.gotoHomePage();
   await homePage.isDisplayed();
+  await homePage.clickImportDataButton();
+  await navBar.gotoHomePage();
+  await homePage.clickViewDataButton();
+  await navBar.logout();
+  await signOutPage.isDisplayed();
 });
 
 test('Test that user pages show up', async () => {
