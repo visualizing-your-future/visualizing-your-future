@@ -3,6 +3,7 @@ import { addStuffPage, listStuffAdminPage, listStuffPage, editStuffPage, /* mana
 import { landingPage } from './landing.page';
 import { signInPage } from './signin.page';
 import { signUpPage } from './signup.page';
+import { homePage } from './home.page';
 import { navBar } from './navbar.component';
 import { COMPONENT_IDS } from '../imports/ui/utilities/ComponentIDs';
 
@@ -26,6 +27,14 @@ test('Test that signin and signout work', async () => {
   await navBar.isLoggedIn(credentials.username);
   await navBar.logout();
   await signOutPage.isDisplayed();
+});
+
+test.only('Test that the home page can be navigated to and is functional', async () => {
+  await navBar.gotoSignInPage();
+  await signInPage.signin(credentials.username, credentials.password);
+  await navBar.isLoggedIn(credentials.username);
+  await navBar.gotoHomePage();
+  await homePage.isDisplayed();
 });
 
 test('Test that user pages show up', async () => {

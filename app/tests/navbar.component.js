@@ -13,7 +13,6 @@ class NavBar {
   }
 
   async gotoSignInPage() {
-    await this.ensureLogout(t);
     const visible = await Selector(`#${COMPONENT_IDS.NAVBAR_COLLAPSE}`).visible;
     if (!visible) {
       await t.click('button.navbar-toggler');
@@ -93,6 +92,15 @@ class NavBar {
     await t.expect(Selector(`#${COMPONENT_IDS.NAVBAR_CURRENT_USER}`).exists).ok();
     await t.click(`#${COMPONENT_IDS.NAVBAR_MANAGE_DROPDOWN}`);
     await t.click(`#${COMPONENT_IDS.NAVBAR_MANAGE_DROPDOWN_DATABASE}`);
+  }
+
+  async gotoHomePage() {
+    const visible = await Selector(`#${COMPONENT_IDS.NAVBAR_COLLAPSE}`).visible;
+    if (!visible) {
+      await t.click('button.navbar-toggler');
+    }
+    await t.expect(Selector(`#${COMPONENT_IDS.NAVBAR_CURRENT_USER}`).exists).ok();
+    await t.click(`#${COMPONENT_IDS.NAVBAR_MY_HOME}`);
   }
 }
 
