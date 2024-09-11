@@ -35,6 +35,8 @@ const EditStuff = () => {
     const { name, quantity, condition } = data;
     const collectionName = Stuffs.getCollectionName();
     const updateData = { id: _id, name, quantity, condition };
+    console.log(collectionName);
+    console.log(updateData);
     updateMethod.callPromise({ collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));

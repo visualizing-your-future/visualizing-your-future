@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Alert, Card, Col, Container, Row } from 'react-bootstrap';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -11,11 +11,8 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { Stuffs } from '../../api/stuff/StuffCollection';
 import { updateMethod } from '../../api/base/BaseCollection.methods';
-import { Users } from '../../api/user/UserCollection';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
-// import { defineMethod } from '../../api/base/BaseCollection.methods';
 
 /**
  * SignUp component is similar to signin component, but we create a new user instead.
@@ -75,25 +72,18 @@ const UserAccountSettings = () => {
   /* Submit changes to first and last names. */
   const submit = (data) => {
     const { firstName, lastName } = data;
-    AdminProfiles.update(adminDocument, { firstName, lastName });
+    // AdminProfiles.update(adminDocument._id, { firstName, lastName });
     const adminProfilesCollectionName = AdminProfiles.getCollectionName();
-    const _id = Users.getID(Meteor.user().username);
+    const _id = AdminProfiles.getID(Meteor.user().username);
     const updateData = { id: _id, firstName, lastName };
-    updateMethod.callPromise({ adminProfilesCollectionName, updateData })
+    updateMethod.callPromise({ collectionName: adminProfilesCollectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
-    navigate('/home');
+    navigate('/profiles');
   };
 
   /* Stateful page */
   return (userSubReady && adminSubReady) ? (
-    console.log(cUser),
-    console.log(upname),
-    console.log(apname),
-    console.log(userSubReady),
-    console.log(adminSubReady),
-    console.log(userDocument),
-    console.log(adminDocument),
     <Container id={PAGE_IDS.SIGN_UP} className="py-3">
       <Row className="justify-content-center">
         <Col xs={5}>
