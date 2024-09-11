@@ -29,7 +29,7 @@ test('Test that signin and signout work', async () => {
   await signOutPage.isDisplayed();
 });
 
-test.only('Test that the home page can be navigated to and is functional', async () => {
+test('Test that the home page can be navigated to and is functional', async () => {
   await navBar.gotoSignInPage();
   await signInPage.signin(credentials.username, credentials.password);
   await navBar.isLoggedIn(credentials.username);
