@@ -15,12 +15,19 @@ export const COMPONENT_IDS = {
   NAVBAR_MANAGE_DROPDOWN: 'navbar-manage-dropdown',
   NAVBAR_MANAGE_DROPDOWN_DATABASE: 'navbar-manage-dropdown-database',
   NAVBAR_SIGN_OUT: 'navbar-sign-out',
+  NAVBAR_USER_ACCOUNT_SETTINGS: 'navbar-user-account-settings',
   SIGN_IN_FORM_EMAIL: 'sign-in-form-email',
   SIGN_IN_FORM_PASSWORD: 'sign-in-form-password',
   SIGN_IN_FORM_SUBMIT: 'sign-in-form-submit',
   SIGN_UP_FORM_FIRST_NAME: 'sign-up-form-first-name',
   SIGN_UP_FORM_LAST_NAME: 'sign-up-form-last-name',
   SIGN_UP_FORM_EMAIL: 'sign-up-form-email',
+  SIGN_UP_ACCOUNT_TYPE: 'sign-up-form-account-type', /* NEWLY ADDED (idk If this is needed) */
+  SIGN_UP_ACCOUNT_TYPE_OPTION: 'sign-up-form-account-type', /* NEWLY ADDED */
+  SIGN_UP_CLIENT_KEY: 'sign-up-form-client-key', /* NEWLY ADDED */
   SIGN_UP_FORM_PASSWORD: 'sign-up-form-password',
   SIGN_UP_FORM_SUBMIT: 'sign-up-form-submit',
+  CHANGE_ACCOUNT_FIRST_NAME: 'change-account-first-name',
+  CHANGE_ACCOUNT_LAST_NAME: 'change-account-last-name',
+  SAVE_ACCOUNT_CHANGES: 'save-account-changes',
 };

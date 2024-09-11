@@ -13,11 +13,17 @@ const NavBar = () => {
   const { currentUser } = useTracker(() => ({
     currentUser: Meteor.user() ? Meteor.user().username : '',
   }), []);
-  const menuStyle = { marginBottom: '10px' };
+  const menuStyle = { marginBottom: '0px' };
   return (
-    <Navbar bg="light" expand="lg" style={menuStyle}>
-      <Container>
-        <Navbar.Brand id={COMPONENT_IDS.NAVBAR_LANDING_PAGE} as={NavLink} to="/"><h1>meteor-application-template-production</h1></Navbar.Brand>
+    <Navbar bg="light" expand="lg" style={menuStyle} className="justify-content-center px-5">
+      <Container className="d-flex justify-content-between custom-navbar-spacing">
+        <Navbar.Brand id={COMPONENT_IDS.NAVBAR_LANDING_PAGE} as={NavLink} to="/">
+          <img src="/images/logo.png" className="rounded" alt="visualizing your future logo" width={90} />
+          <div className="logo-text ms-2">
+            <span className="fw-bold">VISUALIZING</span>
+            <span className="fw-bold">YOUR FUTURE</span>
+          </div>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls={COMPONENT_IDS.NAVBAR_COLLAPSE} />
         <Navbar.Collapse id={COMPONENT_IDS.NAVBAR_COLLAPSE}>
           <Nav className="me-auto justify-content-start">
@@ -37,12 +43,13 @@ const NavBar = () => {
           </Nav>
           <Nav className="justify-content-end">
             {currentUser === '' ? (
-              <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Login">
+              <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Login" className="custom-login-button">
                 <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN_SIGN_IN} as={NavLink} to="/signin"><PersonFill />Sign in</NavDropdown.Item>
                 <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN_SIGN_UP} as={NavLink} to="/signup"><PersonPlusFill />Sign up</NavDropdown.Item>
               </NavDropdown>
             ) : (
               <NavDropdown id={COMPONENT_IDS.NAVBAR_CURRENT_USER} title={currentUser}>
+                <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_USER_ACCOUNT_SETTINGS} as={NavLink} to="/userAccountSettings"><BoxArrowRight /> Account Settings</NavDropdown.Item>
                 <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_SIGN_OUT} as={NavLink} to="/signout"><BoxArrowRight /> Sign out</NavDropdown.Item>
               </NavDropdown>
             )}
