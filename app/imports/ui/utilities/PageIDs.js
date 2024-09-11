@@ -17,4 +17,5 @@ export const PAGE_IDS = {
   SIGN_UP: 'sign-up',
   DATA_INPUT: 'data-input',
   CLIENT_DATA: 'client-data',
+  VISUALIZATION_EXPORT: 'visualization-export',
 };
