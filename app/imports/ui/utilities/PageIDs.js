@@ -8,6 +8,7 @@ export const PAGE_IDS = {
   DATA_STUFF: 'data-stuff',
   LIST_STUFF_ADMIN: 'list-stuff-admin',
   LIST_PROFILES: 'list-profiles',
+  ADMIN: 'admin',
   MANAGE_DATABASE: 'manage-database',
   NOT_AUTHORIZED: 'not-authorized',
   NOT_FOUND: 'not-found',

@@ -3,7 +3,7 @@ import { Col, Container, Button, Row } from 'react-bootstrap';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
 const Admin = () => (
-  <Container>
+  <Container id={PAGE_IDS.ADMIN}>
     <Row className="justify-content-center">
       <Col className="text-center">
         <h2>Admin Dashboard</h2>
