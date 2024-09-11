@@ -33,4 +33,5 @@ export const COMPONENT_IDS = {
   CHANGE_ACCOUNT_FIRST_NAME: 'change-account-first-name',
   CHANGE_ACCOUNT_LAST_NAME: 'change-account-last-name',
   SAVE_ACCOUNT_CHANGES: 'save-account-changes',
+  VISUALIZATION_EXPORT: 'visualization-export',
 };
