@@ -14,6 +14,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { Stuffs } from '../../api/stuff/StuffCollection';
 import { updateMethod } from '../../api/base/BaseCollection.methods';
 import { Users } from '../../api/user/UserCollection';
+import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 // import { defineMethod } from '../../api/base/BaseCollection.methods';
 
 /**
@@ -39,48 +40,67 @@ const UserAccountSettings = () => {
   // const [error, setError] = useState('');
 
   // Waits until subscribed to database and account information is returned.
-  const { ready, user, upname, cUser } = useTracker(() => {
+  const { cUser, upname, apname, userSubReady, adminSubReady, userDocument, adminDocument } = useTracker(() => {
     // TODO: put sub in if statement based on user role.
-    const sub = UserProfiles.subscribeProfileAdmin();
-    // const sub = UserProfiles.subscribeProfileUser()
+    const userSub = UserProfiles.subscribeProfileAdmin();
+    const adminSub = AdminProfiles.subscribeAdmin();
 
+    // Determine if subscriptions are ready
+    const userSubRdy = userSub.ready();
+    const adminSubRdy = adminSub.ready();
+
+    // Get the profile collection names.
     const userProfilesCollectionName = UserProfiles.getCollectionName();
+    const adminProfilesCollectionName = AdminProfiles.getCollectionName();
+
+    // Get the current user's username (should be email).
     const currentUser = Meteor.user().username;
-    const document = UserProfiles.findOne({ email: 'john@foo.com' });
+    const userDoc = UserProfiles.findOne({ email: currentUser });
+    const adminDoc = AdminProfiles.findOne({ email: currentUser });
+
+    // One liner for the above code.
     // const document = UserProfiles.findOne({ email: Meteor.user()?.username });
+
     return {
       cUser: currentUser,
       upname: userProfilesCollectionName,
-      ready: sub.ready(),
-      user: document,
+      apname: adminProfilesCollectionName,
+      userSubReady: userSubRdy,
+      adminSubReady: adminSubRdy,
+      userDocument: userDoc,
+      adminDocument: adminDoc,
     };
   }, []);
 
   /* Submit changes to first and last names. */
   const submit = (data) => {
     const { firstName, lastName } = data;
-    UserProfiles.update(user, { firstName, lastName });
-    const userProfilesCollectionName = UserProfiles.getCollectionName();
+    AdminProfiles.update(adminDocument, { firstName, lastName });
+    const adminProfilesCollectionName = AdminProfiles.getCollectionName();
     const _id = Users.getID(Meteor.user().username);
     const updateData = { id: _id, firstName, lastName };
-    updateMethod.callPromise({ userProfilesCollectionName, updateData })
+    updateMethod.callPromise({ adminProfilesCollectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
     navigate('/home');
   };
 
   /* Stateful page */
-  return ready ? (
+  return (userSubReady && adminSubReady) ? (
     console.log(cUser),
-      console.log(upname),
-      console.log(user),
+    console.log(upname),
+    console.log(apname),
+    console.log(userSubReady),
+    console.log(adminSubReady),
+    console.log(userDocument),
+    console.log(adminDocument),
     <Container id={PAGE_IDS.SIGN_UP} className="py-3">
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center">
             <h2>Edit User Account Information</h2>
           </Col>
-          <AutoForm model={user} schema={bridge} onSubmit={data => submit(data)}>
+          <AutoForm model={adminDocument} schema={bridge} onSubmit={data => submit(data)}>
             <Card>
               <Card.Body>
                 <TextField id={COMPONENT_IDS.CHANGE_ACCOUNT_FIRST_NAME} name="firstName" placeholder="First Name" />
