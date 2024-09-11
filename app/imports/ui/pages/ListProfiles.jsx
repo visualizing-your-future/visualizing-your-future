@@ -7,7 +7,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 
-/* Renders a table containing all of the Users documents. Use <StuffItemAdmin> to render each row. */
+/* Renders a table containing all of the Users documents. Use <ProfileItem> to render each row. */
 const ListProfiles = () => {
   // useTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker
   const { userProfileItems, adminProfileItems, userSubReady, adminSubReady } = useTracker(() => {
@@ -38,6 +38,7 @@ const ListProfiles = () => {
                 <th>Email</th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>Account Type</th>
               </tr>
             </thead>
             <tbody>

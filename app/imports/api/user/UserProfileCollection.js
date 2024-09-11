@@ -159,7 +159,7 @@ class UserProfileCollection extends BaseProfileCollection {
 }
 
 /**
- * Profides the singleton instance of this class to all other entities.
+ * Provides the singleton instance of this class to all other entities.
  * @type {UserProfileCollection}
  */
 export const UserProfiles = new UserProfileCollection();
