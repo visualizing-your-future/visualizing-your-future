@@ -18,10 +18,7 @@ import { defineMethod } from '../../api/base/BaseCollection.methods';
 const SignUp = () => {
   const [error, setError] = useState('');
   const [redirectToReferer, setRedirectToRef] = useState(false);
-  const [accountType, setAccountType] = useState(''); // State to track selected account type
-  const handleAccountTypeChange = (Client) => {
-    setAccountType(Client); // Update account type when a radio option is selected
-  };
+  const [formModel, setFormModel] = useState({});
 
   const schema = new SimpleSchema({
     firstName: String,
@@ -35,7 +32,7 @@ const SignUp = () => {
     },
     clientKey: {
       type: String,
-      optional: true, // Make clientKey optional initially
+      optional: true,
       custom() {
         if (this.field('accountType').value === 'Client' && !this.value) {
           return 'required';
@@ -53,7 +50,7 @@ const SignUp = () => {
 
     if (doc.accountType === 'Client' && !doc.clientKey) {
       setError('Client key is required for account type Client');
-      return; // Stop submission if clientKey is missing
+      return;
     }
 
     // create the new UserProfile
@@ -83,21 +80,22 @@ const SignUp = () => {
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center">
-            <h2>Register your account</h2>
+            <h2>Create Your Account</h2>
           </Col>
-          <AutoForm schema={bridge} onSubmit={data => submit(data)}>
+          <AutoForm
+            schema={bridge}
+            onSubmit={data => submit(data)}
+            onChangeModel={(model) => setFormModel(model)}
+          >
             <Card>
               <Card.Body>
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME} name="firstName" placeholder="First name" />
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME} name="lastName" placeholder="Last name" />
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL} name="email" placeholder="E-mail address" />
 
-                <RadioField
-                  id={COMPONENT_IDS.SIGN_UP_FORM_ACCOUNT_TYPE_OPTION}
-                  name="accountType"
-                  onChange={handleAccountTypeChange}
-                />
-                {accountType === 'Client' && (
+                <RadioField id={COMPONENT_IDS.SIGN_UP_FORM_ACCOUNT_TYPE_OPTION} name="accountType" />
+
+                {formModel.accountType === 'Client' && (
                   <TextField
                     id={COMPONENT_IDS.SIGN_UP_FORM_CLIENT_KEY}
                     name="clientKey"
