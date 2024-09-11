@@ -1,9 +1,9 @@
-import { React, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import { Roles } from 'meteor/alanning:roles';
 import { useTracker } from 'meteor/react-meteor-data';
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
 import ListStuff from '../pages/ListStuff';
@@ -72,13 +72,6 @@ const App = () => {
 
 const ProtectedRoute = ({ children }) => {
   const isLogged = Meteor.userId() !== null;
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (isLogged) {
-      navigate('/home');
-    }
-  }, [isLogged, navigate]);
-
   console.log('ProtectedRoute', isLogged);
   return isLogged ? children : <Navigate to="/signin" />;
 };
