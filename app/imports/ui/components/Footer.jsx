@@ -10,30 +10,27 @@ const Footer = () => (
         <Col md={3}>
           <h5>ABOUT US</h5>
           <ul className="list-unstyled">
-            <li>Who We Are</li>
-            <li>Our Mission</li>
-            <li>Our Team</li>
-            <li>Careers</li>
+            <li><a href="https://visualizing-your-future.github.io">Who We Are</a></li>
+            <li><a href="#">Place Holder</a></li>
           </ul>
         </Col>
+
         <Col md={3}>
-          <h5>WHAT WE DO</h5>
+          <h5>SERVICES PROVIDED</h5>
           <ul className="list-unstyled">
-            <li>Data Visualization</li>
-            <li>Financial Forecasting</li>
-            <li>Consulting Services</li>
-            <li>Custom Solutions</li>
+            <li><a href="#">Data Visualization</a></li>
           </ul>
         </Col>
+
         <Col md={3}>
           <h5>CONTACT US</h5>
           <address>
-            700 Bishop Street,<br />
-            Suite 2001,<br />
-            Honolulu, Hawaii 96813<br />
-            (808) 536-0066<br />
+            ADDRESS <br />
+            OF SPIRE<br />
+            OR US<br />
           </address>
         </Col>
+
         <Col md={3} className="text-center">
           <h5>FOLLOW US</h5>
           <ul className="list-inline">
@@ -50,26 +47,26 @@ const Footer = () => (
         </Col>
       </Row>
       <Row>
+        <Col className="text-center py-3">
+          Visualizing Your Future | Developed for Spire Hawaii LLP
+        </Col>
+      </Row>
+      <Row>
         <Col md={12} className="text-center">
           <a href="https://visualizing-your-future.github.io" target="_blank" rel="noopener noreferrer">
             <img
               src="/images/logo.png"
               alt="Visualizing Your Future"
-              width={80}
+              width={70}
               className="rounded"
             />
           </a>
           <img
             src="/images/spire-logo.png"
             alt="Partner Logo 1"
-            width={80}
+            width={100}
             className="footer-logo mx-2"
           />
-        </Col>
-      </Row>
-      <Row>
-        <Col className="text-center py-3">
-          Visualizing Your Future | Developed for Spire Hawaii LLP
         </Col>
       </Row>
     </Container>
