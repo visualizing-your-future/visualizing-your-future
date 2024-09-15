@@ -5,6 +5,10 @@
     { "email": "john@foo.com", "password": "changeme", "role": "USER" , "firstName": "John", "lastName": "Doe" }
   ],
 
+  "defaultAuditedBalanceData": [
+    { "owner":  "john@foo.com", "cashStuff": [ {"pettyCash": "800", "cash":  "8047307", "cashBankCred": "17643599" } ]}
+  ],
+
   "defaultData": [
     { "name": "Basket", "quantity": 3, "owner": "john@foo.com", "condition": "excellent" },
     { "name": "Bicycle", "quantity": 2, "owner": "john@foo.com", "condition": "poor" },

@@ -1,9 +1,13 @@
 export const COMPONENT_IDS = {
   LIST_STUFF_EDIT: 'list-stuff-edit',
-  MANGAGE_DATABASE_DUMP: 'manage-database-dump',
+  LIST_PROFILES_EDIT: 'list-profiles-edit',
+  MANAGE_DATABASE_DUMP: 'manage-database-dump',
+  NAVBAR_DATA_INPUT: 'navbar-data-input',
+  NAVBAR_CLIENT_DATA: 'navbar-client-data',
   NAVBAR_ADD_STUFF: 'navbar-add-stuff',
   NAVBAR_LIST_STUFF: 'navbar-list-stuff',
   NAVBAR_LIST_STUFF_ADMIN: 'navbar-list-stuff-admin',
+  NAVBAR_LIST_PROFILES_ADMIN: 'navbar-list-profiles-admin',
   NAVBAR_CURRENT_USER: 'navbar-current-user',
   NAVBAR_LANDING_PAGE: 'navbar-landing-page',
   NAVBAR_COLLAPSE: 'navbar-collapse',
@@ -13,6 +17,8 @@ export const COMPONENT_IDS = {
   NAVBAR_MANAGE_DROPDOWN: 'navbar-manage-dropdown',
   NAVBAR_MANAGE_DROPDOWN_DATABASE: 'navbar-manage-dropdown-database',
   NAVBAR_SIGN_OUT: 'navbar-sign-out',
+  NAVBAR_USER_ACCOUNT_SETTINGS: 'navbar-user-account-settings',
+  NAVBAR_MY_HOME: 'navbar-my-home',
   SIGN_IN_FORM_EMAIL: 'sign-in-form-email',
   SIGN_IN_FORM_PASSWORD: 'sign-in-form-password',
   SIGN_IN_FORM_SUBMIT: 'sign-in-form-submit',
@@ -24,4 +30,8 @@ export const COMPONENT_IDS = {
   SIGN_UP_FORM_COMPANY_NAME: 'sign-up-form-company-name', /* NEWLY ADDED */
   SIGN_UP_FORM_PASSWORD: 'sign-up-form-password',
   SIGN_UP_FORM_SUBMIT: 'sign-up-form-submit',
+  CHANGE_ACCOUNT_FIRST_NAME: 'change-account-first-name',
+  CHANGE_ACCOUNT_LAST_NAME: 'change-account-last-name',
+  SAVE_ACCOUNT_CHANGES: 'save-account-changes',
+  VISUALIZATION_EXPORT: 'visualization-export',
 };

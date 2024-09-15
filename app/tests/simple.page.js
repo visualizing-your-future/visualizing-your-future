@@ -16,6 +16,9 @@ class SimplePage {
   }
 }
 
+// export const myFuturesPage = new SimplePage(PAGE_IDS.HOME);
+// export const dataInputPage = new SimplePage(PAGE_IDS.DATA_INPUT);
+// export const clientDataPage = new SimplePage(PAGE_IDS.CLIENT_DATA);
 export const addStuffPage = new SimplePage(PAGE_IDS.ADD_STUFF);
 export const editStuffPage = new SimplePage(PAGE_IDS.EDIT_STUFF);
 export const listStuffPage = new SimplePage(PAGE_IDS.LIST_STUFF);

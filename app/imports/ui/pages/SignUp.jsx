@@ -118,22 +118,19 @@ const SignUp = () => {
             schema={bridge}
             onSubmit={data => submit(data)}
             onChangeModel={(model) => setFormModel(model)}
-            className="custom-label-color"
+            className="register-label-color"
           >
             <Card>
               <Card.Body>
                 <RadioField id={COMPONENT_IDS.SIGN_UP_FORM_ACCOUNT_TYPE} name="accountType" />
-
                 {formModel.accountType === 'Accountant' && (
                   <TextField id={COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME} name="firstName" placeholder="first name" />)}
                 {formModel.accountType === 'Accountant' && (
                   <TextField id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME} name="lastName" placeholder="last name" />)}
-
                 {formModel.accountType === 'Client' && (
                   <TextField id={COMPONENT_IDS.SIGN_UP_FORM_COMPANY_NAME} name="companyName" placeholder="company name" />)}
                 {formModel.accountType === 'Client' && (
                   <TextField id={COMPONENT_IDS.SIGN_UP_FORM_CLIENT_KEY} name="clientKey" placeholder="client key" />)}
-
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL} name="email" placeholder="email address" />
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_PASSWORD} name="password" placeholder="password" type="password" />
                 <ErrorsField />
