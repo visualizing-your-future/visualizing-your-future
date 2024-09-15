@@ -159,6 +159,11 @@ body {
   transition: background-color 0.3s, box-shadow 0.3s;
 }
 
+/* Turns all text on register page black */
+.register-label-color label {
+  color: #000000 !important;
+}
+
 #button-square:hover {
   background-color: #C9302C !important;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
@@ -242,4 +247,3 @@ body {
 .footer img {
   max-width: 100%;
 }
-

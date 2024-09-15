@@ -25,9 +25,9 @@ export const COMPONENT_IDS = {
   SIGN_UP_FORM_FIRST_NAME: 'sign-up-form-first-name',
   SIGN_UP_FORM_LAST_NAME: 'sign-up-form-last-name',
   SIGN_UP_FORM_EMAIL: 'sign-up-form-email',
-  SIGN_UP_ACCOUNT_TYPE: 'sign-up-form-account-type', /* NEWLY ADDED (idk If this is needed) */
-  SIGN_UP_ACCOUNT_TYPE_OPTION: 'sign-up-form-account-type', /* NEWLY ADDED */
-  SIGN_UP_CLIENT_KEY: 'sign-up-form-client-key', /* NEWLY ADDED */
+  SIGN_UP_FORM_ACCOUNT_TYPE: 'sign-up-form-account-type', /* NEWLY ADDED (idk If this is needed) */
+  SIGN_UP_FORM_CLIENT_KEY: 'sign-up-form-client-key', /* NEWLY ADDED */
+  SIGN_UP_FORM_COMPANY_NAME: 'sign-up-form-company-name', /* NEWLY ADDED */
   SIGN_UP_FORM_PASSWORD: 'sign-up-form-password',
   SIGN_UP_FORM_SUBMIT: 'sign-up-form-submit',
   CHANGE_ACCOUNT_FIRST_NAME: 'change-account-first-name',
