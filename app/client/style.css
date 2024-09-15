@@ -26,3 +26,8 @@ body {
   padding-top: 10px;
   padding-bottom: 20px;
 }
+
+/* Turns all text on register page black */
+.custom-label-color label {
+  color: #000000 !important;
+}
