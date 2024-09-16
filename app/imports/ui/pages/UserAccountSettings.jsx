@@ -7,12 +7,14 @@ import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import { AutoForm, ErrorsField, SubmitField, TextField } from 'uniforms-bootstrap5';
 import { useTracker } from 'meteor/react-meteor-data';
 import swal from 'sweetalert';
+import { Roles } from 'meteor/alanning:roles';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { updateMethod } from '../../api/base/BaseCollection.methods';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
+import { ROLE } from '../../api/role/Role';
 
 /**
  * SignUp component is similar to signin component, but we create a new user instead.
@@ -37,35 +39,32 @@ const UserAccountSettings = () => {
   // const [error, setError] = useState('');
 
   // Waits until subscribed to database and account information is returned.
-  const { cUser, upname, apname, userSubReady, adminSubReady, userDocument, adminDocument } = useTracker(() => {
-    // TODO: put sub in if statement based on user role.
-    const userSub = UserProfiles.subscribeProfileAdmin();
-    const adminSub = AdminProfiles.subscribeAdmin();
-
-    // Determine if subscriptions are ready
-    const userSubRdy = userSub.ready();
-    const adminSubRdy = adminSub.ready();
-
-    // Get the profile collection names.
-    const userProfilesCollectionName = UserProfiles.getCollectionName();
-    const adminProfilesCollectionName = AdminProfiles.getCollectionName();
-
-    // Get the current user's username (should be email).
+  const { cUser, subReady, collectionName, userDocument } = useTracker(() => {
     const currentUser = Meteor.user().username;
-    const userDoc = UserProfiles.findOne({ email: currentUser });
-    const adminDoc = AdminProfiles.findOne({ email: currentUser });
+    let sub;
+    let subRdy;
+    let colName;
+    let userDoc;
 
-    // One liner for the above code.
-    // const document = UserProfiles.findOne({ email: Meteor.user()?.username });
-
+    const userId = Meteor.userId();
+    if (Roles.userIsInRole(userId, ROLE.ADMIN)) {
+      sub = AdminProfiles.subscribeAdmin();
+      subRdy = sub.ready();
+      colName = AdminProfiles.getCollectionName();
+      userDoc = AdminProfiles.findOne({ email: currentUser });
+    } else if (Roles.userIsInRole(userId, ROLE.USER)) {
+      sub = UserProfiles.subscribeProfileUser();
+      subRdy = sub.ready();
+      colName = UserProfiles.getCollectionName();
+      userDoc = UserProfiles.findOne({ email: currentUser });
+    } else {
+      navigate('/notauthorized');
+    }
     return {
       cUser: currentUser,
-      upname: userProfilesCollectionName,
-      apname: adminProfilesCollectionName,
-      userSubReady: userSubRdy,
-      adminSubReady: adminSubRdy,
+      subReady: subRdy,
+      collectionName: colName,
       userDocument: userDoc,
-      adminDocument: adminDoc,
     };
   }, []);
 
@@ -83,14 +82,14 @@ const UserAccountSettings = () => {
   };
 
   /* Stateful page */
-  return (userSubReady && adminSubReady) ? (
+  return subReady ? (
     <Container id={PAGE_IDS.SIGN_UP} className="py-3">
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center">
             <h2>Edit User Account Information</h2>
           </Col>
-          <AutoForm model={adminDocument} schema={bridge} onSubmit={data => submit(data)}>
+          <AutoForm model={userDocument} schema={bridge} onSubmit={data => submit(data)}>
             <Card>
               <Card.Body>
                 <TextField id={COMPONENT_IDS.CHANGE_ACCOUNT_FIRST_NAME} name="firstName" placeholder="First Name" />
