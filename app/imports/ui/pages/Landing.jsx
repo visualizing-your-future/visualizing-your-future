@@ -19,8 +19,8 @@ const Landing = () => {
     const user = Meteor.user();
     return {
       currentUser: user ? user.username : '',
-      firstName: user?.profile?.firstName || '',
-      lastName: user?.profile?.lastName || '',
+      firstName: user ? user.firstName : '',
+      lastName: user ? user.lastName : '',
       isAdmin: Roles.userIsInRole(Meteor.userId(), [ROLE.ADMIN]), // Check if the user is an admin
     };
   }, []);
@@ -32,13 +32,19 @@ const Landing = () => {
           <Row className="d-flex justify-content-center align-items-center">
             <Col xs={12}>
               {isAdmin ? (
-                <h1 className="mt-4">Welcome Admin {currentUser}!</h1>
+                <div>
+                  <h1 className="mt-4">Welcome Admin {currentUser}!</h1>
+                  <h1>Hi, <b>{firstName}</b>!</h1>
+                  <p className="lead mt-3">Admin Dashboard</p>
+                </div>
               ) : currentUser ? (
-                <h1 className="mt-4">Welcome {currentUser}!</h1>
+                <div>
+                  <h1 className="mt-4">Welcome User {currentUser}!</h1>
+                  <p className="lead mt-3">User Dashboard</p>
+                </div>
               ) : (
                 <h1 className="mt-4">Welcome to Spire</h1>
               )}
-              <p className="lead mt-3">Discover. Innovate. Grow.</p>
               <Button
                 variant="primary"
                 size="lg"
@@ -56,14 +62,6 @@ const Landing = () => {
       {/* Admin-Specific Section */}
       {isAdmin && (
         <Container fluid className="py-5">
-          <Row className="justify-content-center text-center">
-            <Col xs={12} md={8}>
-              <h3 className="mb-4">Admin Panel</h3>
-              <p>
-                As an Admin, you can manage the platform, add content, and oversee all user activities.
-              </p>
-            </Col>
-          </Row>
 
           <Container id={PAGE_IDS.HOME} className="py-5">
             <Row className="text-center">
