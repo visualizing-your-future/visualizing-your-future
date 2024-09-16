@@ -22,41 +22,34 @@ const SignUp = () => {
   const schema = new SimpleSchema({
     email: String,
     password: String,
+    accountType: {
+      type: String,
+      allowedValues: ['Accountant', 'Client'],
+      label: 'Account Type',
+      defaultValue: 'Accountant',
+    },
     firstName: {
       type: String,
       label: 'First Name',
       optional: true,
       custom() {
-        if (formModel.accountType === 'Accountant') {
-          return 'required';
+        // eslint-disable-next-line react/no-this-in-sfc
+        const accountType = this.field('accountType').value;
+        // eslint-disable-next-line react/no-this-in-sfc
+        if (accountType === 'Accountant' && !this.value) {
+          return 'required'; // Require for 'Accountant'
         }
         return undefined;
       },
     },
     lastName: {
       type: String,
-      label: 'Last Name ',
+      label: 'Last Name',
       optional: true,
       custom() {
-        if (formModel.accountType === 'Accountant') {
-          return 'required';
-        }
-        return undefined;
-      },
-    },
-    accountType: {
-      type: String,
-      allowedValues: ['Accountant', 'Client'],
-      label: 'Account Type: ',
-      defaultValue: 'Accountant',
-    },
-    clientKey: {
-      type: String,
-      label: 'Client Key',
-      optional: true,
-      custom() {
-        if (formModel.accountType === 'Client') {
-          return 'required';
+        const accountType = this.field('accountType').value;
+        if (accountType === 'Accountant' && !this.value) {
+          return 'required'; // Require for 'Accountant'
         }
         return undefined;
       },
@@ -66,8 +59,21 @@ const SignUp = () => {
       label: 'Company Name',
       optional: true,
       custom() {
-        if (formModel.accountType === 'Client') {
-          return 'required';
+        const accountType = this.field('accountType').value;
+        if (accountType === 'Client' && !this.value) {
+          return 'required'; // Require for 'Accountant'
+        }
+        return undefined;
+      },
+    },
+    clientKey: {
+      type: String,
+      label: 'Client Key',
+      optional: true,
+      custom() {
+        const accountType = this.field('accountType').value;
+        if (accountType === 'Client' && !this.value) {
+          return 'required'; // Require for 'Accountant'
         }
         return undefined;
       },
@@ -79,11 +85,6 @@ const SignUp = () => {
   const submit = (doc) => {
     const collectionName = UserProfiles.getCollectionName();
     const definitionData = doc;
-
-    if (doc.accountType === 'Client' && !doc.clientKey) {
-      setError('Client key is required for account type Client');
-      return;
-    }
 
     // create the new UserProfile
     defineMethod.callPromise({ collectionName, definitionData })
@@ -124,13 +125,17 @@ const SignUp = () => {
               <Card.Body>
                 <RadioField id={COMPONENT_IDS.SIGN_UP_FORM_ACCOUNT_TYPE} name="accountType" />
                 {formModel.accountType === 'Accountant' && (
-                  <TextField id={COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME} name="firstName" placeholder="first name" />)}
-                {formModel.accountType === 'Accountant' && (
-                  <TextField id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME} name="lastName" placeholder="last name" />)}
+                  <>
+                    <TextField id={COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME} name="firstName" placeholder="first name" />
+                    <TextField id={COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME} name="lastName" placeholder="last name" />
+                  </>
+                )}
                 {formModel.accountType === 'Client' && (
-                  <TextField id={COMPONENT_IDS.SIGN_UP_FORM_COMPANY_NAME} name="companyName" placeholder="company name" />)}
-                {formModel.accountType === 'Client' && (
-                  <TextField id={COMPONENT_IDS.SIGN_UP_FORM_CLIENT_KEY} name="clientKey" placeholder="client key" />)}
+                  <>
+                    <TextField id={COMPONENT_IDS.SIGN_UP_FORM_COMPANY_NAME} name="companyName" placeholder="company name" />
+                    <TextField id={COMPONENT_IDS.SIGN_UP_FORM_CLIENT_KEY} name="clientKey" placeholder="client key" />
+                  </>
+                )}
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL} name="email" placeholder="email address" />
                 <TextField id={COMPONENT_IDS.SIGN_UP_FORM_PASSWORD} name="password" placeholder="password" type="password" />
                 <ErrorsField />
