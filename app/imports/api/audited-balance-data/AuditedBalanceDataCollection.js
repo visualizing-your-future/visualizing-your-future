@@ -102,12 +102,12 @@ class AuditedBalanceDataCollection extends BaseCollection {
 
       capAssetsTotal: { type: Number, optional: true },
 
-      rstrCash: { type: Number, optional: true },
+      rstrCash: { type: Number, defaultValue: 0, optional: true },
 
       otherAssetsTotal: { type: Number, optional: true },
 
-      pensionRsrcs: { type: Number, optional: true },
-      OPEBRsrcs: { type: Number, optional: true },
+      pensionRsrcs: { type: Number, defaultValue: 0, optional: true },
+      OPEBRsrcs: { type: Number, defaultValue: 0, optional: true },
 
       totAssetsAndRsrcs: { type: Number, optional: true },
 
@@ -220,7 +220,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
   /**
    * Subscription method for AuditedBalanceData owned by the current user.
    */
-  subscribeABD() {
+  subscribeAudBalData() {
     if (Meteor.isClient) {
       return Meteor.subscribe(auditedBalanceDataPublications.auditedBalanceData);
     }
@@ -231,7 +231,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
    * Subscription method for admin users.
    * It subscribes to the entire collection.
    */
-  subscribeABDAdmin() {
+  subscribeAudBalDataAdmin() {
     if (Meteor.isClient) {
       return Meteor.subscribe(auditedBalanceDataPublications.auditedBalanceDataAdmin);
     }
@@ -269,13 +269,11 @@ class AuditedBalanceDataCollection extends BaseCollection {
     return { OPEBRsrcs, pensionRsrcs, rstrCash, compBAssets, land, assets, loanFund, investments, other, cashStuff, owner };
   }
 
-  // Function to sum all numeric values in an array
   sumArray(array) {
     if (!array || !array.length) return 0;
     return array.reduce((total, item) => total + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
   }
 
-  // Functions to update totals
   updateTotals(docId) {
     const doc = this.findOne(docId);
     const totalCash = this.sumArray(doc.cashStuff);

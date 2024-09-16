@@ -4,7 +4,6 @@ import { Card, Col, Container, Row } from 'react-bootstrap';
 import { AutoForm, ErrorsField, HiddenField, SubmitField, NumField } from 'uniforms-bootstrap5';
 import { useTracker } from 'meteor/react-meteor-data';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-// import { useParams } from 'react-router';
 import { AuditedBalanceData } from '../../api/audited-balance-data/AuditedBalanceDataCollection';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
@@ -24,33 +23,28 @@ const DataInput = () => {
   const [totalCapAssets, setTotalCapAssets] = useState(0);
   const [totalOtherAssets, setTotalOtherAssets] = useState(0);
   const [totalAssetsAndRsrcs, setTotalAssetsAndRsrcs] = useState(0);
-  // useTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker
-  const { dataStuff, ready } = useTracker(() => {
-    // Get access to Stuff documents.
-    const subscription = AuditedBalanceData.subscribeABD();
-    // Determine if the subscription is ready
+  const { audBalData, ready } = useTracker(() => {
+    const subscription = AuditedBalanceData.subscribeAudBalData();
     const rdy = subscription.ready();
-    // Get the document
     const data = AuditedBalanceData.find({}, { sort: { name: 1 } }).fetch();
     return {
-      dataStuff: data,
+      audBalData: data,
       ready: rdy,
     };
   }, []);
 
   useEffect(() => {
     if (ready) {
-      const cashArray = dataStuff[0].cashStuff;
-      const otherArray = dataStuff[0].other || [];
-      const investmentsArray = dataStuff[0].investments || [];
-      const loanFundArray = dataStuff[0].loanFund || [];
-      const assetsArray = dataStuff[0].assets || [];
-      const landArray = dataStuff[0].land || [];
-      const compBAssetsArray = dataStuff[0].compBAssets || [];
-      const rstrCash = dataStuff[0].rstrCash || 0;
-      const pensionRsrcs = dataStuff[0].pensionRsrcs || 0;
-      const OPEBRsrcs = dataStuff[0].OPEBRsrcs || 0;
-
+      const cashArray = audBalData[0].cashStuff;
+      const otherArray = audBalData[0].other || [];
+      const investmentsArray = audBalData[0].investments || [];
+      const loanFundArray = audBalData[0].loanFund || [];
+      const assetsArray = audBalData[0].assets || [];
+      const landArray = audBalData[0].land || [];
+      const compBAssetsArray = audBalData[0].compBAssets || [];
+      const rstrCash = audBalData[0].rstrCash || 0;
+      const pensionRsrcs = audBalData[0].pensionRsrcs || 0;
+      const OPEBRsrcs = audBalData[0].OPEBRsrcs || 0;
       const cashTotal = cashArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
       const otherTotal = otherArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
       const investmentsTotal = investmentsArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
@@ -75,12 +69,11 @@ const DataInput = () => {
       setTotalOtherAssets(otherAssetsTotal);
       setTotalAssetsAndRsrcs(assetsAndRsrcsTotal);
     }
-  }, [ready, dataStuff]);
+  }, [ready, audBalData]);
 
-  // On successful submit, insert the data.
   const submit = (data) => {
     const { cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs } = data;
-    const docID = dataStuff[0]._id;
+    const docID = audBalData[0]._id;
     const collectionName = AuditedBalanceData.getCollectionName();
     const updateData = { id: docID, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs };
     updateMethod.callPromise({ collectionName, updateData })
@@ -108,7 +101,7 @@ const DataInput = () => {
         </Col>
         <hr className="solid" />
       </Row>
-      <AutoForm schema={bridge} onSubmit={data => submit(data)} model={AuditedBalanceData.findOne(dataStuff._id)}>
+      <AutoForm schema={bridge} onSubmit={data => submit(data)} model={AuditedBalanceData.findOne(audBalData._id)}>
         <Card.Body className="m-0">
           <Row className="justify-content-start">
             <Col className="col-lg-3">
