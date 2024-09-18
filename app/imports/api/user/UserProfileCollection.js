@@ -1,7 +1,14 @@
+import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
+import { Roles } from 'meteor/alanning:roles';
 import BaseProfileCollection from './BaseProfileCollection';
 import { ROLE } from '../role/Role';
 import { Users } from './UserCollection';
+
+export const profilePublications = {
+  profile: 'Profile',
+  profileAdmin: 'ProfileAdmin',
+};
 
 class UserProfileCollection extends BaseProfileCollection {
   constructor() {
@@ -57,6 +64,55 @@ class UserProfileCollection extends BaseProfileCollection {
   removeIt(profileID) {
     if (this.isDefined(profileID)) {
       return super.removeIt(profileID);
+    }
+    return null;
+  }
+
+  /**
+   * Default publication method for entities.
+   * It publishes the entire collection for admin and just the stuff associated to an owner.
+   */
+  publish() {
+    if (Meteor.isServer) {
+      // get the StuffCollection instance.
+      const instance = this;
+      /** This subscription publishes only the documents associated with the logged in user */
+      Meteor.publish(profilePublications.profile, function publish() {
+        if (this.userId) {
+          const username = Meteor.users.findOne(this.userId).username;
+          return instance._collection.find({ owner: username });
+        }
+        return this.ready();
+      });
+
+      /** This subscription publishes all documents regardless of user, but only if the logged in user is the Admin. */
+      Meteor.publish(profilePublications.profileAdmin, function publish() {
+        if (this.userId && Roles.userIsInRole(this.userId, ROLE.ADMIN)) {
+          return instance._collection.find();
+        }
+        return this.ready();
+      });
+    }
+  }
+
+  /**
+   * Subscription method for users.
+   * It subscribes to the entire collection?
+   */
+  subscribeProfileUser() {
+    if (Meteor.isClient) {
+      return Meteor.subscribe(profilePublications.profile);
+    }
+    return null;
+  }
+
+  /**
+   * Subscription method for admin users.
+   * It subscribes to the entire collection.
+   */
+  subscribeProfileAdmin() {
+    if (Meteor.isClient) {
+      return Meteor.subscribe(profilePublications.profileAdmin);
     }
     return null;
   }

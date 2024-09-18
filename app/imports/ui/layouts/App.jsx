@@ -9,17 +9,23 @@ import Landing from '../pages/Landing';
 import ListStuff from '../pages/ListStuff';
 import DataInput from '../pages/DataInput';
 import ListStuffAdmin from '../pages/ListStuffAdmin';
+import ListProfiles from '../pages/ListProfiles';
 import AddStuff from '../pages/AddStuff';
 import EditStuff from '../pages/EditStuff';
 import NotFound from '../pages/NotFound';
 import SignUp from '../pages/SignUp';
 import SignOut from '../pages/SignOut';
+import UserAccountSettings from '../pages/UserAccountSettings';
 import NavBar from '../components/NavBar';
 import SignIn from '../pages/SignIn';
 import NotAuthorized from '../pages/NotAuthorized';
 import { ROLE } from '../../api/role/Role';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ManageDatabase from '../pages/ManageDatabase';
+import ClientData from '../pages/ClientData';
+import ClientDataImport from '../pages/ClientDataImport';
+import Home from '../pages/Home';
+import VisualizationExport from '../pages/VisualizationExport';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -38,13 +44,19 @@ const App = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signout" element={<SignOut />} />
-          <Route path="/home" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
+          <Route path="/userAccountSettings" element={<UserAccountSettings />} />
+          <Route path="/landing" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
+          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
           <Route path="/dataInput" element={<ProtectedRoute><DataInput /></ProtectedRoute>} />
+          <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
           <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
           <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
+          <Route path="/visualizationExport" element={<ProtectedRoute><VisualizationExport /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
+          <Route path="/profiles" element={<AdminProtectedRoute ready={ready}><ListProfiles /></AdminProtectedRoute>} />
           <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
+          <Route path="/clients" element={<AdminProtectedRoute ready={ready}><ClientData /></AdminProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -59,6 +71,7 @@ const App = () => {
  * Checks for Meteor login before routing to the requested page, otherwise goes to signin page.
  * @param {any} { component: Component, ...rest }
  */
+
 const ProtectedRoute = ({ children }) => {
   const isLogged = Meteor.userId() !== null;
   console.log('ProtectedRoute', isLogged);

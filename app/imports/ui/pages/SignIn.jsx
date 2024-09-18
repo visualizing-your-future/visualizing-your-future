@@ -47,12 +47,13 @@ const SignIn = () => {
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center">
-            <h2>Login to your account</h2>
+            <h1>Welcome Back!</h1>
+            <h4>Please login to your account</h4>
           </Col>
           <AutoForm schema={bridge} onSubmit={data => submit(data)}>
             <Card>
               <Card.Body>
-                <TextField id={COMPONENT_IDS.SIGN_IN_FORM_EMAIL} name="email" placeholder="E-mail address" />
+                <TextField id={COMPONENT_IDS.SIGN_IN_FORM_EMAIL} name="email" placeholder="E-mail Address" />
                 <TextField id={COMPONENT_IDS.SIGN_IN_FORM_PASSWORD} name="password" placeholder="Password" type="password" />
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SIGN_IN_FORM_SUBMIT} />
@@ -60,7 +61,7 @@ const SignIn = () => {
             </Card>
           </AutoForm>
           <Alert variant="secondary">
-            <Link to="/signup">Click here to Register</Link>
+            <h6>Don&#39;t have an account? Click <Link to="/signup">here</Link> to create one!</h6>
           </Alert>
           {error === '' ? (
             ''
