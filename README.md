@@ -3,6 +3,8 @@
 ## Overview
 Visualizing Your Future is a graphical data presentation and financial forecasting web application created for Spire Hawaii LLP.
 
+![CI](https://github.com/visualizing-your-future/visualizing-your-future/workflows/ci.yml/badge.svg)
+
 Important functionalities include:
 * Dynamically convert data into visual formats.
 * Parse uploaded Excel sheet(s).
