@@ -123,6 +123,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
 
       longTermInYear: {
         type: Array,
+        defaultValue: [],
         optional: true,
       },
       'longTermInYear.$': Object,
@@ -354,8 +355,8 @@ class AuditedBalanceDataCollection extends BaseCollection {
         otherAssetsTotal: rstrCash + totalAssets + totalLand + totalCompBAssets + totalInvestments + totalLoanFund + totalOther,
         assetsAndRsrcsTotal: pensionRsrcs + OPEBRsrcs + rstrCash + totalAssets + totalLand + totalCompBAssets + totalInvestments + totalLoanFund + totalOther,
         liabilitiesTotal: totalLiab,
-        longTermInYear: totalLongTermInYear,
-        longTermAftYear: totalLongTermAftYear,
+        longTermInYearTotal: totalLongTermInYear,
+        longTermAftYearTotal: totalLongTermAftYear,
         allLiabilitiesTotal: totalLiab + totalLongTermInYear + totalLongTermAftYear,
         liabInflowRsrcsTotal: totalLiab + totalLongTermInYear + totalLongTermAftYear + pensionRsrcsInflow + OPEBRsrcsInflow,
         totalNet: totalCommitConting,
