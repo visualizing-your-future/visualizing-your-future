@@ -6,7 +6,6 @@ import { Roles } from 'meteor/alanning:roles';
 import { useNavigate } from 'react-router-dom';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { ROLE } from '../../api/role/Role';
-import { UserProfiles } from '../../api/user/UserProfileCollection';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -16,14 +15,11 @@ const Landing = () => {
   };
 
   // useTracker connects Meteor data to React components
-  const { currentUser, isAdmin, firstNames, lastName } = useTracker(() => {
+  const { currentUser, isAdmin, firstName, lastName } = useTracker(() => {
     const user = Meteor.user();
-    const userProfileSub = UserProfiles.subscribeProfileUser();
-    const userProfileSubRdy = userProfileSub.ready();
-    const userProfile = UserProfiles.find({}).fetch()[0];
     return {
       currentUser: user ? user.username : '',
-      firstNames: userProfileSubRdy ? userProfile.firstName : '',
+      firstName: user ? user.firstName : '',
       lastName: user ? user.lastName : '',
       isAdmin: Roles.userIsInRole(Meteor.userId(), [ROLE.ADMIN]), // Check if the user is an admin
     };
@@ -38,28 +34,21 @@ const Landing = () => {
               {isAdmin ? (
                 <div>
                   <h1 className="mt-4">Welcome Admin {currentUser}!</h1>
-                  <h1>Hi, <b>{firstNames}</b>!</h1>
                   <p className="lead mt-3">Admin Dashboard</p>
+
                 </div>
               ) : currentUser ? (
                 <div>
                   <h1 className="mt-4">Welcome User {currentUser}!</h1>
                   <p className="lead mt-3">User Dashboard</p>
-                  <h1>Hi, <b>{firstName}</b>!</h1>
-
                 </div>
               ) : (
-                <h1 className="mt-4">Welcome to Spire</h1>
+                <div>
+                  <h1 className="mt-4">Welcome to Spire</h1>
+                  <Button variant="primary" size="lg" className="button-square mt-3" id="button-square"/>
+                </div>
+
               )}
-              <Button
-                variant="primary"
-                size="lg"
-                className="button-square mt-3"
-                id="button-square"
-                href={currentUser ? '/home' : '/signin'}
-              >
-                {currentUser ? 'Account Settings' : 'Learn More'}
-              </Button>
             </Col>
           </Row>
         </Container>
@@ -72,37 +61,26 @@ const Landing = () => {
           <Container id={PAGE_IDS.HOME} className="py-5">
             <Row className="text-center">
               <h3>Client Profiles</h3>
+              <div>See details per client here.</div>
             </Row>
-            <Row className="d-flex justify-content-center mb-4">
+            <Row className="d-flex justify-content-center mb-4 py-5">
               {/* First Button */}
               <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-                <Button
-                  onClick={() => handleNavigation('/clientDataImport')}
-                  className="btn btn-secondary"
-                  id="button-square"
-                >
-                  Import Data
+                <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary" id="button-square">
+                  Import Client Data
                 </Button>
               </Col>
 
               {/* Second Button */}
               <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-                <Button
-                  onClick={() => handleNavigation('/dataInput')}
-                  className="btn btn-secondary"
-                  id="button-square"
-                >
-                  View Financials
+                <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary" id="button-square">
+                  Data Input
                 </Button>
               </Col>
 
               {/* Third Button */}
               <Col xs={12} md={4} className="d-flex justify-content-center">
-                <Button
-                  onClick={() => handleNavigation('/home')}
-                  className="btn btn-secondary"
-                  id="button-square"
-                >
+                <Button onClick={() => handleNavigation('/home')} className="btn btn-secondary" id="button-square">
                   See Client&apos;s Projections
                 </Button>
               </Col>
@@ -123,42 +101,32 @@ const Landing = () => {
           <Container id={PAGE_IDS.HOME} className="py-5">
             <Row className="text-center">
               <h3>Client Profiles</h3>
+              <div>See details per client here.</div>
             </Row>
-            <Row className="d-flex justify-content-center mb-4">
+            <Row className="d-flex justify-content-center mb-4 py-5">
               {/* First Button */}
               <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-                <Button
-                  onClick={() => handleNavigation('/clientDataImport')}
-                  className="btn btn-secondary"
-                  id="button-square"
-                >
-                  Import Data
+                <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary" id="button-square">
+                  Import Client Data
                 </Button>
               </Col>
 
               {/* Second Button */}
               <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-                <Button
-                  onClick={() => handleNavigation('/dataInput')}
-                  className="btn btn-secondary"
-                  id="button-square"
-                >
-                  View Financials
+                <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary" id="button-square">
+                  Data Input
                 </Button>
               </Col>
 
               {/* Third Button */}
               <Col xs={12} md={4} className="d-flex justify-content-center">
-                <Button
-                  onClick={() => handleNavigation('/home')}
-                  className="btn btn-secondary"
-                  id="button-square"
-                >
+                <Button onClick={() => handleNavigation('/home')} className="btn btn-secondary" id="button-square">
                   See Client&apos;s Projections
                 </Button>
               </Col>
             </Row>
           </Container>
+
         </Container>
       )}
 
