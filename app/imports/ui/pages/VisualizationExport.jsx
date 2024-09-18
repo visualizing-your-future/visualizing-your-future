@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
+import { Container } from 'react-bootstrap';
+import { PAGE_IDS } from '../utilities/PageIDs';
 
 const VisualizationExport = ({ clientData }) => {
   const lineChartRef = useRef(null);
@@ -120,32 +122,34 @@ const VisualizationExport = ({ clientData }) => {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-      <h2>Client Financial Projections</h2>
-      <p><strong>Note:</strong> These are example graphs to test how data may be projected. Data from <code>ClientDataImport</code> reports will need to be implemented. In progress page.</p>
+    <Container id={PAGE_IDS.VISUALIZATION_EXPORT}>
+      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+        <h2>Client Financial Projections</h2>
+        <p><strong>Note:</strong> These are example graphs to test how data may be projected. Data from <code>ClientDataImport</code> reports will need to be implemented. In progress page.</p>
 
-      <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-        {/* Line chart */}
-        <div style={{ width: '300px', height: '300px' }}>
-          <h3>Line Chart</h3>
-          <canvas ref={lineChartRef} />
+        <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+          {/* Line chart */}
+          <div style={{ width: '300px', height: '300px' }}>
+            <h3>Line Chart</h3>
+            <canvas ref={lineChartRef} />
+          </div>
+
+          {/* Bar chart */}
+          <div style={{ width: '300px', height: '300px' }}>
+            <h3>Bar Chart</h3>
+            <canvas ref={barChartRef} />
+          </div>
+
+          {/* Pie chart */}
+          <div style={{ width: '300px', height: '300px' }}>
+            <h3>Pie Chart</h3>
+            <canvas ref={pieChartRef} />
+          </div>
         </div>
 
-        {/* Bar chart */}
-        <div style={{ width: '300px', height: '300px' }}>
-          <h3>Bar Chart</h3>
-          <canvas ref={barChartRef} />
-        </div>
-
-        {/* Pie chart */}
-        <div style={{ width: '300px', height: '300px' }}>
-          <h3>Pie Chart</h3>
-          <canvas ref={pieChartRef} />
-        </div>
+        <button onClick={exportToCSV}>Export Data as CSV</button>
       </div>
-
-      <button onClick={exportToCSV}>Export Data as CSV</button>
-    </div>
+    </Container>
   );
 };
 
