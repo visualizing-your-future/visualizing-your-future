@@ -7,6 +7,10 @@ import { navBar } from './navbar.component';
 import { clientDataImportPage } from './clientDataImport.page';
 import { dataInputPage } from './dataInput.page';
 import { visualizationPage } from './visualization.page';
+import { adminPage } from './admin.page';
+import { allProfilesPage } from './allProfiles.page';
+import { manageDatabasePage } from './manageDatabase.page';
+import { accountSettingsPage } from './accountSettings.page';
 
 /* global fixture:false, test:false */
 /* run command : "npm run test-acceptance-development */
@@ -76,11 +80,31 @@ test('Test that all navbar page links for role User works', async () => {
   await clientDataImportPage.isDisplayed();
   await navBar.gotoVisualizationPage();
   await visualizationPage.isDisplayed();
+  await navBar.gotoAccountSettingsPage();
+  await accountSettingsPage.isDisplayed();
   await navBar.logout();
   await signOutPage.isDisplayed();
 });
 
-test.only('Test that the home page can be navigated to and is functional', async () => {
+// PASSED TEST
+test('Test that all navbar links specific to role admin works', async () => {
+  await navBar.gotoSignInPage();
+  await signInPage.signin(adminCredentials.username, adminCredentials.password);
+  await navBar.isLoggedIn(adminCredentials.username);
+  await navBar.gotoHomePage();
+  await homePage.isDisplayed();
+  await navBar.gotoAdminPage();
+  await adminPage.isDisplayed();
+  await navBar.gotoAllProfilesPage();
+  await allProfilesPage.isDisplayed();
+  await navBar.gotoManageDatabasePage();
+  await manageDatabasePage.isDisplayed();
+  await navBar.logout();
+  await signOutPage.isDisplayed();
+});
+
+// PASSED TEST
+test('Test that the home page can be navigated to and is functional', async () => {
   await navBar.gotoSignInPage();
   await signInPage.signin(credentials.username, credentials.password);
   await navBar.isLoggedIn(credentials.username);
@@ -105,20 +129,4 @@ test('Tests edit user page for each role/account type', async () => {
   // TODO: accountant
   // TODO: client
   // TODO: admin
-});
-
-test.only('Test that all navbar links for role admin work', async () => {
-  await navBar.gotoSignInPage();
-  await signInPage.signin(adminCredentials.username, adminCredentials.password);
-  await navBar.isLoggedIn(adminCredentials.username);
-  await navBar.gotoHomePage();
-  await homePage.isDisplayed();
-  // TODO: await navBar.gotoAdminPage();
-  // TODO: await adminPage.isDisplayed();
-  // TODO: await navBar.gotoAllProfilesPage();
-  // TODO: await allProfilesPage.isDisplayed();
-  // TODO: await navBar.gotoManageDatabasePage();
-  // TODO: await manageDatabasePage.isDisplayed();
-  await navBar.logout();
-  await signOutPage.isDisplayed();
 });

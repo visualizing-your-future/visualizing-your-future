@@ -7,8 +7,8 @@ export const COMPONENT_IDS = {
   NAVBAR_CLIENT_DATA: 'navbar-client-data', /* Goes to CLIENT_DATA_IMPORT pageID */
   NAVBAR_ADD_STUFF: 'navbar-add-stuff',
   NAVBAR_LIST_STUFF: 'navbar-list-stuff',
-  NAVBAR_LIST_STUFF_ADMIN: 'navbar-list-stuff-admin',
-  NAVBAR_LIST_PROFILES_ADMIN: 'navbar-list-profiles-admin',
+  NAVBAR_ADMIN: 'navbar-admin',
+  NAVBAR_LIST_PROFILES_ADMIN: 'navbar-list-profiles-admin', /* Goes to LIST_PROFILES pageID */
   NAVBAR_CURRENT_USER: 'navbar-current-user',
   NAVBAR_LANDING_PAGE: 'navbar-landing-page',
   NAVBAR_COLLAPSE: 'navbar-collapse',
