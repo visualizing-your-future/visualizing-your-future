@@ -43,8 +43,10 @@ class UserProfileCollection extends BaseProfileCollection {
    * @param docID the id of the UserProfile
    * @param firstName new first name (optional).
    * @param lastName new last name (optional).
+   * @param email new email (optional).
+   * @param password new password (optional).
    */
-  update(docID, { firstName, lastName }) {
+  update(docID, { firstName, lastName, email, password }) {
     this.assertDefined(docID);
     const updateData = {};
     if (firstName) {
@@ -52,6 +54,12 @@ class UserProfileCollection extends BaseProfileCollection {
     }
     if (lastName) {
       updateData.lastName = lastName;
+    }
+    if (email) {
+      updateData.email = email;
+    }
+    if (password) {
+      updateData.password = password;
     }
     this._collection.update(docID, { $set: updateData });
   }

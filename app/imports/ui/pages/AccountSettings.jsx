@@ -19,7 +19,7 @@ import { ROLE } from '../../api/role/Role';
 /**
  * SignUp component is similar to signin component, but we create a new user instead.
  */
-const UserAccountSettings = () => {
+const AccountSettings = () => {
   // Names the page in the browser.
   document.title = 'Visualizing Your Future - Account Settings';
 
@@ -78,12 +78,12 @@ const UserAccountSettings = () => {
     updateMethod.callPromise({ collectionName: adminProfilesCollectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
-    navigate('/profiles');
+    navigate('/userAccountSettings');
   };
 
   /* Stateful page */
   return subReady ? (
-    <Container id={PAGE_IDS.SIGN_UP} className="py-3">
+    <Container id={PAGE_IDS.ACCOUNT_SETTINGS} className="py-3">
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center">
@@ -92,10 +92,10 @@ const UserAccountSettings = () => {
           <AutoForm model={userDocument} schema={bridge} onSubmit={data => submit(data)}>
             <Card>
               <Card.Body>
-                <TextField id={COMPONENT_IDS.CHANGE_ACCOUNT_FIRST_NAME} name="firstName" placeholder="First Name" />
-                <TextField id={COMPONENT_IDS.CHANGE_ACCOUNT_LAST_NAME} name="lastName" placeholder="Last name" />
-                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_EMAIL} name="email" placeholder="email" />
-                <TextField id={COMPONENT_IDS.SIGN_UP_FORM_PASSWORD} name="password" placeholder="Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_FIRST_NAME} name="firstName" placeholder="First Name" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last name" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_EMAIL} name="email" placeholder="email" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_PASSWORD} name="password" placeholder="Password" type="password" />
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
               </Card.Body>
@@ -107,4 +107,4 @@ const UserAccountSettings = () => {
   ) : <LoadingSpinner />;
 };
 
-export default UserAccountSettings;
+export default AccountSettings;
