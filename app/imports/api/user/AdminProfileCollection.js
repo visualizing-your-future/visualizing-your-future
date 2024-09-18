@@ -35,7 +35,8 @@ class AdminProfileCollection extends BaseProfileCollection {
 
   /**
    * Updates the AdminProfile. You cannot change the email or role.
-   * @param docID the id of the AdminProfile
+   * @param docID the id of the AdminProfile.
+   * @param userID the associated User ID.
    * @param firstName new first name (optional).
    * @param lastName new last name (optional).
    * @param email new email (optional).

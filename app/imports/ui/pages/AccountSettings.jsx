@@ -35,16 +35,20 @@ const AccountSettings = () => {
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
-  // State handler.
-  // const [error, setError] = useState('');
+  /**
+   * Don't know what this is, might not be needed?
+   *
+   * State handler.
+   * const [error, setError] = useState('');
+   */
 
-  // Waits until subscribed to database and account information is returned.
-  const { userID, subReady, collectionName, userDocument } = useTracker(() => {
+  const { userID, subReady, collectionName, userDocument, documentID } = useTracker(() => {
     const username = Meteor.user().username;
     let sub;
     let subRdy;
     let colName;
     let userDoc;
+    let docID;
 
     const usrId = Meteor.userId();
     if (Roles.userIsInRole(usrId, ROLE.ADMIN)) {
@@ -52,38 +56,46 @@ const AccountSettings = () => {
       subRdy = sub.ready();
       colName = AdminProfiles.getCollectionName();
       userDoc = AdminProfiles.findOne({ email: username });
+      /**
+       * Meteor.userID() returns the userID.
+       * This returns the document ID value (not the entire document).
+       */
+      docID = AdminProfiles.getID(Meteor.user().username);
     } else if (Roles.userIsInRole(usrId, ROLE.USER)) {
       sub = UserProfiles.subscribeProfileUser();
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
       userDoc = UserProfiles.findOne({ email: username });
+      docID = UserProfiles.getID(Meteor.user().username);
     } else {
       navigate('/notauthorized');
     }
-    console.log(userDoc);
     return {
       userID: usrId,
       subReady: subRdy,
       collectionName: colName,
       userDocument: userDoc,
+      documentID: docID,
     };
   }, []);
 
-  /* Submit changes to first and last names. */
   const submit = (data) => {
     const { firstName, lastName, email, password } = data;
-    /**
-     * Meteor.userID() returns the userID.
-     * This returns the document ID (_id). */
-    const _id = AdminProfiles.getID(Meteor.user().username);
-    const updateData = { id: _id, userID, firstName, lastName, email, password };
+    const updateData = { id: documentID, userID, firstName, lastName, email, password };
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
+    /**
+     * TODO: implement logic to determine if password changed.
+     * Currently, if the password is changed, the user is logged out, but redirected to the
+     * userAccountSettings page with no access to anything.
+     *
+     * Should redirect to userAccountSettings page if password or email was NOT changed.
+     * Redirect to signin page if password or email was changed.
+     */
     navigate('/userAccountSettings');
   };
 
-  /* Stateful page */
   return subReady ? (
     <Container id={PAGE_IDS.ACCOUNT_SETTINGS} className="py-3">
       <Row className="justify-content-center">
