@@ -80,7 +80,7 @@ const Landing = () => {
 
               {/* Third Button */}
               <Col xs={12} md={4} className="d-flex justify-content-center">
-                <Button onClick={() => handleNavigation('/home')} className="btn btn-secondary" id="button-square">
+                <Button onClick={() => handleNavigation('/VisualizationExport')} className="btn btn-secondary" id="button-square">
                   See Client&apos;s Projections
                 </Button>
               </Col>
@@ -115,7 +115,7 @@ const Landing = () => {
 
             {/* Third Button */}
             <Col xs={12} md={4} className="d-flex justify-content-center">
-              <Button onClick={() => handleNavigation('/home')} className="btn btn-secondary" id="button-square">
+              <Button onClick={() => handleNavigation('/VisualizationExport')} className="btn btn-secondary" id="button-square">
                 See Client&apos;s Projections
               </Button>
             </Col>
