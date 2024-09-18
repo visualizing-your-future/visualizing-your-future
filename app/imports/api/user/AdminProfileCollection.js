@@ -41,22 +41,26 @@ class AdminProfileCollection extends BaseProfileCollection {
    * @param email new email (optional).
    * @param password new password (optional).
    */
-  update(docID, { firstName, lastName, email, password }) {
-    this.assertDefined(docID);
-    const updateData = {};
-    if (firstName) {
-      updateData.firstName = firstName;
+  update(docID, { userID, firstName, lastName, email, password }) {
+    if (Meteor.isServer) {
+      this.assertDefined(docID);
+      const updateData = {};
+      if (firstName) {
+        updateData.firstName = firstName;
+      }
+      if (lastName) {
+        updateData.lastName = lastName;
+      }
+      if (email) {
+        updateData.email = email;
+        Users.updateUsername(userID, email);
+      }
+      if (password) {
+        updateData.password = password;
+        Users.updatePassword(userID, password);
+      }
+      this._collection.update(docID, { $set: updateData });
     }
-    if (lastName) {
-      updateData.lastName = lastName;
-    }
-    if (email) {
-      updateData.email = email;
-    }
-    if (password) {
-      updateData.password = password;
-    }
-    this._collection.update(docID, { $set: updateData });
   }
 
   /**

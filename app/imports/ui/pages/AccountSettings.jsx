@@ -39,29 +39,30 @@ const AccountSettings = () => {
   // const [error, setError] = useState('');
 
   // Waits until subscribed to database and account information is returned.
-  const { cUser, subReady, collectionName, userDocument } = useTracker(() => {
-    const currentUser = Meteor.user().username;
+  const { userID, subReady, collectionName, userDocument } = useTracker(() => {
+    const username = Meteor.user().username;
     let sub;
     let subRdy;
     let colName;
     let userDoc;
 
-    const userId = Meteor.userId();
-    if (Roles.userIsInRole(userId, ROLE.ADMIN)) {
+    const usrId = Meteor.userId();
+    if (Roles.userIsInRole(usrId, ROLE.ADMIN)) {
       sub = AdminProfiles.subscribeAdmin();
       subRdy = sub.ready();
       colName = AdminProfiles.getCollectionName();
-      userDoc = AdminProfiles.findOne({ email: currentUser });
-    } else if (Roles.userIsInRole(userId, ROLE.USER)) {
+      userDoc = AdminProfiles.findOne({ email: username });
+    } else if (Roles.userIsInRole(usrId, ROLE.USER)) {
       sub = UserProfiles.subscribeProfileUser();
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
-      userDoc = UserProfiles.findOne({ email: currentUser });
+      userDoc = UserProfiles.findOne({ email: username });
     } else {
       navigate('/notauthorized');
     }
+    console.log(userDoc);
     return {
-      cUser: currentUser,
+      userID: usrId,
       subReady: subRdy,
       collectionName: colName,
       userDocument: userDoc,
@@ -70,12 +71,13 @@ const AccountSettings = () => {
 
   /* Submit changes to first and last names. */
   const submit = (data) => {
-    const { firstName, lastName } = data;
-    // AdminProfiles.update(adminDocument._id, { firstName, lastName });
-    const adminProfilesCollectionName = AdminProfiles.getCollectionName();
+    const { firstName, lastName, email, password } = data;
+    /**
+     * Meteor.userID() returns the userID.
+     * This returns the document ID (_id). */
     const _id = AdminProfiles.getID(Meteor.user().username);
-    const updateData = { id: _id, firstName, lastName };
-    updateMethod.callPromise({ collectionName: adminProfilesCollectionName, updateData })
+    const updateData = { id: _id, userID, firstName, lastName, email, password };
+    updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
     navigate('/userAccountSettings');
