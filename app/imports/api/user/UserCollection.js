@@ -69,15 +69,27 @@ class UserCollection {
     // return undefined;
   }
 
-  /** TODO: Documentation for this */
-  updateUsername(userID, email) {
+  /**
+   * Updates the user's username and email (these are the same values).
+   * Sign in checks meteor/accounts-base (not BaseProfileCollection schema),
+   * so a different method is needed to update the username and email.
+   * @param userID The userID of the user.
+   * @param email The new email.
+   */
+  updateUsernameAndEmail(userID, email) {
     Accounts.setUsername(userID, email);
     Meteor.users.update(userID, { $set: { 'emails.0.address': email } });
   }
 
-  /** TODO: Documentation for this */
-  updatePassword(userID, email) {
-    Accounts.setPasswordAsync(userID, email);
+  /**
+   * Updates the user's password.
+   * Sign in checks meteor/accounts-base and BaseProfileCollection schema does not have a password field,
+   * so a different method is needed to update the username and email.
+   * @param userID The userID of the user.
+   * @param password The new password.
+   */
+  updatePassword(userID, password) {
+    Accounts.setPasswordAsync(userID, password);
   }
 
   /**

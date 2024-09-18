@@ -20,13 +20,13 @@ import { ROLE } from '../../api/role/Role';
  * SignUp component is similar to signin component, but we create a new user instead.
  */
 const AccountSettings = () => {
-  // Names the page in the browser.
+  /** Names the page in the browser. */
   document.title = 'Visualizing Your Future - Account Settings';
 
-  // Used to change page after submitting account changes.
+  /** Used to change page after submitting account changes. */
   const navigate = useNavigate();
 
-  // Account settings the user can change.
+  /** Account settings the user can change. */
   const schema = new SimpleSchema({
     firstName: { type: String, optional: true },
     lastName: { type: String, optional: true },
@@ -43,23 +43,26 @@ const AccountSettings = () => {
    */
 
   const { userID, subReady, collectionName, userDocument, documentID } = useTracker(() => {
-    const username = Meteor.user().username;
+    /** Was the subscription successful? */
     let sub;
+    /** Is the subscription ready? */
     let subRdy;
+    /** Collection name. */
     let colName;
+    /** Entire user document. */
     let userDoc;
+    /** The user's document ID. */
     let docID;
-
+    /** The user's ID. */
     const usrId = Meteor.userId();
+    /** The user's username. */
+    const username = Meteor.user().username;
+
     if (Roles.userIsInRole(usrId, ROLE.ADMIN)) {
       sub = AdminProfiles.subscribeAdmin();
       subRdy = sub.ready();
       colName = AdminProfiles.getCollectionName();
       userDoc = AdminProfiles.findOne({ email: username });
-      /**
-       * Meteor.userID() returns the userID.
-       * This returns the document ID value (not the entire document).
-       */
       docID = AdminProfiles.getID(Meteor.user().username);
     } else if (Roles.userIsInRole(usrId, ROLE.USER)) {
       sub = UserProfiles.subscribeProfileUser();
@@ -70,6 +73,7 @@ const AccountSettings = () => {
     } else {
       navigate('/notauthorized');
     }
+
     return {
       userID: usrId,
       subReady: subRdy,

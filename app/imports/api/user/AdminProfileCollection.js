@@ -54,10 +54,11 @@ class AdminProfileCollection extends BaseProfileCollection {
       }
       if (email) {
         updateData.email = email;
-        Users.updateUsername(userID, email);
+        /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
+        Users.updateUsernameAndEmail(userID, email);
       }
       if (password) {
-        updateData.password = password;
+        /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
         Users.updatePassword(userID, password);
       }
       this._collection.update(docID, { $set: updateData });
