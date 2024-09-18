@@ -91,42 +91,35 @@ const Landing = () => {
 
       {/* User-Specific Section */}
       {currentUser && !isAdmin && (
-        <Container fluid className="py-5">
+        <Container fluid id={PAGE_IDS.HOME} className="py-5">
           <Row className="justify-content-center text-center">
             <Col xs={12} md={8}>
               <h3 className="mb-4">User Dashboard</h3>
               <p>Create your profile, connect with others, and explore opportunities to grow your career.</p>
             </Col>
           </Row>
-          <Container id={PAGE_IDS.HOME} className="py-5">
-            <Row className="text-center">
-              <h3>Client Profiles</h3>
-              <div>See details per client here.</div>
-            </Row>
-            <Row className="d-flex justify-content-center mb-4 py-5">
-              {/* First Button */}
-              <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-                <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary" id="button-square">
-                  Import Client Data
-                </Button>
-              </Col>
+          <Row className="d-flex justify-content-center mb-4 py-5">
+            {/* First Button */}
+            <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
+              <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary" id="button-square">
+                Import Client Data
+              </Button>
+            </Col>
 
-              {/* Second Button */}
-              <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-                <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary" id="button-square">
-                  Data Input
-                </Button>
-              </Col>
+            {/* Second Button */}
+            <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
+              <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary" id="button-square">
+                Data Input
+              </Button>
+            </Col>
 
-              {/* Third Button */}
-              <Col xs={12} md={4} className="d-flex justify-content-center">
-                <Button onClick={() => handleNavigation('/home')} className="btn btn-secondary" id="button-square">
-                  See Client&apos;s Projections
-                </Button>
-              </Col>
-            </Row>
-          </Container>
-
+            {/* Third Button */}
+            <Col xs={12} md={4} className="d-flex justify-content-center">
+              <Button onClick={() => handleNavigation('/home')} className="btn btn-secondary" id="button-square">
+                See Client&apos;s Projections
+              </Button>
+            </Col>
+          </Row>
         </Container>
       )}
 
