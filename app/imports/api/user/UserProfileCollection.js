@@ -40,28 +40,33 @@ class UserProfileCollection extends BaseProfileCollection {
 
   /**
    * Updates the UserProfile. You cannot change the email or role.
-   * @param docID the id of the UserProfile
+   * @param docID the id of the UserProfile.
+   * @param userID the associated User ID.
    * @param firstName new first name (optional).
    * @param lastName new last name (optional).
    * @param email new email (optional).
    * @param password new password (optional).
    */
-  update(docID, { firstName, lastName, email, password }) {
-    this.assertDefined(docID);
-    const updateData = {};
-    if (firstName) {
-      updateData.firstName = firstName;
+  update(docID, { userID, firstName, lastName, email, password }) {
+    if (Meteor.isServer) {
+      this.assertDefined(docID);
+      const updateData = {};
+      if (firstName) {
+        updateData.firstName = firstName;
+      }
+      if (lastName) {
+        updateData.lastName = lastName;
+      }
+      if (email) {
+        updateData.email = email;
+        Users.updateUsername(userID, email);
+      }
+      if (password) {
+        updateData.password = password;
+        Users.updatePassword(userID, password);
+      }
+      this._collection.update(docID, { $set: updateData });
     }
-    if (lastName) {
-      updateData.lastName = lastName;
-    }
-    if (email) {
-      updateData.email = email;
-    }
-    if (password) {
-      updateData.password = password;
-    }
-    this._collection.update(docID, { $set: updateData });
   }
 
   /**
@@ -82,13 +87,12 @@ class UserProfileCollection extends BaseProfileCollection {
    */
   publish() {
     if (Meteor.isServer) {
-      // get the StuffCollection instance.
       const instance = this;
       /** This subscription publishes only the documents associated with the logged in user */
       Meteor.publish(profilePublications.profile, function publish() {
         if (this.userId) {
           const username = Meteor.users.findOne(this.userId).username;
-          return instance._collection.find({ owner: username });
+          return instance._collection.find({ email: username });
         }
         return this.ready();
       });

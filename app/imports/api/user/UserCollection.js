@@ -69,6 +69,17 @@ class UserCollection {
     // return undefined;
   }
 
+  /** TODO: Documentation for this */
+  updateUsername(userID, email) {
+    Accounts.setUsername(userID, email);
+    Meteor.users.update(userID, { $set: { 'emails.0.address': email } });
+  }
+
+  /** TODO: Documentation for this */
+  updatePassword(userID, email) {
+    Accounts.setPasswordAsync(userID, email);
+  }
+
   /**
    * Asserts that the passed user has the specified role.
    * @param user The user (username or userID).
