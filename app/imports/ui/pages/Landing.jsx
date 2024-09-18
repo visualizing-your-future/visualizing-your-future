@@ -6,6 +6,7 @@ import { Roles } from 'meteor/alanning:roles';
 import { useNavigate } from 'react-router-dom';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { ROLE } from '../../api/role/Role';
+import { UserProfiles } from '../../api/user/UserProfileCollection';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -15,11 +16,14 @@ const Landing = () => {
   };
 
   // useTracker connects Meteor data to React components
-  const { currentUser, isAdmin, firstName, lastName } = useTracker(() => {
+  const { currentUser, isAdmin, firstNames, lastName } = useTracker(() => {
     const user = Meteor.user();
+    const userProfileSub = UserProfiles.subscribeProfileUser();
+    const userProfileSubRdy = userProfileSub.ready();
+    const userProfile = UserProfiles.find({}).fetch()[0];
     return {
       currentUser: user ? user.username : '',
-      firstName: user ? user.firstName : '',
+      firstNames: userProfileSubRdy ? userProfile.firstName : '',
       lastName: user ? user.lastName : '',
       isAdmin: Roles.userIsInRole(Meteor.userId(), [ROLE.ADMIN]), // Check if the user is an admin
     };
@@ -34,13 +38,15 @@ const Landing = () => {
               {isAdmin ? (
                 <div>
                   <h1 className="mt-4">Welcome Admin {currentUser}!</h1>
-                  <h1>Hi, <b>{firstName}</b>!</h1>
+                  <h1>Hi, <b>{firstNames}</b>!</h1>
                   <p className="lead mt-3">Admin Dashboard</p>
                 </div>
               ) : currentUser ? (
                 <div>
                   <h1 className="mt-4">Welcome User {currentUser}!</h1>
                   <p className="lead mt-3">User Dashboard</p>
+                  <h1>Hi, <b>{firstName}</b>!</h1>
+
                 </div>
               ) : (
                 <h1 className="mt-4">Welcome to Spire</h1>
