@@ -339,7 +339,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
     const totalLongTermAftYear = this.sumArray(doc.longTermAftYear);
     const pensionRsrcsInflow = doc.pensionRsrcsInflow;
     const OPEBRsrcsInflow = doc.OPEBRsrcsInflow;
-    const totalCommitConting = doc.commitConting;
+    const totalCommitConting = this.sumArray(doc.commitConting);
 
     this._collection.update(docId, {
       $set: {

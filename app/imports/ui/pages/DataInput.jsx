@@ -26,6 +26,9 @@ const DataInput = () => {
   const [totalLongTermInYear, setTotalLongTermInYear] = useState(0);
   const [totalLongTermAftYear, setTotalLongTermAftYear] = useState(0);
   const [totalLiabilities, setTotalLiabilities] = useState(0);
+  const [totalLiabInflowRsrcs, setTotalLiabInflowRsrcs] = useState(0);
+  const [totalCommitConting, setTotalCommitConting] = useState(0);
+  const [totalLiabInRsrc, setTotalLiabInRsrc] = useState(0);
   const { audBalData, ready } = useTracker(() => {
     const subscription = AuditedBalanceData.subscribeAudBalData();
     const rdy = subscription.ready();
@@ -38,7 +41,7 @@ const DataInput = () => {
 
   useEffect(() => {
     if (ready) {
-      const cashArray = audBalData[0].cashStuff;
+      const cashArray = audBalData[0].cashStuff || [];
       const otherArray = audBalData[0].other || [];
       const investmentsArray = audBalData[0].investments || [];
       const loanFundArray = audBalData[0].loanFund || [];
@@ -51,6 +54,9 @@ const DataInput = () => {
       const liabArray = audBalData[0].liabilities || [];
       const longTermInYearArray = audBalData[0].longTermInYear || [];
       const longTermAftYearArray = audBalData[0].longTermAftYear || [];
+      const pensionRsrcsInflow = audBalData[0].pensionRsrcsInflow || 0;
+      const OPEBRsrcsInflow = audBalData[0].OPEBRsrcsInflow || 0;
+      const commitContingArray = audBalData[0].commitConting || [];
       const cashTotal = cashArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
       const otherTotal = otherArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
       const investmentsTotal = investmentsArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
@@ -65,6 +71,9 @@ const DataInput = () => {
       const longTermInYearTotal = longTermInYearArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
       const longTermAftYearTotal = longTermAftYearArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
       const liabilitiesTotal = longTermInYearTotal + longTermAftYearTotal + liabArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
+      const liabDefInflowRsrcsTotal = liabilitiesTotal + pensionRsrcsInflow + OPEBRsrcsInflow;
+      const commitContingTotal = commitContingArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
+      const liabInRsrcTotal = liabDefInflowRsrcsTotal + commitContingTotal;
 
       setTotalCash(cashTotal);
       setTotalOther(otherTotal);
@@ -80,6 +89,9 @@ const DataInput = () => {
       setTotalLongTermInYear(longTermInYearTotal);
       setTotalLongTermAftYear(longTermAftYearTotal);
       setTotalLiabilities(liabilitiesTotal);
+      setTotalLiabInflowRsrcs(liabDefInflowRsrcsTotal);
+      setTotalCommitConting(commitContingTotal);
+      setTotalLiabInRsrc(liabInRsrcTotal);
     }
   }, [ready, audBalData]);
 
@@ -87,7 +99,6 @@ const DataInput = () => {
     const { cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting } = data;
     const docID = audBalData[0]._id;
     const collectionName = AuditedBalanceData.getCollectionName();
-    console.log(longTermInYear);
     const updateData = { id: docID, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting };
     updateMethod.callPromise({ collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
@@ -151,7 +162,7 @@ const DataInput = () => {
               <h6 className="text-end">Total Cash and Cash Equivalents</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalCash}</h6>
+              <h6>$ {totalCash.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="justify-content-start my-0">
@@ -229,7 +240,7 @@ const DataInput = () => {
               <h6 className="text-end">Total Other</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalOther}</h6>
+              <h6>$ {totalOther.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="align-items-center px-3">
@@ -307,7 +318,7 @@ const DataInput = () => {
               <h6 className="text-end">Subtotal - Investment</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalInvestments}</h6>
+              <h6>$ {totalInvestments.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="align-items-center px-3">
@@ -332,7 +343,7 @@ const DataInput = () => {
               <h6 className="text-end">Subtotal - Loan Fund</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalLoanFund}</h6>
+              <h6>$ {totalLoanFund.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="justify-content-start px-3">
@@ -340,7 +351,7 @@ const DataInput = () => {
               <h6>Investments</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalInvestLoan}</h6>
+              <h6>$ {totalInvestLoan.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="justify-content-start px-3">
@@ -391,7 +402,7 @@ const DataInput = () => {
               <h6 className="text-center">Net</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalAssets}</h6>
+              <h6>$ {totalAssets.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="justify-content-start ps-3">
@@ -429,7 +440,7 @@ const DataInput = () => {
               <h6 className="text-end">Subtotal - Capital Assets, Net</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalLand}</h6>
+              <h6>$ {totalLand.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="justify-content-start px-3">
@@ -491,7 +502,7 @@ const DataInput = () => {
               <h6 className="text-end">Subtotal - Limited Liability Company B&apos;s Assets</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalCompBAssets}</h6>
+              <h6>$ {totalCompBAssets.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="justify-content-start px-3">
@@ -499,7 +510,7 @@ const DataInput = () => {
               <h6>Capital Assets, Net</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalCapAssets}</h6>
+              <h6>$ {totalCapAssets.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="justify-content-start px-3">
@@ -516,7 +527,7 @@ const DataInput = () => {
               <h6 className="text-end">Total Other Assets</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalOtherAssets}</h6>
+              <h6>$ {totalOtherAssets.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="justify-content-start px-3">
@@ -541,7 +552,7 @@ const DataInput = () => {
               <h6 className="text-end">Total Assets and Deferred Outflows of Resource</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalAssetsAndRsrcs}</h6>
+              <h6>$ {totalAssetsAndRsrcs.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="justify-content-start pt-3">
@@ -676,7 +687,7 @@ const DataInput = () => {
               <h6>Long-Term Liabilities - Due Within One Year:</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalLongTermInYear}</h6>
+              <h6>$ {totalLongTermInYear.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="align-items-center px-3">
@@ -782,7 +793,7 @@ const DataInput = () => {
               <h6>Long-Term Liabilities - Due After One Year:</h6>
             </Col>
             <Col className="col-lg-2">
-              <h6>$ {totalLongTermAftYear}</h6>
+              <h6>$ {totalLongTermAftYear.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="align-items-center px-3">
@@ -792,10 +803,7 @@ const DataInput = () => {
             </Col>
             <Col className="col-lg-2">
               <hr className="solid my-0" />
-              <h6>$ {totalLiabilities}</h6>
-            </Col>
-            <Col className="col-lg-2">
-              <SubmitField value="Update" />
+              <h6>$ {totalLiabilities.toFixed(2)}</h6>
             </Col>
           </Row>
           <Row className="align-items-center px-3">
@@ -812,6 +820,73 @@ const DataInput = () => {
             </Col>
             <Col className="col-lg-2">
               <NumField name="OPEBRsrcsInflow" decimal label={null} />
+            </Col>
+          </Row>
+          <Row className="align-items-center px-3">
+            <Col className="col-lg-3">
+              <hr className="solid my-0" />
+              <h6 className="text-end">Total Liabilities and Deferred Inflows of Resources</h6>
+            </Col>
+            <Col className="col-lg-2">
+              <hr className="solid my-0" />
+              <h6>$ {totalLiabInflowRsrcs.toFixed(2)}</h6>
+            </Col>
+          </Row>
+          <Row className="justify-content-start pt-3">
+            <Col className="col-lg-3">
+              <h6>Commitments and Contingencies</h6>
+            </Col>
+          </Row>
+          <Row className="justify-content-start pt-3">
+            <Col className="col-lg-3">
+              <h6>Net Position</h6>
+            </Col>
+          </Row>
+          <Row className="align-items-center px-3">
+            <Col className="col-lg-3">
+              Invested in Capital Assets, Net of Related Debt
+            </Col>
+            <Col className="col-lg-2">
+              <NumField name="commitConting.0.invCapAssNetDbt" decimal label={null} />
+            </Col>
+          </Row>
+          <Row className="align-items-center px-3">
+            <Col className="col-lg-3">
+              Restricted - Federal Funds
+            </Col>
+            <Col className="col-lg-2">
+              <NumField name="commitConting.0.rstrFedFun" decimal label={null} />
+            </Col>
+          </Row>
+          <Row className="align-items-center px-3">
+            <Col className="col-lg-3">
+              Unrestricted
+            </Col>
+            <Col className="col-lg-2">
+              <NumField name="commitConting.0.unRstr" decimal label={null} />
+            </Col>
+          </Row>
+          <Row className="align-items-center px-3">
+            <Col className="col-lg-3">
+              <hr className="solid my-0" />
+              <h6 className="text-center">Total Net Position</h6>
+            </Col>
+            <Col className="col-lg-2">
+              <hr className="solid my-0" />
+              <h6>$ {totalCommitConting.toFixed(2)}</h6>
+            </Col>
+          </Row>
+          <Row className="align-items-center px-3">
+            <Col className="col-lg-3">
+              <hr className="solid my-0" />
+              <h6 className="text-center">Total Liabilities, Deferred Inflows of Resources</h6>
+            </Col>
+            <Col className="col-lg-2">
+              <hr className="solid my-0" />
+              <h6>$ {totalLiabInRsrc.toFixed(2)}</h6>
+            </Col>
+            <Col className="col-lg-2">
+              <SubmitField value="Update" />
             </Col>
           </Row>
           <ErrorsField />
