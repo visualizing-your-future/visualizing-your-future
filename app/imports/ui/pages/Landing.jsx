@@ -45,7 +45,7 @@ const Landing = () => {
               ) : (
                 <div>
                   <h1 className="mt-4">Welcome to Spire</h1>
-                  <Button variant="primary" size="lg" className="button-square mt-3" id="button-square"/>
+                  <Button variant="primary" size="lg" className="button-square mt-3" id="button-square">Learn More</Button>
                 </div>
 
               )}
@@ -133,9 +133,10 @@ const Landing = () => {
             </Col>
           </Row>
 
-          <Row className="my-5 justify-content-center">
-            <Col xs={12} md={6}>
-              <h4>State Financial Agencies</h4>
+          <Row className="justify-content-center service-section mt-4">
+            <Col xs={12} md={6} className="service-column">
+              <h3>State Financial Agencies</h3>
+              <h4>Services provided:</h4>
               <ul>
                 <li>Design of accounting system framework, chart of accounts</li>
                 <li>Statewide financial framework</li>
@@ -144,8 +145,10 @@ const Landing = () => {
                 <li>Change management</li>
               </ul>
             </Col>
-            <Col xs={12} md={6}>
-              <h4>An Agribusiness</h4>
+
+            <Col xs={12} md={6} className="service-column">
+              <h3>An Agribusiness</h3>
+              <h4>Services provided:</h4>
               <ul>
                 <li>Outsource CFO services</li>
                 <li>Financial system setup and implementation</li>
