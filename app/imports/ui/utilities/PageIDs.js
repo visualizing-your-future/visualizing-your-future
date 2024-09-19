@@ -15,6 +15,7 @@ export const PAGE_IDS = {
   SIGN_IN: 'sign-in',
   SIGN_OUT: 'sign-out',
   SIGN_UP: 'sign-up',
+  ACCOUNT_SETTINGS: 'account-settings',
   DATA_INPUT: 'data-input',
   CLIENT_DATA: 'client-data',
   CLIENT_DATA_IMPORT: 'client-data-import', /* Goes from NAVBAR_CLIENT_DATA */

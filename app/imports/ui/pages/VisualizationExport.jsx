@@ -1,154 +1,198 @@
-import React, { useEffect, useRef } from 'react';
-import Chart from 'chart.js/auto';
-import { Container } from 'react-bootstrap';
-import { PAGE_IDS } from '../utilities/PageIDs';
+import React from 'react';
+import { Col, Container, Row, Card, CardHeader } from 'react-bootstrap';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const VisualizationExport = ({ clientData }) => {
-  const lineChartRef = useRef(null);
-  const barChartRef = useRef(null);
-  const pieChartRef = useRef(null);
+// Formatter for currency
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0, // Adjust if you want decimal places
+}).format;
 
-  // Placeholder data
-  const data = clientData || [
-    { year: 'Year 1', forecast: 400 },
-    { year: 'Year 2', forecast: 800 },
-    { year: 'Year 3', forecast: 1500 },
-    { year: 'Year 4', forecast: 2000 },
-    { year: 'Year 5', forecast: 3000 },
+// Financial Data for visualization
+const VisualizationExport = () => {
+  // Hard code data for example
+  const data = [
+    {
+      name: 'Year 6',
+      netPosition: 533192165,
+      cashInflow: 36140210,
+      cashOutflow: 35860815,
+      netCashFlow: 279395,
+      liquidity: 369418004,
+      opex: 35860815,
+      debt: 72700000,
+    },
+    {
+      name: 'Year 7',
+      netPosition: 561522031,
+      cashInflow: 36587523,
+      cashOutflow: 34998259,
+      netCashFlow: 1589264,
+      liquidity: 403370308,
+      opex: 34998259,
+      debt: 69700000,
+    },
+    {
+      name: 'Year 8',
+      netPosition: 548326762,
+      cashInflow: 35693705,
+      cashOutflow: 36110120,
+      netCashFlow: -416415,
+      liquidity: 422605819,
+      opex: 35603263,
+      debt: 66193143,
+    },
+    {
+      name: 'Year 9',
+      netPosition: 581109400,
+      cashInflow: 35567019,
+      cashOutflow: 36521628,
+      netCashFlow: -954609,
+      liquidity: 432669418,
+      opex: 36014771,
+      debt: 41686286,
+    },
+    {
+      name: 'Pro 1',
+      netPosition: 574544776,
+      cashInflow: 35914282,
+      cashOutflow: 37310350,
+      netCashFlow: -1396068,
+      liquidity: 428237517,
+      opex: 36803493,
+      debt: 41179429,
+    },
   ];
 
-  useEffect(() => {
-    const lineCtx = lineChartRef.current.getContext('2d');
-    const barCtx = barChartRef.current.getContext('2d');
-    const pieCtx = pieChartRef.current.getContext('2d');
-
-    // Line chart
-    new Chart(lineCtx, {
-      type: 'line',
-      data: {
-        labels: data.map(item => item.year),
-        datasets: [{
-          label: 'Forecast (Line)',
-          data: data.map(item => item.forecast),
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          fill: true,
-        }],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
-
-    // Bar chart
-    new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: data.map(item => item.year),
-        datasets: [{
-          label: 'Forecast (Bar)',
-          data: data.map(item => item.forecast),
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.6)',
-            'rgba(54, 162, 235, 0.6)',
-            'rgba(255, 206, 86, 0.6)',
-            'rgba(75, 192, 192, 0.6)',
-            'rgba(153, 102, 255, 0.6)',
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-          ],
-          borderWidth: 1,
-        }],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
-
-    // Pie chart
-    new Chart(pieCtx, {
-      type: 'pie',
-      data: {
-        labels: data.map(item => item.year),
-        datasets: [{
-          label: 'Forecast (Pie)',
-          data: data.map(item => item.forecast),
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.6)',
-            'rgba(54, 162, 235, 0.6)',
-            'rgba(255, 206, 86, 0.6)',
-            'rgba(75, 192, 192, 0.6)',
-            'rgba(153, 102, 255, 0.6)',
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-          ],
-          borderWidth: 1,
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-      },
-    });
-
-  }, [data]);
-
-  const exportToCSV = () => {
-    const csvData = data.map(row => `${row.year},${row.forecast}`).join('\n');
-    const csvBlob = new Blob([csvData], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(csvBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'client_forecast.csv';
-    a.click();
-  };
-
   return (
-    <Container id={PAGE_IDS.VISUALIZATION_EXPORT}>
-      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-        <h2>Client Financial Projections</h2>
-        <p><strong>Note:</strong> These are example graphs to test how data may be projected. Data from <code>ClientDataImport</code> reports will need to be implemented. In progress page.</p>
+    <Container>
+      <Row>
+        <Col>
+          <h3>Equity Metrics</h3>
+          <Card>
+            <CardHeader>Net Position</CardHeader>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart
+                width={600}
+                height={300}
+                data={data}
+                margin={{
+                  top: 5, right: 30, left: 20, bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis tickFormatter={(value) => currencyFormatter(value)} fontSize={10} />
+                <Tooltip formatter={(value) => currencyFormatter(value)} />
+                <Legend />
+                <Line type="monotone" dataKey="netPosition" stroke="#8884d8" activeDot={{ r: 8 }} />
+              </LineChart>
+            </ResponsiveContainer>
 
-        <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-          {/* Line chart */}
-          <div style={{ width: '300px', height: '300px' }}>
-            <h3>Line Chart</h3>
-            <canvas ref={lineChartRef} />
-          </div>
+            <CardHeader>Liquidity</CardHeader>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart
+                width={600}
+                height={300}
+                data={data}
+                margin={{
+                  top: 5, right: 30, left: 20, bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis tickFormatter={(value) => currencyFormatter(value)} fontSize={10} />
+                <Tooltip formatter={(value) => currencyFormatter(value)} />
+                <Legend />
+                <Line type="monotone" dataKey="liquidity" stroke="#82ca9d" />
+              </LineChart>
+            </ResponsiveContainer>
 
-          {/* Bar chart */}
-          <div style={{ width: '300px', height: '300px' }}>
-            <h3>Bar Chart</h3>
-            <canvas ref={barChartRef} />
-          </div>
+            <CardHeader>Debt</CardHeader>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart
+                width={600}
+                height={300}
+                data={data}
+                margin={{
+                  top: 5, right: 30, left: 20, bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis tickFormatter={(value) => currencyFormatter(value)} fontSize={10} />
+                <Tooltip formatter={(value) => currencyFormatter(value)} />
+                <Legend />
+                <Line type="monotone" dataKey="debt" stroke="#ffc658" />
+              </LineChart>
+            </ResponsiveContainer>
+          </Card>
+        </Col>
 
-          {/* Pie chart */}
-          <div style={{ width: '300px', height: '300px' }}>
-            <h3>Pie Chart</h3>
-            <canvas ref={pieChartRef} />
-          </div>
-        </div>
+        <Col>
+          <h3>Cash Flow Metrics</h3>
+          <Card>
+            <CardHeader>Cash Inflow and Outflow</CardHeader>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart
+                width={600}
+                height={300}
+                data={data}
+                margin={{
+                  top: 5, right: 30, left: 20, bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis tickFormatter={(value) => currencyFormatter(value)} fontSize={10} />
+                <Tooltip formatter={(value) => currencyFormatter(value)} />
+                <Legend />
+                <Line type="monotone" dataKey="cashInflow" stroke="#8884d8" activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="cashOutflow" stroke="#82ca9d" />
+              </LineChart>
+            </ResponsiveContainer>
 
-        <button onClick={exportToCSV}>Export Data as CSV</button>
-      </div>
+            <CardHeader>Net Cash Flow</CardHeader>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart
+                width={500}
+                height={300}
+                data={data}
+                margin={{
+                  top: 5, right: 30, left: 20, bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis tickFormatter={(value) => currencyFormatter(value)} fontSize={10} />
+                <Tooltip formatter={(value) => currencyFormatter(value)} />
+                <Legend />
+                <Line type="monotone" dataKey="netCashFlow" stroke="#ff7300" />
+              </LineChart>
+            </ResponsiveContainer>
+
+            <CardHeader>Operating Expenses (Opex)</CardHeader>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart
+                width={600}
+                height={300}
+                data={data}
+                margin={{
+                  top: 5, right: 30, left: 20, bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis tickFormatter={(value) => currencyFormatter(value)} fontSize={10} />
+                <Tooltip formatter={(value) => currencyFormatter(value)} />
+                <Legend />
+                <Line type="monotone" dataKey="opex" stroke="#82ca9d" />
+              </LineChart>
+            </ResponsiveContainer>
+          </Card>
+        </Col>
+      </Row>
     </Container>
   );
 };

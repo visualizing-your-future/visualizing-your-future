@@ -35,20 +35,33 @@ class AdminProfileCollection extends BaseProfileCollection {
 
   /**
    * Updates the AdminProfile. You cannot change the email or role.
-   * @param docID the id of the AdminProfile
+   * @param docID the id of the AdminProfile.
+   * @param userID the associated User ID.
    * @param firstName new first name (optional).
    * @param lastName new last name (optional).
+   * @param email new email (optional).
+   * @param password new password (optional).
    */
-  update(docID, { firstName, lastName }) {
-    this.assertDefined(docID);
-    const updateData = {};
-    if (firstName) {
-      updateData.firstName = firstName;
+  update(docID, { userID, firstName, lastName, email, password }) {
+    if (Meteor.isServer) {
+      this.assertDefined(docID);
+      const updateData = {};
+      if (firstName) {
+        updateData.firstName = firstName;
+      }
+      if (lastName) {
+        updateData.lastName = lastName;
+      }
+      if (email) {
+        updateData.email = email;
+        Users.updateUsername(userID, email);
+      }
+      if (password) {
+        updateData.password = password;
+        Users.updatePassword(userID, password);
+      }
+      this._collection.update(docID, { $set: updateData });
     }
-    if (lastName) {
-      updateData.lastName = lastName;
-    }
-    this._collection.update(docID, { $set: updateData });
   }
 
   /**
