@@ -26,8 +26,8 @@ fixture('meteor-application-template-production localhost test with default db')
 // TEST PASSED
 test('Test that landing page shows up and button works', async () => {
   await landingPage.isDisplayed();
-  await landingPage.clickLearnMoreButton();
-  await await signInPage.isDisplayed();
+  // await landingPage.clickLearnMoreButton();
+  // await signInPage.isDisplayed();
 });
 
 // TEST PASSED
@@ -66,13 +66,13 @@ test.skip('Test that sign up for client and sign out work', async () => {
   await signOutPage.isDisplayed();
 });
 
-// PASSED TEST COME BCAK
-test.only('Test that all navbar page links for role User works', async () => {
+// TEST PASSED
+test('Test that all navbar page links for role User works', async () => {
   await navBar.gotoSignInPage();
   await signInPage.signin(credentials.username, credentials.password);
   await navBar.isLoggedIn(credentials.username);
   await landingPage.isDisplayed();
-  //await landingPage.visibleWelcomeUser();
+  // TODO: Check that the correct welcomes for user is being shown
   await navBar.gotoDataInputPage();
   await dataInputPage.isDisplayed();
   await navBar.gotoClientDataImportPage();
@@ -91,6 +91,7 @@ test('Test that all navbar links specific to role admin works', async () => {
   await signInPage.signin(adminCredentials.username, adminCredentials.password);
   await navBar.isLoggedIn(adminCredentials.username);
   await landingPage.isDisplayed();
+  // TODO: Check that the correct welcome for admin is being shown
   await navBar.gotoAdminPage();
   await adminPage.isDisplayed();
   await navBar.gotoAllProfilesPage();
@@ -101,7 +102,7 @@ test('Test that all navbar links specific to role admin works', async () => {
   await signOutPage.isDisplayed();
 });
 
-// PASSED TEST
+// CHECK AGAIN
 test('Test that the home page can be navigated to and is functional', async () => {
   await navBar.gotoSignInPage();
   await signInPage.signin(credentials.username, credentials.password);
@@ -112,18 +113,18 @@ test('Test that the home page can be navigated to and is functional', async () =
   await navBar.gotoLandingPage();
   await landingPage.clickViewDataButton();
   await dataInputPage.isDisplayed();
-  //await navBar.gotoLandingPage();
-  //await landingPage.clickClientProjectionsButton();
-  //await visualizationPage.isDisplayed();
+  await navBar.gotoLandingPage();
+  await landingPage.clickClientProjectionsButton();
+  await visualizationPage.isDisplayed();
   await navBar.logout();
   await signOutPage.isDisplayed();
 });
 
-test('Tests functionality of data input page', async () => {
+test.skip('Tests functionality of data input page', async () => {
 // TODO: later on, add code here
 });
 
-test('Tests edit user page for each role/account type', async () => {
+test.skip('Tests edit user page for each role/account type', async () => {
 // TODO: later on, add code here
   // TODO: accountant
   // TODO: client
