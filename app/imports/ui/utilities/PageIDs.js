@@ -5,9 +5,10 @@ export const PAGE_IDS = {
   LANDING: 'landing',
   HOME: 'my-home',
   LIST_STUFF: 'list-stuff',
-  DATA_STUFF: 'data-stuff',
-  LIST_STUFF_ADMIN: 'list-stuff-admin',
-  LIST_PROFILES: 'list-profiles',
+  DATA_STUFF: 'data-stuff', /* Goes from NAVBAR_DATA_INPUT */
+  ADMIN: 'list-stuff-admin',
+  ACCOUNT_SETTINGS: 'account-settings',
+  LIST_PROFILES: 'list-profiles', /* Goes from NAVBAR_LIST_PROFILES_ADMIN */
   MANAGE_DATABASE: 'manage-database',
   NOT_AUTHORIZED: 'not-authorized',
   NOT_FOUND: 'not-found',
@@ -17,5 +18,6 @@ export const PAGE_IDS = {
   ACCOUNT_SETTINGS: 'account-settings',
   DATA_INPUT: 'data-input',
   CLIENT_DATA: 'client-data',
+  CLIENT_DATA_IMPORT: 'client-data-import', /* Goes from NAVBAR_CLIENT_DATA */
   VISUALIZATION_EXPORT: 'visualization-export',
 };

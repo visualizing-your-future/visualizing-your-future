@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Card } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
 import { AuditedBalanceData } from '../../api/audited-balance-data/AuditedBalanceDataCollection';
+import { PAGE_IDS } from '../utilities/PageIDs';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const ClientData = () => {
@@ -43,7 +44,7 @@ const ClientData = () => {
   return (
     // Conditionally render the component based on whether the data is ready
     ready ? (
-      <Container className="py-3">
+      <Container id={PAGE_IDS.CLIENT_DATA} className="py-3">
         <Row className="justify-content-center pb-3">
           <Col md={7} className="text-center">
             <h2>Select a Client</h2>
