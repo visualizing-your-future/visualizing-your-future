@@ -53,7 +53,12 @@ class NavBar {
     await t.click(`#${COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN_SIGN_UP}`);
   }
 
-  /* Go to my futures page */
+  /* Go to landing page */
+  async gotoLandingPage() {
+    await t.click(`#${COMPONENT_IDS.NAVBAR_LANDING_PAGE}`);
+  }
+
+  /* Go to data input page */
   async gotoDataInputPage() {
     const visible = await Selector(`#${COMPONENT_IDS.NAVBAR_COLLAPSE}`).visible;
     if (!visible) {
@@ -63,7 +68,7 @@ class NavBar {
     await t.click(`#${COMPONENT_IDS.NAVBAR_DATA_INPUT}`);
   }
 
-  /* Go to my futures page */
+  /* Go to client data page */
   async gotoClientDataImportPage() {
     const visible = await Selector(`#${COMPONENT_IDS.NAVBAR_COLLAPSE}`).visible;
     if (!visible) {

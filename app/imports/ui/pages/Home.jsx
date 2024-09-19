@@ -42,7 +42,7 @@ const Home = () => {
           </Row>
         </Col>
         <Col xs={3} className="d-flex justify-content-center">
-          <Button onClick={() => handleNavigation('/home')} className="btn btn-primary">
+          <Button id="clientProjectionsButton" onClick={() => handleNavigation('/home')} className="btn btn-primary">
             <h5>See Client&apos;s Projections</h5>
           </Button>
         </Col>

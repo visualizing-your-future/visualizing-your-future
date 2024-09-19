@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Container, Row, Card, CardHeader } from 'react-bootstrap';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { PAGE_IDS } from '../utilities/PageIDs';
 
 // Formatter for currency
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -66,7 +67,7 @@ const VisualizationExport = () => {
   ];
 
   return (
-    <Container>
+    <Container id={PAGE_IDS.VISUALIZATION_EXPORT}>
       <Row>
         <Col>
           <h3>Equity Metrics</h3>

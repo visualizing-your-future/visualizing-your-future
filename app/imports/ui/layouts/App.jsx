@@ -24,7 +24,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ManageDatabase from '../pages/ManageDatabase';
 import ClientData from '../pages/ClientData';
 import ClientDataImport from '../pages/ClientDataImport';
-import Home from '../pages/Home';
 import VisualizationExport from '../pages/VisualizationExport';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
@@ -46,7 +45,6 @@ const App = () => {
           <Route path="/signout" element={<SignOut />} />
           <Route path="/userAccountSettings" element={<AccountSettings />} />
           <Route path="/landing" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
-          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
           <Route path="/dataInput" element={<ProtectedRoute><DataInput /></ProtectedRoute>} />
           <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
