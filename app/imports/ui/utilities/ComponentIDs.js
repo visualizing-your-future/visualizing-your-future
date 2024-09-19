@@ -36,4 +36,6 @@ export const COMPONENT_IDS = {
   ACCOUNT_SETTINGS_EMAIL: 'account-settings-email',
   ACCOUNT_SETTINGS_PASSWORD: 'account-settings-password',
   SAVE_ACCOUNT_CHANGES: 'save-account-changes',
+  LANDING_USER: 'landing-user',
+  LANDING_ADMIN: 'landing-admin',
 };

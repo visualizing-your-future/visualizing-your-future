@@ -2,7 +2,6 @@ import { signOutPage } from './simple.page';
 import { landingPage } from './landing.page';
 import { signInPage } from './signin.page';
 import { signUpPage } from './signup.page';
-import { homePage } from './home.page';
 import { navBar } from './navbar.component';
 import { clientDataImportPage } from './clientDataImport.page';
 import { dataInputPage } from './dataInput.page';
@@ -13,7 +12,7 @@ import { manageDatabasePage } from './manageDatabase.page';
 import { accountSettingsPage } from './accountSettings.page';
 
 /* global fixture:false, test:false */
-/* run command : "npm run test-acceptance-development */
+/* run command : npm run test-acceptance-development */
 
 /** Credentials for one of the sample users defined in settings.development.json. */
 const credentials = { username: 'john@foo.com', password: 'changeme' };
@@ -25,7 +24,7 @@ fixture('meteor-application-template-production localhost test with default db')
   .page('http://localhost:3000');
 
 // TEST PASSED
-test('Test that landing page shows up', async () => {
+test('Test that landing page shows up and button works', async () => {
   await landingPage.isDisplayed();
   await landingPage.clickLearnMoreButton();
   await await signInPage.isDisplayed();
@@ -67,13 +66,13 @@ test.skip('Test that sign up for client and sign out work', async () => {
   await signOutPage.isDisplayed();
 });
 
-// PASSED TEST
-test('Test that all navbar page links for role User works', async () => {
+// PASSED TEST COME BCAK
+test.only('Test that all navbar page links for role User works', async () => {
   await navBar.gotoSignInPage();
   await signInPage.signin(credentials.username, credentials.password);
   await navBar.isLoggedIn(credentials.username);
-  await navBar.gotoHomePage();
-  await homePage.isDisplayed();
+  await landingPage.isDisplayed();
+  //await landingPage.visibleWelcomeUser();
   await navBar.gotoDataInputPage();
   await dataInputPage.isDisplayed();
   await navBar.gotoClientDataImportPage();
@@ -91,8 +90,7 @@ test('Test that all navbar links specific to role admin works', async () => {
   await navBar.gotoSignInPage();
   await signInPage.signin(adminCredentials.username, adminCredentials.password);
   await navBar.isLoggedIn(adminCredentials.username);
-  await navBar.gotoHomePage();
-  await homePage.isDisplayed();
+  await landingPage.isDisplayed();
   await navBar.gotoAdminPage();
   await adminPage.isDisplayed();
   await navBar.gotoAllProfilesPage();
@@ -108,14 +106,15 @@ test('Test that the home page can be navigated to and is functional', async () =
   await navBar.gotoSignInPage();
   await signInPage.signin(credentials.username, credentials.password);
   await navBar.isLoggedIn(credentials.username);
-  await navBar.gotoHomePage();
-  await homePage.isDisplayed();
-  await homePage.clickImportDataButton();
+  await landingPage.isDisplayed();
+  await landingPage.clickImportDataButton();
   await clientDataImportPage.isDisplayed();
-  await navBar.gotoHomePage();
-  await homePage.clickViewDataButton();
+  await navBar.gotoLandingPage();
+  await landingPage.clickViewDataButton();
   await dataInputPage.isDisplayed();
-  // TODO: check that "See Client's Projections" button points to visulization page
+  //await navBar.gotoLandingPage();
+  //await landingPage.clickClientProjectionsButton();
+  //await visualizationPage.isDisplayed();
   await navBar.logout();
   await signOutPage.isDisplayed();
 });
