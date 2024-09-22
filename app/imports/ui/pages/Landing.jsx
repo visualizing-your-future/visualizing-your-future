@@ -6,6 +6,7 @@ import { Roles } from 'meteor/alanning:roles';
 import { useNavigate } from 'react-router-dom';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { ROLE } from '../../api/role/Role';
+import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -26,140 +27,139 @@ const Landing = () => {
   }, []);
 
   return (
-    <div>
-      <div id="landing-page-container" className="py-5 text-center">
-        <Container id={PAGE_IDS.LANDING}>
-          <Row className="d-flex justify-content-center align-items-center">
-            <Col xs={12}>
-              {isAdmin ? (
-                <div>
-                  <h1 className="mt-4">Welcome Admin {currentUser}!</h1>
-                  <p className="lead mt-3">Admin Dashboard</p>
+    <div id={PAGE_IDS.LANDING}>
+      <div>
+        <div id="landing-page-container" className="py-5 text-center">
+          <Container>
+            <Row className="d-flex justify-content-center align-items-center">
+              <Col xs={12}>
+                {isAdmin ? (
+                  <div>
+                    <h1 id={COMPONENT_IDS.LANDING_ADMIN} className="mt-4">Welcome Admin {currentUser}!</h1>
+                    <p className="lead mt-3">Admin Dashboard</p>
 
-                </div>
-              ) : currentUser ? (
-                <div>
-                  <h1 className="mt-4">Welcome User {currentUser}!</h1>
-                  <p className="lead mt-3">User Dashboard</p>
-                </div>
-              ) : (
-                <div>
-                  <h1 className="mt-4">Welcome to Spire</h1>
-                  <Button variant="primary" size="lg" className="button-square mt-3" id="button-square">Learn More</Button>
-                </div>
+                  </div>
+                ) : currentUser ? (
+                  <div>
+                    <h1 id={COMPONENT_IDS.LANDING_USER} className="mt-4">Welcome User {currentUser}!</h1>
+                    <p className="lead mt-3">User Dashboard</p>
+                  </div>
+                ) : (
+                  <div>
+                    <h1 className="mt-4">Welcome to Spire</h1>
+                    <Button variant="primary" size="lg" className="button-square mt-3" id="button-square" />
+                  </div>
 
-              )}
-            </Col>
-          </Row>
-        </Container>
-      </div>
+                )}
+              </Col>
+            </Row>
+          </Container>
+        </div>
 
-      {/* Admin-Specific Section */}
-      {isAdmin && (
-        <Container fluid className="py-5">
+        {/* Admin-Specific Section */}
+        {isAdmin && (
+          <Container fluid className="py-5">
 
-          <Container id={PAGE_IDS.HOME} className="py-5">
-            <Row className="text-center">
-              <h3>Client Profiles</h3>
-              <div>See details per client here.</div>
+            <Container id={PAGE_IDS.LANDING_USER} className="py-5">
+              <Row className="text-center">
+                <h3>Client Profiles</h3>
+                <div>See details per client here.</div>
+              </Row>
+              <Row className="d-flex justify-content-center mb-4 py-5">
+                {/* First Button */}
+                <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
+                  <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary" id="importDataButton">
+                    Import Client Data
+                  </Button>
+                </Col>
+
+                {/* Second Button */}
+                <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
+                  <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary" id="viewDataButton">
+                    Data Input
+                  </Button>
+                </Col>
+
+                {/* Third Button */}
+                <Col xs={12} md={4} className="d-flex justify-content-center">
+                  <Button onClick={() => handleNavigation('/VisualizationExport')} className="btn btn-secondary" id="clientProjectionsButton">
+                    See Client&apos;s Projections
+                  </Button>
+                </Col>
+              </Row>
+            </Container>
+          </Container>
+        )}
+
+        {/* User-Specific Section */}
+        {currentUser && !isAdmin && (
+          <Container fluid id={PAGE_IDS.HOME_ADMIN} className="py-5">
+            <Row className="justify-content-center text-center">
+              <Col xs={12} md={8}>
+                <h3 className="mb-4">User Dashboard</h3>
+                <p>Create your profile, connect with others, and explore opportunities to grow your career.</p>
+              </Col>
             </Row>
             <Row className="d-flex justify-content-center mb-4 py-5">
               {/* First Button */}
               <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-                <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary" id="button-square">
+                <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary" id="importDataButton">
                   Import Client Data
                 </Button>
               </Col>
 
               {/* Second Button */}
               <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-                <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary" id="button-square">
+                <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary" id="viewDataButton">
                   Data Input
                 </Button>
               </Col>
 
               {/* Third Button */}
               <Col xs={12} md={4} className="d-flex justify-content-center">
-                <Button onClick={() => handleNavigation('/VisualizationExport')} className="btn btn-secondary" id="button-square">
+                <Button onClick={() => handleNavigation('/VisualizationExport')} className="btn btn-secondary" id="clientProjectionsButton">
                   See Client&apos;s Projections
                 </Button>
               </Col>
             </Row>
           </Container>
-        </Container>
-      )}
+        )}
 
-      {/* User-Specific Section */}
-      {currentUser && !isAdmin && (
-        <Container fluid id={PAGE_IDS.HOME} className="py-5">
-          <Row className="justify-content-center text-center">
-            <Col xs={12} md={8}>
-              <h3 className="mb-4">User Dashboard</h3>
-              <p>Create your profile, connect with others, and explore opportunities to grow your career.</p>
-            </Col>
-          </Row>
-          <Row className="d-flex justify-content-center mb-4 py-5">
-            {/* First Button */}
-            <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-              <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary" id="button-square">
-                Import Client Data
-              </Button>
-            </Col>
+        {/* Guest Section */}
+        {!currentUser && (
+          <Container fluid className="py-5">
+            <Row className="justify-content-center text-center">
+              <Col xs={12} md={8}>
+                <h2>Why Spire?</h2>
+                <p className="mt-3">At Spire, we believe in innovation and growth. Join us to explore opportunities and discover new possibilities in your career.</p>
+              </Col>
+            </Row>
 
-            {/* Second Button */}
-            <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-              <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary" id="button-square">
-                Data Input
-              </Button>
-            </Col>
-
-            {/* Third Button */}
-            <Col xs={12} md={4} className="d-flex justify-content-center">
-              <Button onClick={() => handleNavigation('/VisualizationExport')} className="btn btn-secondary" id="button-square">
-                See Client&apos;s Projections
-              </Button>
-            </Col>
-          </Row>
-        </Container>
-      )}
-
-      {/* Guest Section */}
-      {!currentUser && (
-        <Container fluid className="py-5">
-          <Row className="justify-content-center text-center">
-            <Col xs={12} md={8}>
-              <h2>Why Spire?</h2>
-              <p className="mt-3">At Spire, we believe in innovation and growth. Join us to explore opportunities and discover new possibilities in your career.</p>
-            </Col>
-          </Row>
-
-          <Row className="justify-content-center service-section mt-4">
-            <Col xs={12} md={6} className="service-column">
-              <h3>State Financial Agencies</h3>
-              <h4>Services provided:</h4>
-              <ul>
-                <li>Design of accounting system framework, chart of accounts</li>
-                <li>Statewide financial framework</li>
-                <li>Organizational development and direction</li>
-                <li>Project management</li>
-                <li>Change management</li>
-              </ul>
-            </Col>
-
-            <Col xs={12} md={6} className="service-column">
-              <h3>An Agribusiness</h3>
-              <h4>Services provided:</h4>
-              <ul>
-                <li>Outsource CFO services</li>
-                <li>Financial system setup and implementation</li>
-                <li>Financial planning and analysis</li>
-                <li>Due diligence assistance</li>
-                <li>Accounting setup</li>
-              </ul>
-            </Col>
-          </Row>
-        </Container>
-      )}
+            <Row className="my-5 justify-content-center">
+              <Col xs={12} md={6}>
+                <h4>State Financial Agencies</h4>
+                <ul>
+                  <li>Design of accounting system framework, chart of accounts</li>
+                  <li>Statewide financial framework</li>
+                  <li>Organizational development and direction</li>
+                  <li>Project management</li>
+                  <li>Change management</li>
+                </ul>
+              </Col>
+              <Col xs={12} md={6}>
+                <h4>An Agribusiness</h4>
+                <ul>
+                  <li>Outsource CFO services</li>
+                  <li>Financial system setup and implementation</li>
+                  <li>Financial planning and analysis</li>
+                  <li>Due diligence assistance</li>
+                  <li>Accounting setup</li>
+                </ul>
+              </Col>
+            </Row>
+          </Container>
+        )}
+      </div>
     </div>
   );
 };

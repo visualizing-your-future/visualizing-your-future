@@ -16,19 +16,20 @@ class SignUpPage {
   }
 
   /** Signs up a new user, then checks to see that they are logged in by checking the navbar. */
-  async signupUser(username, password, accountType, clientKey) {
-    await t.typeText(`#${COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME}`, 'Jane');
-    await t.typeText(`#${COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME}`, 'Doe');
-    await t.typeText(`#${COMPONENT_IDS.SIGN_UP_FORM_EMAIL}`, username);
+  async signupUser(username, password, accountType, company, clientKey) {
     if (accountType === 'Accountant') {
       await t.click(this.accountTypeAccountantSelector);
+      await t.typeText(`#${COMPONENT_IDS.SIGN_UP_FORM_FIRST_NAME}`, 'Jane');
+      await t.typeText(`#${COMPONENT_IDS.SIGN_UP_FORM_LAST_NAME}`, 'Doe');
     } else if (accountType === 'Client') {
       await t.click(this.accountTypeClientSelector);
-      if (clientKey) {
-        await t.typeText(Selector('#sign-up .form-control').nth(3), clientKey);
-      }
+      await t.wait(100);
+      await t.typeText(`#${COMPONENT_IDS.SIGN_UP_FORM_COMPANY_NAME}`, company);
+      await t.typeText(`#${COMPONENT_IDS.SIGN_UP_FORM_CLIENT_KEY}`, clientKey);
     }
+    await t.typeText(`#${COMPONENT_IDS.SIGN_UP_FORM_EMAIL}`, username);
     await t.typeText(`#${COMPONENT_IDS.SIGN_UP_FORM_PASSWORD}`, password);
+
     await t.click(`#${COMPONENT_IDS.SIGN_UP_FORM_SUBMIT} input.btn.btn-primary`);
   }
 }

@@ -28,13 +28,12 @@ const NavBar = () => {
         <Navbar.Collapse id={COMPONENT_IDS.NAVBAR_COLLAPSE}>
           <Nav className="me-auto justify-content-start">
             {currentUser ? ([
-              // <Nav.Link id={COMPONENT_IDS.NAVBAR_MY_HOME} as={NavLink} to="/home" key="home">My Futures</Nav.Link>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_DATA_INPUT} as={NavLink} to="/dataInput" key="dataInput">Data Input (Temp)</Nav.Link>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/clientDataImport" key="clients">Client Data</Nav.Link>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_VISUALIZATION_EXPORT} as={NavLink} to="/visualizationExport" key="visualizationExport">Visualization</Nav.Link>,
             ]) : ''}
             {Roles.userIsInRole(Meteor.userId(), [ROLE.ADMIN]) ? (
-              [<Nav.Link id={COMPONENT_IDS.NAVBAR_LIST_STUFF_ADMIN} as={NavLink} to="/admin" key="admin">Admin</Nav.Link>,
+              [<Nav.Link id={COMPONENT_IDS.NAVBAR_ADMIN} as={NavLink} to="/admin" key="admin">Admin</Nav.Link>,
                 <Nav.Link id={COMPONENT_IDS.NAVBAR_LIST_PROFILES_ADMIN} as={NavLink} to="/profiles" key="profiles">All Profiles</Nav.Link>,
                 <NavDropdown id={COMPONENT_IDS.NAVBAR_MANAGE_DROPDOWN} title="Manage" key="manage-dropdown">
                   <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_MANAGE_DROPDOWN_DATABASE} key="manage-database" as={NavLink} to="/manage-database"><CloudDownload /> Database</NavDropdown.Item>
