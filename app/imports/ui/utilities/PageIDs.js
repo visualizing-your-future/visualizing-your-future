@@ -10,6 +10,7 @@ export const PAGE_IDS = {
   ADMIN: 'list-stuff-admin',
   ACCOUNT_SETTINGS: 'account-settings',
   LIST_PROFILES: 'list-profiles', /* Goes from NAVBAR_LIST_PROFILES_ADMIN */
+  EDIT_PROFILE: 'edit-profile',
   MANAGE_DATABASE: 'manage-database',
   NOT_AUTHORIZED: 'not-authorized',
   NOT_FOUND: 'not-found',
