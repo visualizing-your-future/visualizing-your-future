@@ -6,7 +6,7 @@
   ],
 
   "defaultAuditedBalanceData": [
-    { "owner":  "john@foo.com", "cashStuff": [ {"pettyCash": "800", "cash":  "8047307", "cashBankCred": "17643599" } ]}
+    { "owner":  "john@foo.com" }
   ],
 
   "defaultData": [
