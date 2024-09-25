@@ -132,7 +132,7 @@ const Comparison = ({ data }) => {
           </Form.Control>
         </Form.Group>
       </Form>
-      {filteredData.length > 0 && renderChart(filteredData, selectedChartType, '#8884d8')}
+      {filteredData.length > 0 && renderChart(filteredData, selectedChartType, '#e64b37')}
     </Card.Body>
   );
 };
@@ -145,34 +145,36 @@ const VisualizationExport = () => {
     <Container>
       <Row>
         <Col>
-          <Nav variant="tabs" activeKey={activeKey} onSelect={setActiveKey}>
+          <Nav variant="tabs" activeKey={activeKey} onSelect={setActiveKey} className="mb-3">
             <Nav.Item>
-              <Nav.Link eventKey="snapshot">Snapshot</Nav.Link>
+              <Nav.Link eventKey="snapshot" style={{ color: '#e64b37' }}>Snapshot</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="4year">4-Year</Nav.Link>
+              <Nav.Link eventKey="4year" style={{ color: '#e64b37' }}>4-Year</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="8year">8-Year</Nav.Link>
+              <Nav.Link eventKey="8year" style={{ color: '#e64b37' }}>8-Year</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="12year">12-Year</Nav.Link>
+              <Nav.Link eventKey="12year" style={{ color: '#e64b37' }}>12-Year</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="comparison">Comparison</Nav.Link>
+              <Nav.Link eventKey="comparison" style={{ color: '#e64b37' }}>Comparison</Nav.Link>
             </Nav.Item>
           </Nav>
         </Col>
       </Row>
       <Row>
         <Col>
-          <Card>
-            <Card.Header>{activeKey.charAt(0).toUpperCase() + activeKey.slice(1)} View</Card.Header>
+          <Card className="mt-3">
+            <Card.Header style={{ backgroundColor: '#e64b37', color: 'white' }}>
+              {activeKey.charAt(0).toUpperCase() + activeKey.slice(1)} View
+            </Card.Header>
             <Card.Body>
               {activeKey === 'snapshot' && (
                 <>
                   {renderSnapshotTable(dataSets.snapshot)}
-                  {renderChart(dataSets.snapshot, 'netPosition', '#8884d8')}
+                  {renderChart(dataSets.snapshot, 'netPosition', '#e64b37')}
                   {renderChart(dataSets.snapshot, 'cashOnHand', '#82ca9d')}
                   {renderChart(dataSets.snapshot, 'debt', '#ffc658')}
                   {renderChart(dataSets.snapshot, 'revenues', '#ff7300')}
@@ -183,7 +185,7 @@ const VisualizationExport = () => {
               {activeKey === '4year' && (
                 <>
                   {renderSnapshotTable(dataSets['4year'])}
-                  {renderChart(dataSets['4year'], 'netPosition', '#8884d8')}
+                  {renderChart(dataSets['4year'], 'netPosition', '#e64b37')}
                   {renderChart(dataSets['4year'], 'cashOnHand', '#82ca9d')}
                   {renderChart(dataSets['4year'], 'debt', '#ffc658')}
                   {renderChart(dataSets['4year'], 'revenues', '#ff7300')}
@@ -194,7 +196,7 @@ const VisualizationExport = () => {
               {activeKey === '8year' && (
                 <>
                   {renderSnapshotTable(dataSets['8year'])}
-                  {renderChart(dataSets['8year'], 'netPosition', '#8884d8')}
+                  {renderChart(dataSets['8year'], 'netPosition', '#e64b37')}
                   {renderChart(dataSets['8year'], 'cashOnHand', '#82ca9d')}
                   {renderChart(dataSets['8year'], 'debt', '#ffc658')}
                   {renderChart(dataSets['8year'], 'revenues', '#ff7300')}
@@ -205,7 +207,7 @@ const VisualizationExport = () => {
               {activeKey === '12year' && (
                 <>
                   {renderSnapshotTable(dataSets['12year'])}
-                  {renderChart(dataSets['12year'], 'netPosition', '#8884d8')}
+                  {renderChart(dataSets['12year'], 'netPosition', '#e64b37')}
                   {renderChart(dataSets['12year'], 'cashOnHand', '#82ca9d')}
                   {renderChart(dataSets['12year'], 'debt', '#ffc658')}
                   {renderChart(dataSets['12year'], 'revenues', '#ff7300')}
