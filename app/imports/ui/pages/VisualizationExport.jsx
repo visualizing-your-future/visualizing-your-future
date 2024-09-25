@@ -29,7 +29,7 @@ const snapshotData = [
 const dataSets = {
   snapshot: snapshotData,
   '4year': snapshotData.slice(0, 5), // Using first 5 years
-  '8year': snapshotData.slice(0, 9), // Using first 8 years
+  '8year': snapshotData.slice(0, 8), // Using first 8 years
   '12year': snapshotData, // All 12 years
 };
 
@@ -86,24 +86,30 @@ const renderChart = (data, key, color) => (
 );
 
 // Comparison Component
+// eslint-disable-next-line react/prop-types
 const Comparison = ({ data }) => {
   const [selectedYears, setSelectedYears] = useState([]);
   const [selectedChartType, setSelectedChartType] = useState('netPosition');
 
   const handleYearSelect = (year) => {
-    setSelectedYears((prev) => (prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]));
+    setSelectedYears((prev) => {
+      const isSelected = prev.includes(year);
+      return isSelected ? prev.filter((y) => y !== year) : [...prev, year];
+    });
   };
 
   const handleChartTypeChange = (e) => {
     setSelectedChartType(e.target.value);
   };
 
+  // eslint-disable-next-line react/prop-types
   const filteredData = data.filter((entry) => selectedYears.includes(entry.year));
 
   return (
     <Card.Body>
       <h5>Select Years to Compare</h5>
       <Form>
+        {/* eslint-disable-next-line react/prop-types */}
         {data.map((entry, index) => (
           <Form.Check
             key={index}
