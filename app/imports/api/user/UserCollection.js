@@ -84,24 +84,15 @@ class UserCollection {
   }
 
   /**
-   * Updates the user's password.
-   * Sign in checks meteor/accounts-base and BaseProfileCollection schema does not have a password field,
-   * so a different method is needed to update the username and email.
+   * Checks user input old password vs password stored in database.
+   * If it matches, update password to the new password.
+   * This is a client side only function.
+   *
    * @param oldPassword The user's old password.
    * @param newPassword The user's new password.
-   *
-   * TODO: method should not be Async.
    */
   updatePassword(oldPassword, newPassword) {
-    console.log('attempting to change password');
-    console.log(oldPassword);
-    console.log(newPassword);
-    if (Meteor.isClient) {
-      console.log('changing password on CLIENT');
-      Accounts.changePassword(oldPassword, newPassword);
-    } else {
-      console.log('SEEERRRVVEEERRR');
-    }
+    Accounts.changePassword(oldPassword, newPassword);
   }
 
   /**

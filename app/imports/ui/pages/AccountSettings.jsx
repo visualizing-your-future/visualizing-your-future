@@ -87,9 +87,20 @@ const AccountSettings = () => {
   }, []);
 
   const submit = (data) => {
+    /** Verify the user is actually logged in before doing anything. */
+    if (!Meteor.user()) {
+      swal('Error', 'You are not logged in.', 'error');
+      return;
+    }
+
+    /** Stores the values the user inputs in the page TextFields. */
     const { firstName, lastName, email, oldPassword, newPassword, verifyNewPassword } = data;
 
-    /** Check if user input new password correctly. */
+    /**
+     * Check if user intended to change password and input new password correctly.
+     * If so, call CLIENT side function updatePassword().
+     * If not, throw error.
+     */
     if (oldPassword && (newPassword === verifyNewPassword)) {
       Users.updatePassword(oldPassword, newPassword);
     } else if (oldPassword && (newPassword !== verifyNewPassword)) {
@@ -97,20 +108,14 @@ const AccountSettings = () => {
       return;
     }
 
-    const updateData = { id: documentID, userID, firstName, lastName, email, oldPassword, newPassword };
-    console.log('passwords match');
-    console.log(collectionName, updateData);
+    /**
+     * Add the documentID to the data being passed to the collection update function,
+     * then call the collection update function.
+     */
+    const updateData = { id: documentID, userID, firstName, lastName, email };
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
-    /**
-     * TODO: implement logic to determine if password changed.
-     * Currently, if the password is changed, the user is logged out, but redirected to the
-     * userAccountSettings page with no access to anything.
-     *
-     * Should redirect to userAccountSettings page if password or email was NOT changed.
-     * Redirect to signin page if password or email was changed.
-     */
     navigate('/userAccountSettings');
   };
 
@@ -128,8 +133,8 @@ const AccountSettings = () => {
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last name" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_EMAIL} name="email" placeholder="email" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="oldPassword" placeholder="Old Password" type="password" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="newPassword" placeholder="New Password" type="password" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="verifyNewPassword" placeholder="Re-type New Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_NEW_PASSWORD} name="newPassword" placeholder="New Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_VERIFY_NEW_PASSWORD} name="verifyNewPassword" placeholder="Re-type New Password" type="password" />
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
               </Card.Body>
