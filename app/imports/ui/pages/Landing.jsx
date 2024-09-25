@@ -7,105 +7,76 @@ import { useNavigate } from 'react-router-dom';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { ROLE } from '../../api/role/Role';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
-import { AdminProfiles } from '../../api/user/AdminProfileCollection'; // Import AdminProfiles
-import LoadingSpinner from '../components/LoadingSpinner'; // Import a loading spinner
+import { AdminProfiles } from '../../api/user/AdminProfileCollection';
+import LoadingSpinner from '../components/LoadingSpinner';
 
-/**
- * Landing component:
- * This component renders the landing page, displaying different dashboards based on the user type:
- * Admins, regular users, and guests. It uses Meteor's useTracker hook to subscribe to
- * the necessary user profile data.
- */
 const Landing = () => {
   const navigate = useNavigate();
 
-  /**
-   * handleNavigation:
-   * Helper function to navigate to a different page when the user clicks a button.
-   */
   const handleNavigation = (path) => {
     navigate(path);
   };
 
-  /**
-   * useTracker:
-   * This hook subscribes to the user and admin profiles and fetches the firstName, lastName,
-   * and user type (admin or regular user). It also manages a loading state while waiting for the subscription data.
-   */
-  let { currentUser, firstName, lastName, isAdmin, isLoading } = useTracker(() => {
+  const tracker = useTracker(() => {
     const user = Meteor.user();
     const userId = Meteor.userId();
-
-    // Loading state - true until subscriptions are ready
-    isLoading = true;
+    let isLoading = true;
+    let isAdmin = false;
+    let firstName = '';
+    let lastName = '';
+    let profile;
+    if (!userId) {
+      return { currentUser: '', isAdmin: false, firstName: '', lastName: '', isLoading: false };
+    }
 
     // Check if the user is an Admin
     isAdmin = Roles.userIsInRole(userId, [ROLE.ADMIN]);
 
-    currentUser = user ? user.username : '';
-    firstName = '';
-    lastName = '';
-    let profile;
-
-    // If the user is an admin, subscribe to AdminProfiles and fetch admin-specific data
     if (isAdmin) {
       const adminHandle = AdminProfiles.subscribeAdmin();
       if (!adminHandle.ready()) {
-        return { isLoading: true }; // Early return if not ready
+        return { isLoading: true };
       }
-
       profile = AdminProfiles.findOne({ email: user?.username });
     } else {
-      // Otherwise, subscribe to UserProfiles and fetch user-specific data
       const userHandle = UserProfiles.subscribeProfileUser();
       if (!userHandle.ready()) {
-        return { isLoading: true }; // Early return if not ready
+        return { isLoading: true };
       }
-
       profile = UserProfiles.findOne({ email: user?.username });
     }
 
-    // Set firstName and lastName based on profile data
     if (profile) {
       firstName = profile.firstName || '';
       lastName = profile.lastName || '';
     }
 
-    isLoading = false; // Set loading to false once data is ready
+    isLoading = false;
 
     return {
-      currentUser,
+      currentUser: user ? user.username : '',
       firstName,
       lastName,
       isAdmin,
       isLoading,
     };
-  }, []);
+  }, []); const
+    { currentUser, firstName, lastName, isAdmin, isLoading } = tracker;
 
-  // Display a loading spinner while subscriptions are still loading
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
-  /**
-   * getWelcomeMessage:
-   * Helper function to return the appropriate welcome message based on whether the user is an Admin, a regular user, or a guest.
-   */
   const getWelcomeMessage = () => {
     if (isAdmin) {
       return <h1 className="mt-4">Welcome {firstName || currentUser} {lastName}!</h1>;
-    }
-    if (currentUser) {
+    } if (currentUser) {
       return <h1 className="mt-4">Welcome {firstName || currentUser} {lastName}!</h1>;
     }
     return <h1 className="mt-4">Welcome to Spire</h1>;
 
   };
 
-  /**
-   * renderButtonsForAdmin:
-   * Helper function that returns buttons for actions available to admin users, such as importing client data and inputting data.
-   */
   const renderButtonsForAdmin = () => (
     <Container fluid className="py-5">
       <Container id={PAGE_IDS.HOME} className="py-5">
@@ -134,10 +105,6 @@ const Landing = () => {
     </Container>
   );
 
-  /**
-   * renderButtonsForUser:
-   * Helper function that returns buttons for actions available to regular users, such as importing client data and seeing projections.
-   */
   const renderButtonsForUser = () => (
     <Container fluid id={PAGE_IDS.HOME} className="py-5">
       <Row className="justify-content-center text-center">
@@ -166,11 +133,6 @@ const Landing = () => {
     </Container>
   );
 
-  /**
-   * Main return block:
-   * This renders the landing page, showing different views for admins, users, and guests.
-   * It uses helper functions to display the correct content for each role.
-   */
   return (
     <div>
       <div id="landing-page-container" className="py-5 text-center">
@@ -185,13 +147,8 @@ const Landing = () => {
         </Container>
       </div>
 
-      {/* Admin-Specific Section */}
       {isAdmin && renderButtonsForAdmin()}
-
-      {/* User-Specific Section */}
       {currentUser && !isAdmin && renderButtonsForUser()}
-
-      {/* Guest Section */}
       {!currentUser && (
         <Container fluid className="py-5">
           <Row className="justify-content-center text-center">
