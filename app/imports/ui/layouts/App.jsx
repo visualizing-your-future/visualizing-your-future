@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
 import ListStuff from '../pages/ListStuff';
 import DataInput from '../pages/DataInput';
-import ListStuffAdmin from '../pages/ListStuffAdmin';
+import Admin from '../pages/Admin';
 import ListProfiles from '../pages/ListProfiles';
 import AddStuff from '../pages/AddStuff';
 import EditStuff from '../pages/EditStuff';
@@ -24,7 +24,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ManageDatabase from '../pages/ManageDatabase';
 import ClientData from '../pages/ClientData';
 import ClientDataImport from '../pages/ClientDataImport';
-import Home from '../pages/Home';
 import VisualizationExport from '../pages/VisualizationExport';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
@@ -46,14 +45,13 @@ const App = () => {
           <Route path="/signout" element={<SignOut />} />
           <Route path="/userAccountSettings" element={<AccountSettings />} />
           <Route path="/landing" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
-          <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
           <Route path="/dataInput" element={<ProtectedRoute><DataInput /></ProtectedRoute>} />
           <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
           <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
           <Route path="/edit/:_id" element={<ProtectedRoute><EditStuff /></ProtectedRoute>} />
           <Route path="/visualizationExport" element={<ProtectedRoute><VisualizationExport /></ProtectedRoute>} />
-          <Route path="/admin" element={<AdminProtectedRoute ready={ready}><ListStuffAdmin /></AdminProtectedRoute>} />
+          <Route path="/admin" element={<AdminProtectedRoute ready={ready}><Admin /></AdminProtectedRoute>} />
           <Route path="/profiles" element={<AdminProtectedRoute ready={ready}><ListProfiles /></AdminProtectedRoute>} />
           <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
           <Route path="/clients" element={<AdminProtectedRoute ready={ready}><ClientData /></AdminProtectedRoute>} />

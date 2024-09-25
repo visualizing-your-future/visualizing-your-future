@@ -47,7 +47,9 @@ const SignUp = () => {
       label: 'Last Name',
       optional: true,
       custom() {
+        // eslint-disable-next-line react/no-this-in-sfc
         const accountType = this.field('accountType').value;
+        // eslint-disable-next-line react/no-this-in-sfc
         if (accountType === 'Accountant' && !this.value) {
           return 'required'; // Require for 'Accountant'
         }
@@ -59,7 +61,9 @@ const SignUp = () => {
       label: 'Company Name',
       optional: true,
       custom() {
+        // eslint-disable-next-line react/no-this-in-sfc
         const accountType = this.field('accountType').value;
+        // eslint-disable-next-line react/no-this-in-sfc
         if (accountType === 'Client' && !this.value) {
           return 'required'; // Require for 'Accountant'
         }
@@ -71,7 +75,9 @@ const SignUp = () => {
       label: 'Client Key',
       optional: true,
       custom() {
+        // eslint-disable-next-line react/no-this-in-sfc
         const accountType = this.field('accountType').value;
+        // eslint-disable-next-line react/no-this-in-sfc
         if (accountType === 'Client' && !this.value) {
           return 'required'; // Require for 'Accountant'
         }
