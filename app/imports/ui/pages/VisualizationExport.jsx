@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Container, Row, Card, Table, Nav, Form } from 'react-bootstrap';
+import { Col, Container, Row, Card, Table, Nav, Form, Button } from 'react-bootstrap';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 // Currency formatter
@@ -86,7 +86,6 @@ const renderChart = (data, key, color) => (
 );
 
 // Comparison Component
-// eslint-disable-next-line react/prop-types
 const Comparison = ({ data }) => {
   const [selectedYears, setSelectedYears] = useState([]);
   const [selectedChartType, setSelectedChartType] = useState('netPosition');
@@ -102,14 +101,12 @@ const Comparison = ({ data }) => {
     setSelectedChartType(e.target.value);
   };
 
-  // eslint-disable-next-line react/prop-types
   const filteredData = data.filter((entry) => selectedYears.includes(entry.year));
 
   return (
     <Card.Body>
       <h5>Select Years to Compare</h5>
       <Form>
-        {/* eslint-disable-next-line react/prop-types */}
         {data.map((entry, index) => (
           <Form.Check
             key={index}
@@ -140,6 +137,16 @@ const Comparison = ({ data }) => {
 // Main VisualizationExport component
 const VisualizationExport = () => {
   const [activeKey, setActiveKey] = useState('snapshot');
+  const [isDataVisible, setIsDataVisible] = useState({
+    snapshot: true,
+    '4year': true,
+    '8year': true,
+    '12year': true,
+  });
+
+  const toggleDataVisibility = (key) => {
+    setIsDataVisible((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
 
   return (
     <Container>
@@ -173,7 +180,10 @@ const VisualizationExport = () => {
             <Card.Body>
               {activeKey === 'snapshot' && (
                 <>
-                  {renderSnapshotTable(dataSets.snapshot)}
+                  <Button onClick={() => toggleDataVisibility('snapshot')} variant="link">
+                    {isDataVisible.snapshot ? 'Hide Data' : 'Show Data'}
+                  </Button>
+                  {isDataVisible.snapshot && renderSnapshotTable(dataSets.snapshot)}
                   {renderChart(dataSets.snapshot, 'netPosition', '#e64b37')}
                   {renderChart(dataSets.snapshot, 'cashOnHand', '#82ca9d')}
                   {renderChart(dataSets.snapshot, 'debt', '#ffc658')}
@@ -184,7 +194,10 @@ const VisualizationExport = () => {
               )}
               {activeKey === '4year' && (
                 <>
-                  {renderSnapshotTable(dataSets['4year'])}
+                  <Button onClick={() => toggleDataVisibility('4year')} variant="link">
+                    {isDataVisible['4year'] ? 'Hide Data' : 'Show Data'}
+                  </Button>
+                  {isDataVisible['4year'] && renderSnapshotTable(dataSets['4year'])}
                   {renderChart(dataSets['4year'], 'netPosition', '#e64b37')}
                   {renderChart(dataSets['4year'], 'cashOnHand', '#82ca9d')}
                   {renderChart(dataSets['4year'], 'debt', '#ffc658')}
@@ -195,7 +208,10 @@ const VisualizationExport = () => {
               )}
               {activeKey === '8year' && (
                 <>
-                  {renderSnapshotTable(dataSets['8year'])}
+                  <Button onClick={() => toggleDataVisibility('8year')} variant="link">
+                    {isDataVisible['8year'] ? 'Hide Data' : 'Show Data'}
+                  </Button>
+                  {isDataVisible['8year'] && renderSnapshotTable(dataSets['8year'])}
                   {renderChart(dataSets['8year'], 'netPosition', '#e64b37')}
                   {renderChart(dataSets['8year'], 'cashOnHand', '#82ca9d')}
                   {renderChart(dataSets['8year'], 'debt', '#ffc658')}
@@ -206,7 +222,10 @@ const VisualizationExport = () => {
               )}
               {activeKey === '12year' && (
                 <>
-                  {renderSnapshotTable(dataSets['12year'])}
+                  <Button onClick={() => toggleDataVisibility('12year')} variant="link">
+                    {isDataVisible['12year'] ? 'Hide Data' : 'Show Data'}
+                  </Button>
+                  {isDataVisible['12year'] && renderSnapshotTable(dataSets['12year'])}
                   {renderChart(dataSets['12year'], 'netPosition', '#e64b37')}
                   {renderChart(dataSets['12year'], 'cashOnHand', '#82ca9d')}
                   {renderChart(dataSets['12year'], 'debt', '#ffc658')}
