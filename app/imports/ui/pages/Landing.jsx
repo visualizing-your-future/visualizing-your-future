@@ -32,18 +32,19 @@ const Landing = () => {
    * This hook subscribes to the user and admin profiles and fetches the firstName, lastName,
    * and user type (admin or regular user). It also manages a loading state while waiting for the subscription data.
    */
-  const { currentUser, firstName, lastName, isAdmin, isLoading } = useTracker(() => {
+  let { currentUser, firstName, lastName, isAdmin, isLoading } = useTracker(() => {
     const user = Meteor.user();
     const userId = Meteor.userId();
 
     // Loading state - true until subscriptions are ready
-    let isLoading = true;
+    isLoading = true;
 
     // Check if the user is an Admin
-    const isAdmin = Roles.userIsInRole(userId, [ROLE.ADMIN]);
+    isAdmin = Roles.userIsInRole(userId, [ROLE.ADMIN]);
 
-    let firstName = '';
-    let lastName = '';
+    currentUser = user ? user.username : '';
+    firstName = '';
+    lastName = '';
     let profile;
 
     // If the user is an admin, subscribe to AdminProfiles and fetch admin-specific data
@@ -73,7 +74,7 @@ const Landing = () => {
     isLoading = false; // Set loading to false once data is ready
 
     return {
-      currentUser: user ? user.username : '',
+      currentUser,
       firstName,
       lastName,
       isAdmin,
@@ -93,11 +94,12 @@ const Landing = () => {
   const getWelcomeMessage = () => {
     if (isAdmin) {
       return <h1 className="mt-4">Welcome {firstName || currentUser} {lastName}!</h1>;
-    } else if (currentUser) {
-      return <h1 className="mt-4">Welcome {firstName || currentUser} {lastName}!</h1>;
-    } else {
-      return <h1 className="mt-4">Welcome to Spire</h1>;
     }
+    if (currentUser) {
+      return <h1 className="mt-4">Welcome {firstName || currentUser} {lastName}!</h1>;
+    }
+    return <h1 className="mt-4">Welcome to Spire</h1>;
+
   };
 
   /**
