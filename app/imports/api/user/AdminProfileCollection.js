@@ -42,7 +42,7 @@ class AdminProfileCollection extends BaseProfileCollection {
    * @param email new email (optional).
    * @param password new password (optional).
    */
-  update(docID, { userID, firstName, lastName, email, password }) {
+  update(docID, { userID, firstName, lastName, email, oldPassword, newPassword }) {
     if (Meteor.isServer) {
       this.assertDefined(docID);
       const updateData = {};
@@ -57,9 +57,10 @@ class AdminProfileCollection extends BaseProfileCollection {
         /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
         Users.updateUsernameAndEmail(userID, email);
       }
-      if (password) {
+      if (oldPassword && newPassword) {
+        console.log('AdminProfileCollection.update', oldPassword, newPassword);
         /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
-        Users.updatePassword(userID, password);
+        // Users.updatePassword(oldPassword, newPassword);
       }
       this._collection.update(docID, { $set: updateData });
     }

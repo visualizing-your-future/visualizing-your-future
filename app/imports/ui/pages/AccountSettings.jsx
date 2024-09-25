@@ -14,6 +14,7 @@ import { UserProfiles } from '../../api/user/UserProfileCollection';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { updateMethod } from '../../api/base/BaseCollection.methods';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
+import { Users } from '../../api/user/UserCollection';
 import { ROLE } from '../../api/role/Role';
 
 /**
@@ -31,7 +32,9 @@ const AccountSettings = () => {
     firstName: { type: String, optional: true },
     lastName: { type: String, optional: true },
     email: { type: String, optional: true },
-    password: { type: String, optional: true },
+    oldPassword: { type: String, optional: true },
+    newPassword: { type: String, optional: true },
+    verifyNewPassword: { type: String, optional: true },
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
@@ -84,8 +87,19 @@ const AccountSettings = () => {
   }, []);
 
   const submit = (data) => {
-    const { firstName, lastName, email, password } = data;
-    const updateData = { id: documentID, userID, firstName, lastName, email, password };
+    const { firstName, lastName, email, oldPassword, newPassword, verifyNewPassword } = data;
+
+    /** Check if user input new password correctly. */
+    if (oldPassword && (newPassword === verifyNewPassword)) {
+      Users.updatePassword(oldPassword, newPassword);
+    } else if (oldPassword && (newPassword !== verifyNewPassword)) {
+      swal('Error', 'Passwords do not match.', 'error');
+      return;
+    }
+
+    const updateData = { id: documentID, userID, firstName, lastName, email, oldPassword, newPassword };
+    console.log('passwords match');
+    console.log(collectionName, updateData);
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
@@ -113,7 +127,9 @@ const AccountSettings = () => {
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_FIRST_NAME} name="firstName" placeholder="First Name" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last name" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_EMAIL} name="email" placeholder="email" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_PASSWORD} name="password" placeholder="Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="oldPassword" placeholder="Old Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="newPassword" placeholder="New Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="verifyNewPassword" placeholder="Re-type New Password" type="password" />
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
               </Card.Body>

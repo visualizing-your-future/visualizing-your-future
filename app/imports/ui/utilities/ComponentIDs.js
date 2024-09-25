@@ -33,7 +33,9 @@ export const COMPONENT_IDS = {
   ACCOUNT_SETTINGS_FIRST_NAME: 'account-settings-first-name',
   ACCOUNT_SETTINGS_LAST_NAME: 'account-settings-last-name',
   ACCOUNT_SETTINGS_EMAIL: 'account-settings-email',
-  ACCOUNT_SETTINGS_PASSWORD: 'account-settings-password',
+  ACCOUNT_SETTINGS_OLD_PASSWORD: 'account-settings-old-password',
+  ACCOUNT_SETTINGS_NEW_PASSWORD: 'account-settings-new-password',
+  ACCOUNT_SETTINGS_VERIFY_NEW_PASSWORD: 'account-settings-verify-new-password',
   SAVE_ACCOUNT_CHANGES: 'save-account-changes',
   VISUALIZATION_EXPORT: 'visualization-export',
 };
