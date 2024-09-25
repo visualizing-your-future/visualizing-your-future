@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Col, Container, Row, Card, CardHeader, Table, Tab, Nav, Form } from 'react-bootstrap';
+import { Col, Container, Row, Card, Table, Nav, Form } from 'react-bootstrap';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { PAGE_IDS } from '../utilities/PageIDs';
 
+// Currency formatter
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   minimumFractionDigits: 0,
 }).format;
 
-// Updated snapshot data
+// Snapshot data
 const snapshotData = [
   { year: 'YEAR 1', assets: 660137198, liabilities: 510692581, netPosition: 149444617, cashOnHand: 143912689, investment: 354178236, utility: 33543139, debt: 214615747, revenues: 373746543, opex: 83585519, netIncome: 290160023 },
   { year: 'YEAR 2', assets: 670492102, liabilities: 514859093, netPosition: 155633009, cashOnHand: 145654721, investment: 360744805, utility: 33890716, debt: 30865457, revenues: 377663608, opex: 82616033, netIncome: 295047575 },
@@ -71,82 +71,65 @@ const renderSnapshotTable = (data) => (
   </Table>
 );
 
-// Function to render six charts
-const renderCharts = (data) => (
-  <>
-    <CardHeader>Net Position</CardHeader>
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
-        <YAxis tickFormatter={(value) => currencyFormatter(value)} />
-        <Tooltip formatter={(value) => currencyFormatter(value)} />
-        <Legend />
-        <Line type="monotone" dataKey="netPosition" stroke="#8884d8" activeDot={{ r: 8 }} />
-      </LineChart>
-    </ResponsiveContainer>
-
-    <CardHeader>Cash on Hand</CardHeader>
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
-        <YAxis tickFormatter={(value) => currencyFormatter(value)} />
-        <Tooltip formatter={(value) => currencyFormatter(value)} />
-        <Legend />
-        <Line type="monotone" dataKey="cashOnHand" stroke="#82ca9d" />
-      </LineChart>
-    </ResponsiveContainer>
-
-    <CardHeader>Debt</CardHeader>
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
-        <YAxis tickFormatter={(value) => currencyFormatter(value)} />
-        <Tooltip formatter={(value) => currencyFormatter(value)} />
-        <Legend />
-        <Line type="monotone" dataKey="debt" stroke="#ff7300" />
-      </LineChart>
-    </ResponsiveContainer>
-
-    <CardHeader>Revenues</CardHeader>
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
-        <YAxis tickFormatter={(value) => currencyFormatter(value)} />
-        <Tooltip formatter={(value) => currencyFormatter(value)} />
-        <Legend />
-        <Line type="monotone" dataKey="revenues" stroke="#387908" />
-      </LineChart>
-    </ResponsiveContainer>
-
-    <CardHeader>Net Income</CardHeader>
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
-        <YAxis tickFormatter={(value) => currencyFormatter(value)} />
-        <Tooltip formatter={(value) => currencyFormatter(value)} />
-        <Legend />
-        <Line type="monotone" dataKey="netIncome" stroke="#0088FE" />
-      </LineChart>
-    </ResponsiveContainer>
-
-    <CardHeader>Opex</CardHeader>
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
-        <YAxis tickFormatter={(value) => currencyFormatter(value)} />
-        <Tooltip formatter={(value) => currencyFormatter(value)} />
-        <Legend />
-        <Line type="monotone" dataKey="opex" stroke="#FF0000" />
-      </LineChart>
-    </ResponsiveContainer>
-  </>
+// Function to render a single chart for a specific data key
+const renderChart = (data, key, color) => (
+  <ResponsiveContainer width="100%" height={300}>
+    <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="year" />
+      <YAxis tickFormatter={(value) => currencyFormatter(value)} />
+      <Tooltip formatter={(value) => currencyFormatter(value)} />
+      <Legend />
+      <Line type="monotone" dataKey={key} stroke={color} activeDot={{ r: 8 }} />
+    </LineChart>
+  </ResponsiveContainer>
 );
+
+// Comparison Component
+const Comparison = ({ data }) => {
+  const [selectedYears, setSelectedYears] = useState([]);
+  const [selectedChartType, setSelectedChartType] = useState('netPosition');
+
+  const handleYearSelect = (year) => {
+    setSelectedYears((prev) => (prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]));
+  };
+
+  const handleChartTypeChange = (e) => {
+    setSelectedChartType(e.target.value);
+  };
+
+  const filteredData = data.filter((entry) => selectedYears.includes(entry.year));
+
+  return (
+    <Card.Body>
+      <h5>Select Years to Compare</h5>
+      <Form>
+        {data.map((entry, index) => (
+          <Form.Check
+            key={index}
+            type="checkbox"
+            id={`year-${index}`}
+            label={entry.year}
+            checked={selectedYears.includes(entry.year)}
+            onChange={() => handleYearSelect(entry.year)}
+          />
+        ))}
+        <Form.Group controlId="chartType">
+          <Form.Label>Choose Chart Type:</Form.Label>
+          <Form.Control as="select" value={selectedChartType} onChange={handleChartTypeChange}>
+            <option value="netPosition">Net Position</option>
+            <option value="cashOnHand">Cash on Hand</option>
+            <option value="debt">Debt</option>
+            <option value="revenues">Revenues</option>
+            <option value="opex">Opex</option>
+            <option value="netIncome">Net Income</option>
+          </Form.Control>
+        </Form.Group>
+      </Form>
+      {filteredData.length > 0 && renderChart(filteredData, selectedChartType, '#8884d8')}
+    </Card.Body>
+  );
+};
 
 // Main VisualizationExport component
 const VisualizationExport = () => {
@@ -183,33 +166,48 @@ const VisualizationExport = () => {
               {activeKey === 'snapshot' && (
                 <>
                   {renderSnapshotTable(dataSets.snapshot)}
-                  {renderCharts(dataSets.snapshot)}
+                  {renderChart(dataSets.snapshot, 'netPosition', '#8884d8')}
+                  {renderChart(dataSets.snapshot, 'cashOnHand', '#82ca9d')}
+                  {renderChart(dataSets.snapshot, 'debt', '#ffc658')}
+                  {renderChart(dataSets.snapshot, 'revenues', '#ff7300')}
+                  {renderChart(dataSets.snapshot, 'opex', '#ff00ff')}
+                  {renderChart(dataSets.snapshot, 'netIncome', '#0000ff')}
                 </>
               )}
               {activeKey === '4year' && (
                 <>
                   {renderSnapshotTable(dataSets['4year'])}
-                  {renderCharts(dataSets['4year'])}
+                  {renderChart(dataSets['4year'], 'netPosition', '#8884d8')}
+                  {renderChart(dataSets['4year'], 'cashOnHand', '#82ca9d')}
+                  {renderChart(dataSets['4year'], 'debt', '#ffc658')}
+                  {renderChart(dataSets['4year'], 'revenues', '#ff7300')}
+                  {renderChart(dataSets['4year'], 'opex', '#ff00ff')}
+                  {renderChart(dataSets['4year'], 'netIncome', '#0000ff')}
                 </>
               )}
               {activeKey === '8year' && (
                 <>
                   {renderSnapshotTable(dataSets['8year'])}
-                  {renderCharts(dataSets['8year'])}
+                  {renderChart(dataSets['8year'], 'netPosition', '#8884d8')}
+                  {renderChart(dataSets['8year'], 'cashOnHand', '#82ca9d')}
+                  {renderChart(dataSets['8year'], 'debt', '#ffc658')}
+                  {renderChart(dataSets['8year'], 'revenues', '#ff7300')}
+                  {renderChart(dataSets['8year'], 'opex', '#ff00ff')}
+                  {renderChart(dataSets['8year'], 'netIncome', '#0000ff')}
                 </>
               )}
               {activeKey === '12year' && (
                 <>
                   {renderSnapshotTable(dataSets['12year'])}
-                  {renderCharts(dataSets['12year'])}
+                  {renderChart(dataSets['12year'], 'netPosition', '#8884d8')}
+                  {renderChart(dataSets['12year'], 'cashOnHand', '#82ca9d')}
+                  {renderChart(dataSets['12year'], 'debt', '#ffc658')}
+                  {renderChart(dataSets['12year'], 'revenues', '#ff7300')}
+                  {renderChart(dataSets['12year'], 'opex', '#ff00ff')}
+                  {renderChart(dataSets['12year'], 'netIncome', '#0000ff')}
                 </>
               )}
-              {activeKey === 'comparison' && (
-                <Card.Body>
-                  <h5>Comparison Tab</h5>
-                  <p>This section is under construction.</p>
-                </Card.Body>
-              )}
+              {activeKey === 'comparison' && <Comparison data={snapshotData} />}
             </Card.Body>
           </Card>
         </Col>
