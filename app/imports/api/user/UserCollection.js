@@ -69,15 +69,30 @@ class UserCollection {
     // return undefined;
   }
 
-  /** TODO: Documentation for this */
-  updateUsername(userID, email) {
-    Accounts.setUsername(userID, email);
-    Meteor.users.update(userID, { $set: { 'emails.0.address': email } });
+  /**
+   * Updates the user's username and email (these are the same values).
+   * Sign in checks meteor/accounts-base (not BaseProfileCollection schema),
+   * so a different method is needed to update the username and email.
+   * @param userID The userID of the user.
+   * @param email The new email.
+   */
+  updateUsernameAndEmail(userID, email) {
+    if (Meteor.isServer) {
+      Accounts.setUsername(userID, email);
+      Meteor.users.update(userID, { $set: { 'emails.0.address': email } });
+    }
   }
 
-  /** TODO: Documentation for this */
-  updatePassword(userID, email) {
-    Accounts.setPasswordAsync(userID, email);
+  /**
+   * Checks user input old password vs password stored in database.
+   * If it matches, update password to the new password.
+   * This is a client side only function.
+   *
+   * @param oldPassword The user's old password.
+   * @param newPassword The user's new password.
+   */
+  updatePassword(oldPassword, newPassword) {
+    Accounts.changePassword(oldPassword, newPassword);
   }
 
   /**
@@ -167,7 +182,6 @@ class UserCollection {
     }
     return profile;
   }
-
 }
 
 export const Users = new UserCollection();
