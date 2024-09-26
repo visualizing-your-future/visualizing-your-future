@@ -28,7 +28,7 @@ const snapshotData = [
 // Hard-coded data for different year projections
 const dataSets = {
   snapshot: snapshotData,
-  '4year': snapshotData.slice(0, 5), // Using first 5 years
+  '4year': snapshotData.slice(0, 4), // Using first 4 years
   '8year': snapshotData.slice(0, 8), // Using first 8 years
   '12year': snapshotData, // All 12 years
 };
@@ -71,9 +71,25 @@ const renderSnapshotTable = (data) => (
   </Table>
 );
 
-// Function to render a single chart for a specific data key
-const renderChart = (data, key, color) => (
-  <ResponsiveContainer width="100%" height={300}>
+// Function to render a dual line chart for comparison
+const renderDualChart = (data, key1, key2, color1, color2) => (
+  <ResponsiveContainer width="100%" height={250}>
+    <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="year" />
+      <YAxis tickFormatter={(value) => currencyFormatter(value)} />
+      <Tooltip formatter={(value) => currencyFormatter(value)} />
+      <Legend />
+      <Line type="monotone" dataKey={key1} stroke={color1} activeDot={{ r: 8 }} />
+      <Line type="monotone" dataKey={key2} stroke={color2} activeDot={{ r: 8 }} />
+    </LineChart>
+  </ResponsiveContainer>
+);
+
+// Function to render single line chart
+// eslint-disable-next-line no-unused-vars
+const renderSingleChart = (data, key, color) => (
+  <ResponsiveContainer width="100%" height={250}>
     <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="year" />
@@ -86,9 +102,11 @@ const renderChart = (data, key, color) => (
 );
 
 // Comparison Component
+// eslint-disable-next-line react/prop-types
 const Comparison = ({ data }) => {
   const [selectedYears, setSelectedYears] = useState([]);
-  const [selectedChartType, setSelectedChartType] = useState('netPosition');
+  const [selectedMetric1, setSelectedMetric1] = useState('netPosition');
+  const [selectedMetric2, setSelectedMetric2] = useState('assets');
 
   const handleYearSelect = (year) => {
     setSelectedYears((prev) => {
@@ -97,16 +115,22 @@ const Comparison = ({ data }) => {
     });
   };
 
-  const handleChartTypeChange = (e) => {
-    setSelectedChartType(e.target.value);
+  const handleMetricChange = (metric, isFirstMetric) => {
+    if (isFirstMetric) {
+      setSelectedMetric1(metric);
+    } else {
+      setSelectedMetric2(metric);
+    }
   };
 
+  // eslint-disable-next-line react/prop-types
   const filteredData = data.filter((entry) => selectedYears.includes(entry.year));
 
   return (
     <Card.Body>
       <h5>Select Years to Compare</h5>
       <Form>
+        {/* eslint-disable-next-line react/prop-types */}
         {data.map((entry, index) => (
           <Form.Check
             key={index}
@@ -117,9 +141,9 @@ const Comparison = ({ data }) => {
             onChange={() => handleYearSelect(entry.year)}
           />
         ))}
-        <Form.Group controlId="chartType">
-          <Form.Label>Choose Chart Type:</Form.Label>
-          <Form.Control as="select" value={selectedChartType} onChange={handleChartTypeChange}>
+        <Form.Group controlId="metric1">
+          <Form.Label>Choose First Metric:</Form.Label>
+          <Form.Control as="select" value={selectedMetric1} onChange={(e) => handleMetricChange(e.target.value, true)}>
             <option value="netPosition">Net Position</option>
             <option value="cashOnHand">Cash on Hand</option>
             <option value="debt">Debt</option>
@@ -128,8 +152,20 @@ const Comparison = ({ data }) => {
             <option value="netIncome">Net Income</option>
           </Form.Control>
         </Form.Group>
+        <Form.Group controlId="metric2">
+          <Form.Label>Choose Second Metric:</Form.Label>
+          <Form.Control as="select" value={selectedMetric2} onChange={(e) => handleMetricChange(e.target.value, false)}>
+            <option value="assets">Assets</option>
+            <option value="liabilities">Liabilities</option>
+            <option value="cashOnHand">Cash on Hand</option>
+            <option value="debt">Debt</option>
+            <option value="revenues">Revenues</option>
+            <option value="opex">Opex</option>
+            <option value="netIncome">Net Income</option>
+          </Form.Control>
+        </Form.Group>
       </Form>
-      {filteredData.length > 0 && renderChart(filteredData, selectedChartType, '#e64b37')}
+      {filteredData.length > 0 && renderDualChart(filteredData, selectedMetric1, selectedMetric2, '#8884d8', '#82ca9d')}
     </Card.Body>
   );
 };
@@ -157,16 +193,16 @@ const VisualizationExport = () => {
               <Nav.Link eventKey="snapshot" style={{ color: '#e64b37' }}>Snapshot</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="4year" style={{ color: '#e64b37' }}>4-Year</Nav.Link>
+              <Nav.Link eventKey="4year" style={{ color: '#e64b37' }}>4-Year Dashboard</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="8year" style={{ color: '#e64b37' }}>8-Year</Nav.Link>
+              <Nav.Link eventKey="8year" style={{ color: '#e64b37' }}>8-Year Dashboard</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="12year" style={{ color: '#e64b37' }}>12-Year</Nav.Link>
+              <Nav.Link eventKey="12year" style={{ color: '#e64b37' }}>12-Year Dashboard</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="comparison" style={{ color: '#e64b37' }}>Comparison</Nav.Link>
+              <Nav.Link eventKey="comparison" style={{ color: '#e64b37' }}>Compare Charts</Nav.Link>
             </Nav.Item>
           </Nav>
         </Col>
@@ -184,12 +220,49 @@ const VisualizationExport = () => {
                     {isDataVisible.snapshot ? 'Hide Data' : 'Show Data'}
                   </Button>
                   {isDataVisible.snapshot && renderSnapshotTable(dataSets.snapshot)}
-                  {renderChart(dataSets.snapshot, 'netPosition', '#e64b37')}
-                  {renderChart(dataSets.snapshot, 'cashOnHand', '#82ca9d')}
-                  {renderChart(dataSets.snapshot, 'debt', '#ffc658')}
-                  {renderChart(dataSets.snapshot, 'revenues', '#ff7300')}
-                  {renderChart(dataSets.snapshot, 'opex', '#ff00ff')}
-                  {renderChart(dataSets.snapshot, 'netIncome', '#0000ff')}
+                  <Row>
+                    <Col>
+                      <Card className="mt-3">
+                        <Card.Body>
+                          {activeKey && (
+                            <>
+                              <h5>{activeKey.toUpperCase()} View</h5>
+                              <Row>
+                                <Col lg={6}>
+                                  <h6>Table 1: Assets and Liabilities</h6>
+                                  {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', '#f17e5d', '#246aae')}
+                                </Col>
+                                <Col lg={6}>
+                                  <h6>Table 4: Cash On Hand and Debt</h6>
+                                  {renderDualChart(dataSets[activeKey], 'cashOnHand', 'debt', '#82ca9d', '#e64b37')}
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col lg={6}>
+                                  <h6>Table 2: Liquidity and Opex</h6>
+                                  {renderDualChart(dataSets[activeKey], 'netPosition', 'opex', '#8884d8', '#ffc658')}
+                                </Col>
+                                <Col lg={6}>
+                                  <h6>Table 5: Cash In Flow and Cash Out Flow</h6>
+                                  {renderDualChart(dataSets[activeKey], 'revenues', 'opex', '#8884d8', '#ff7300')}
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col lg={6}>
+                                  <h6>Table 3: Liquidity</h6>
+                                  {renderDualChart(dataSets[activeKey], 'cashOnHand', 'investment', '#82ca9d', '#ff7300')}
+                                </Col>
+                                <Col lg={6}>
+                                  <h6>Table 6: Budget and Actual + Encumbrance</h6>
+                                  {renderDualChart(dataSets[activeKey], 'revenues', 'netIncome', '#246aae', '#f17e5d')}
+                                </Col>
+                              </Row>
+                            </>
+                          )}
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </Row>
                 </>
               )}
               {activeKey === '4year' && (
@@ -198,12 +271,20 @@ const VisualizationExport = () => {
                     {isDataVisible['4year'] ? 'Hide Data' : 'Show Data'}
                   </Button>
                   {isDataVisible['4year'] && renderSnapshotTable(dataSets['4year'])}
-                  {renderChart(dataSets['4year'], 'netPosition', '#e64b37')}
-                  {renderChart(dataSets['4year'], 'cashOnHand', '#82ca9d')}
-                  {renderChart(dataSets['4year'], 'debt', '#ffc658')}
-                  {renderChart(dataSets['4year'], 'revenues', '#ff7300')}
-                  {renderChart(dataSets['4year'], 'opex', '#ff00ff')}
-                  {renderChart(dataSets['4year'], 'netIncome', '#0000ff')}
+                  <Row>
+                    <Col md={6}>
+                      <h4>Equity Metrics</h4>
+                      {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', '#f17e5d', '#246aae')}
+                      {renderDualChart(dataSets[activeKey], 'netPosition', 'opex', '#8884d8', '#ffc658')}
+                      {renderDualChart(dataSets[activeKey], 'cashOnHand', 'investment', '#82ca9d', '#ff7300')}
+                    </Col>
+                    <Col md={6}>
+                      <h4>Cash Flow Metrics</h4>
+                      {renderDualChart(dataSets[activeKey], 'cashOnHand', 'debt', '#82ca9d', '#e64b37')}
+                      {renderDualChart(dataSets[activeKey], 'revenues', 'opex', '#8884d8', '#ff7300')}
+                      {renderDualChart(dataSets[activeKey], 'revenues', 'netIncome', '#246aae', '#f17e5d')}
+                    </Col>
+                  </Row>
                 </>
               )}
               {activeKey === '8year' && (
@@ -212,12 +293,20 @@ const VisualizationExport = () => {
                     {isDataVisible['8year'] ? 'Hide Data' : 'Show Data'}
                   </Button>
                   {isDataVisible['8year'] && renderSnapshotTable(dataSets['8year'])}
-                  {renderChart(dataSets['8year'], 'netPosition', '#e64b37')}
-                  {renderChart(dataSets['8year'], 'cashOnHand', '#82ca9d')}
-                  {renderChart(dataSets['8year'], 'debt', '#ffc658')}
-                  {renderChart(dataSets['8year'], 'revenues', '#ff7300')}
-                  {renderChart(dataSets['8year'], 'opex', '#ff00ff')}
-                  {renderChart(dataSets['8year'], 'netIncome', '#0000ff')}
+                  <Row>
+                    <Col md={6}>
+                      <h4>Equity Metrics</h4>
+                      {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', '#f17e5d', '#246aae')}
+                      {renderDualChart(dataSets[activeKey], 'netPosition', 'opex', '#8884d8', '#ffc658')}
+                      {renderDualChart(dataSets[activeKey], 'cashOnHand', 'investment', '#82ca9d', '#ff7300')}
+                    </Col>
+                    <Col md={6}>
+                      <h4>Cash Flow Metrics</h4>
+                      {renderDualChart(dataSets[activeKey], 'cashOnHand', 'debt', '#82ca9d', '#e64b37')}
+                      {renderDualChart(dataSets[activeKey], 'revenues', 'opex', '#8884d8', '#ff7300')}
+                      {renderDualChart(dataSets[activeKey], 'revenues', 'netIncome', '#246aae', '#f17e5d')}
+                    </Col>
+                  </Row>
                 </>
               )}
               {activeKey === '12year' && (
@@ -226,12 +315,20 @@ const VisualizationExport = () => {
                     {isDataVisible['12year'] ? 'Hide Data' : 'Show Data'}
                   </Button>
                   {isDataVisible['12year'] && renderSnapshotTable(dataSets['12year'])}
-                  {renderChart(dataSets['12year'], 'netPosition', '#e64b37')}
-                  {renderChart(dataSets['12year'], 'cashOnHand', '#82ca9d')}
-                  {renderChart(dataSets['12year'], 'debt', '#ffc658')}
-                  {renderChart(dataSets['12year'], 'revenues', '#ff7300')}
-                  {renderChart(dataSets['12year'], 'opex', '#ff00ff')}
-                  {renderChart(dataSets['12year'], 'netIncome', '#0000ff')}
+                  <Row>
+                    <Col md={6}>
+                      <h4>Equity Metrics</h4>
+                      {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', '#f17e5d', '#246aae')}
+                      {renderDualChart(dataSets[activeKey], 'netPosition', 'opex', '#8884d8', '#ffc658')}
+                      {renderDualChart(dataSets[activeKey], 'cashOnHand', 'investment', '#82ca9d', '#ff7300')}
+                    </Col>
+                    <Col md={6}>
+                      <h4>Cash Flow Metrics</h4>
+                      {renderDualChart(dataSets[activeKey], 'cashOnHand', 'debt', '#82ca9d', '#e64b37')}
+                      {renderDualChart(dataSets[activeKey], 'revenues', 'opex', '#8884d8', '#ff7300')}
+                      {renderDualChart(dataSets[activeKey], 'revenues', 'netIncome', '#246aae', '#f17e5d')}
+                    </Col>
+                  </Row>
                 </>
               )}
               {activeKey === 'comparison' && <Comparison data={snapshotData} />}
