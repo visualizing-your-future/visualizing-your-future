@@ -11,7 +11,6 @@ import DataInput from '../pages/DataInput';
 import Admin from '../pages/Admin';
 import ListProfiles from '../pages/ListProfiles';
 import AddStuff from '../pages/AddStuff';
-import EditStuff from '../pages/EditStuff';
 import NotFound from '../pages/NotFound';
 import SignUp from '../pages/SignUp';
 import SignOut from '../pages/SignOut';
