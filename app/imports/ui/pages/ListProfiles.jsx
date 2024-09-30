@@ -6,6 +6,7 @@ import ProfileItem from '../components/ProfileItem';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
+import AdminProfileItem from '../components/AdminProfileItem';
 
 /* Renders a table containing all of the Users documents. Use <ProfileItem> to render each row. */
 const ListProfiles = () => {
@@ -31,7 +32,7 @@ const ListProfiles = () => {
     <Container id={PAGE_IDS.LIST_PROFILES} className="py-3">
       <Row className="justify-content-center">
         <Col md={7}>
-          <Col className="text-center"><h2>List Profiles (Admin)</h2></Col>
+          <Col className="text-center"><h2>List Profiles</h2></Col>
           <Table striped bordered hover>
             <thead>
               <tr>
@@ -42,7 +43,7 @@ const ListProfiles = () => {
             </thead>
             <tbody>
               {userProfileItems.map((profile) => <ProfileItem key={profile._id} profile={profile} />)}
-              {adminProfileItems.map((profile) => <ProfileItem key={profile._id} profile={profile} />)}
+              {adminProfileItems.map((profile) => <AdminProfileItem key={profile._id} profile={profile} />)}
             </tbody>
           </Table>
         </Col>

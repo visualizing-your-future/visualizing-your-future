@@ -25,7 +25,7 @@ import ManageDatabase from '../pages/ManageDatabase';
 import ClientData from '../pages/ClientData';
 import ClientDataImport from '../pages/ClientDataImport';
 import VisualizationExport from '../pages/VisualizationExport';
-import EditProfile from '../pages/EditProfile';
+import EditUserProfile from '../pages/EditUserProfile';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -50,7 +50,7 @@ const App = () => {
           <Route path="/dataInput" element={<ProtectedRoute><DataInput /></ProtectedRoute>} />
           <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
           <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
-          <Route path="/edit/:_id" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+          <Route path="/edit/:_id" element={<ProtectedRoute><EditUserProfile /></ProtectedRoute>} />
           <Route path="/visualizationExport" element={<ProtectedRoute><VisualizationExport /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminProtectedRoute ready={ready}><Admin /></AdminProtectedRoute>} />
           <Route path="/profiles" element={<AdminProtectedRoute ready={ready}><ListProfiles /></AdminProtectedRoute>} />
