@@ -16,7 +16,7 @@ import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { Users } from '../../api/user/UserCollection';
 
 /* Renders the EditProfile page for editing a single document. */
-const EditUserProfile = () => {
+const EditProfile = () => {
   /** Names the page in the browser. */
   document.title = 'Edit User Profile';
 
@@ -98,7 +98,7 @@ const EditUserProfile = () => {
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
-    navigate('/userAccountSettings');
+    navigate('/profiles');
   };
 
   return subReady ? (
@@ -127,4 +127,4 @@ const EditUserProfile = () => {
     </Container>
   ) : <LoadingSpinner />;
 };
-export default EditUserProfile;
+export default EditProfile;
