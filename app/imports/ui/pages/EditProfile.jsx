@@ -71,12 +71,12 @@ const EditProfile = () => {
       subRdy = sub.ready();
       colName = AdminProfiles.getCollectionName();
       userDoc = AdminProfiles.findDoc(_docId);
-      usrId = AdminProfiles.getID(_docId);
+      usrId = userDoc.userID;
     } else if (!adminRole) {
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
       userDoc = UserProfiles.findDoc(_docId);
-      usrId = AdminProfiles.getID(_docId);
+      usrId = userDoc.userID;
     } else {
       navigate('/notauthorized');
     }
@@ -116,6 +116,7 @@ const EditProfile = () => {
      * then call the collection update function.
      */
     const updateData = { id: _docId, userID, firstName, lastName, email };
+    console.log(updateData);
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
