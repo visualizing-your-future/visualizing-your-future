@@ -17,9 +17,6 @@ import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import { Users } from '../../api/user/UserCollection';
 import { ROLE } from '../../api/role/Role';
 
-/**
- * SignUp component is similar to signin component, but we create a new user instead.
- */
 const AccountSettings = () => {
   /** Names the page in the browser. */
   document.title = 'Visualizing Your Future - Account Settings';
@@ -38,15 +35,8 @@ const AccountSettings = () => {
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
-  /**
-   * Don't know what this is, might not be needed?
-   *
-   * State handler.
-   * const [error, setError] = useState('');
-   */
-
   const { userID, subReady, collectionName, userDocument, documentID } = useTracker(() => {
-    /** Was the subscription successful? */
+    /** Subscription to UserProfiles or AdminProfiles. */
     let sub;
     /** Is the subscription ready? */
     let subRdy;

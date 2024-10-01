@@ -11,7 +11,7 @@ const AdminProfileItem = ({ profile }) => (
     <td>{profile.firstName}</td>
     <td>{profile.lastName}</td>
     <td>
-      <Link className={COMPONENT_IDS.LIST_PROFILES_EDIT} to="/userAccountSettings">Edit</Link>
+      <Link className={COMPONENT_IDS.LIST_PROFILES_EDIT} to={`/edit/${profile._id}`}>Edit</Link>
     </td>
   </tr>
 );

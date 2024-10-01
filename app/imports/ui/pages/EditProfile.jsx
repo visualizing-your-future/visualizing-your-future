@@ -14,13 +14,15 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { Users } from '../../api/user/UserCollection';
+import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 
 /* Renders the EditProfile page for editing a single document. */
 const EditProfile = () => {
   /** Names the page in the browser. */
   document.title = 'Edit User Profile';
 
-  const { _id } = useParams();
+  /** User's document ID is passed as a parameter. */
+  const _docId = useParams();
 
   /** Used to change page after submitting account changes. */
   const navigate = useNavigate();
@@ -36,35 +38,54 @@ const EditProfile = () => {
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
-  /**
-   * Don't know what this is, might not be needed?
-   *
-   * State handler.
-   * const [error, setError] = useState('');
-   */
-
-  const { userID, subReady, collectionName, userDocument, documentID } = useTracker(() => {
-    /** The user's document ID. */
-    const docID = UserProfiles.findDoc(_id);
-    /** The user's ID. */
-    const usrId = docID.userID;
-    /** The user's username. */
-    const username = docID.email;
-    /** Was the subscription successful? */
-    const sub = UserProfiles.subscribeProfileAdmin();
+  const { userID, subReady, collectionName, userDocument } = useTracker(() => {
+    /** Subscription to UserProfiles or AdminProfiles. */
+    let sub;
     /** Is the subscription ready? */
-    const subRdy = sub.ready();
+    let subRdy;
     /** Collection name. */
-    const colName = UserProfiles.getCollectionName();
+    let colName;
     /** Entire user document. */
-    const userDoc = UserProfiles.findOne({ email: username });
+    let userDoc;
+    /** The user's ID. */
+    let usrId;
+    /** testing */
+    let adminRole;
+
+    /**
+     * Try to find the user's document ID in the UserProfiles collection first.
+     * Try AdminProfiles collection if user's document ID doesn't exist in UserProfiles collection.
+     */
+    try {
+      userDoc = UserProfiles.findDoc(_docId);
+      sub = UserProfiles.subscribeProfileUser();
+      adminRole = false;
+    } catch (error) {
+      userDoc = AdminProfiles.findDoc(_docId);
+      sub = AdminProfiles.subscribeAdmin();
+      adminRole = true;
+    }
+
+    /** Check if user is an admin or a user, then assign relevant info. */
+    if (adminRole) {
+      subRdy = sub.ready();
+      colName = AdminProfiles.getCollectionName();
+      userDoc = AdminProfiles.findDoc(_docId);
+      usrId = AdminProfiles.getID(_docId);
+    } else if (!adminRole) {
+      subRdy = sub.ready();
+      colName = UserProfiles.getCollectionName();
+      userDoc = UserProfiles.findDoc(_docId);
+      usrId = AdminProfiles.getID(_docId);
+    } else {
+      navigate('/notauthorized');
+    }
 
     return {
       userID: usrId,
       subReady: subRdy,
       collectionName: colName,
       userDocument: userDoc,
-      documentID: docID,
     };
   }, []);
 
@@ -94,7 +115,7 @@ const EditProfile = () => {
      * Add the documentID to the data being passed to the collection update function,
      * then call the collection update function.
      */
-    const updateData = { id: documentID, userID, firstName, lastName, email };
+    const updateData = { id: _docId, userID, firstName, lastName, email };
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
