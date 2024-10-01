@@ -14,24 +14,27 @@ import { UserProfiles } from '../../api/user/UserProfileCollection';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { updateMethod } from '../../api/base/BaseCollection.methods';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
+import { Users } from '../../api/user/UserCollection';
 import { ROLE } from '../../api/role/Role';
 
 /**
  * SignUp component is similar to signin component, but we create a new user instead.
  */
 const AccountSettings = () => {
-  // Names the page in the browser.
+  /** Names the page in the browser. */
   document.title = 'Visualizing Your Future - Account Settings';
 
-  // Used to change page after submitting account changes.
+  /** Used to change page after submitting account changes. */
   const navigate = useNavigate();
 
-  // Account settings the user can change.
+  /** Account settings the user can change. */
   const schema = new SimpleSchema({
     firstName: { type: String, optional: true },
     lastName: { type: String, optional: true },
     email: { type: String, optional: true },
-    password: { type: String, optional: true },
+    oldPassword: { type: String, optional: true },
+    newPassword: { type: String, optional: true },
+    verifyNewPassword: { type: String, optional: true },
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
@@ -43,23 +46,26 @@ const AccountSettings = () => {
    */
 
   const { userID, subReady, collectionName, userDocument, documentID } = useTracker(() => {
-    const username = Meteor.user().username;
+    /** Was the subscription successful? */
     let sub;
+    /** Is the subscription ready? */
     let subRdy;
+    /** Collection name. */
     let colName;
+    /** Entire user document. */
     let userDoc;
+    /** The user's document ID. */
     let docID;
-
+    /** The user's ID. */
     const usrId = Meteor.userId();
+    /** The user's username. */
+    const username = Meteor.user().username;
+
     if (Roles.userIsInRole(usrId, ROLE.ADMIN)) {
       sub = AdminProfiles.subscribeAdmin();
       subRdy = sub.ready();
       colName = AdminProfiles.getCollectionName();
       userDoc = AdminProfiles.findOne({ email: username });
-      /**
-       * Meteor.userID() returns the userID.
-       * This returns the document ID value (not the entire document).
-       */
       docID = AdminProfiles.getID(Meteor.user().username);
     } else if (Roles.userIsInRole(usrId, ROLE.USER)) {
       sub = UserProfiles.subscribeProfileUser();
@@ -70,6 +76,7 @@ const AccountSettings = () => {
     } else {
       navigate('/notauthorized');
     }
+
     return {
       userID: usrId,
       subReady: subRdy,
@@ -80,19 +87,35 @@ const AccountSettings = () => {
   }, []);
 
   const submit = (data) => {
-    const { firstName, lastName, email, password } = data;
-    const updateData = { id: documentID, userID, firstName, lastName, email, password };
+    /** Verify the user is actually logged in before doing anything. */
+    if (!Meteor.user()) {
+      swal('Error', 'You are not logged in.', 'error');
+      return;
+    }
+
+    /** Stores the values the user inputs in the page TextFields. */
+    const { firstName, lastName, email, oldPassword, newPassword, verifyNewPassword } = data;
+
+    /**
+     * Check if user intended to change password and input new password correctly.
+     * If so, call CLIENT side function updatePassword().
+     * If not, throw error.
+     */
+    if (oldPassword && (newPassword === verifyNewPassword)) {
+      Users.updatePassword(oldPassword, newPassword);
+    } else if (oldPassword && (newPassword !== verifyNewPassword)) {
+      swal('Error', 'Passwords do not match.', 'error');
+      return;
+    }
+
+    /**
+     * Add the documentID to the data being passed to the collection update function,
+     * then call the collection update function.
+     */
+    const updateData = { id: documentID, userID, firstName, lastName, email };
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
-    /**
-     * TODO: implement logic to determine if password changed.
-     * Currently, if the password is changed, the user is logged out, but redirected to the
-     * userAccountSettings page with no access to anything.
-     *
-     * Should redirect to userAccountSettings page if password or email was NOT changed.
-     * Redirect to signin page if password or email was changed.
-     */
     navigate('/userAccountSettings');
   };
 
@@ -109,7 +132,9 @@ const AccountSettings = () => {
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_FIRST_NAME} name="firstName" placeholder="First Name" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last name" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_EMAIL} name="email" placeholder="email" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_PASSWORD} name="password" placeholder="Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="oldPassword" placeholder="Old Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_NEW_PASSWORD} name="newPassword" placeholder="New Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_VERIFY_NEW_PASSWORD} name="verifyNewPassword" placeholder="Re-type New Password" type="password" />
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
               </Card.Body>

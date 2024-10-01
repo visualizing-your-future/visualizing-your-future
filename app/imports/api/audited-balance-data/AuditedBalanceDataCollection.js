@@ -17,39 +17,213 @@ class AuditedBalanceDataCollection extends BaseCollection {
       owner: String,
       cashStuff: {
         type: Array,
+        optional: true,
       },
       'cashStuff.$': Object,
-      'cashStuff.$.pettyCash': Number,
-      'cashStuff.$.cash': Number,
-      'cashStuff.$.cashBankCred': Number,
+      'cashStuff.$.pettyCash': { type: Number, defaultValue: 0, optional: true },
+      'cashStuff.$.cash': { type: Number, defaultValue: 0, optional: true },
+      'cashStuff.$.cashBankCred': { type: Number, defaultValue: 0, optional: true },
+      cashTotal: { type: Number, optional: true },
+
+      other: {
+        type: Array,
+        optional: true,
+      },
+      'other.$': Object,
+      'other.$.actRec': { type: Number, defaultValue: 0, optional: true },
+      'other.$.dueFromFund': { type: Number, defaultValue: 0, optional: true },
+      'other.$.intDivRec': { type: Number, defaultValue: 0, optional: true },
+      'other.$.invPrepaid': { type: Number, defaultValue: 0, optional: true },
+      'other.$.notesDueInYr': { type: Number, defaultValue: 0, optional: true },
+      'other.$.notesDueAftYr': { type: Number, defaultValue: 0, optional: true },
+      'other.$.secDep': { type: Number, defaultValue: 0, optional: true },
+      'other.$.cashHeldByInvMng': { type: Number, defaultValue: 0, optional: true },
+      otherTotal: { type: Number, optional: true },
+
+      investments: {
+        type: Array,
+        optional: true,
+      },
+      'investments.$': Object,
+      'investments.$.mutFun': { type: Number, defaultValue: 0, optional: true },
+      'investments.$.comFun': { type: Number, defaultValue: 0, optional: true },
+      'investments.$.hdgFun': { type: Number, defaultValue: 0, optional: true },
+      'investments.$.privEqt': { type: Number, defaultValue: 0, optional: true },
+      'investments.$.comnTrustFun': { type: Number, defaultValue: 0, optional: true },
+      'investments.$.comPrefStock': { type: Number, defaultValue: 0, optional: true },
+      'investments.$.privDbt': { type: Number, defaultValue: 0, optional: true },
+      'investments.$.other': { type: Number, defaultValue: 0, optional: true },
+      investmentsTotal: { type: Number, optional: true },
+
+      loanFund: {
+        type: Array,
+        optional: true,
+      },
+      'loanFund.$': Object,
+      'loanFund.$.usTreas': { type: Number, defaultValue: 0, optional: true },
+      'loanFund.$.usAgenc': { type: Number, defaultValue: 0, optional: true },
+      loanFundTotal: { type: Number, optional: true },
+
+      investLoanTotal: { type: Number, optional: true },
+
+      assets: {
+        type: Array,
+        optional: true,
+      },
+      'assets.$': Object,
+      'assets.$.bldngs': { type: Number, defaultValue: 0, optional: true },
+      'assets.$.leashldImprv': { type: Number, defaultValue: 0, optional: true },
+      'assets.$.frnFixEqp': { type: Number, defaultValue: 0, optional: true },
+      'assets.$.accumDepr': { type: Number, defaultValue: 0, optional: true },
+      assetsTotal: { type: Number, optional: true },
+
+      land: {
+        type: Array,
+        optional: true,
+      },
+      'land.$': Object,
+      'land.$.landA': { type: Number, defaultValue: 0, optional: true },
+      'land.$.landB': { type: Number, defaultValue: 0, optional: true },
+      'land.$.cnstrProg': { type: Number, defaultValue: 0, optional: true },
+      landTotal: { type: Number, optional: true },
+
+      compBAssets: {
+        type: Array,
+        optional: true,
+      },
+      'compBAssets.$': Object,
+      'compBAssets.$.bldngs': { type: Number, defaultValue: 0, optional: true },
+      'compBAssets.$.leashldImprv': { type: Number, defaultValue: 0, optional: true },
+      'compBAssets.$.frnFixEqp': { type: Number, defaultValue: 0, optional: true },
+      'compBAssets.$.vehcl': { type: Number, defaultValue: 0, optional: true },
+      'compBAssets.$.accumDepr': { type: Number, defaultValue: 0, optional: true },
+      'compBAssets.$.land': { type: Number, defaultValue: 0, optional: true },
+      compBAssetsTotal: { type: Number, optional: true },
+
+      capAssetsTotal: { type: Number, optional: true },
+
+      rstrCash: { type: Number, defaultValue: 0, optional: true },
+
+      otherAssetsTotal: { type: Number, optional: true },
+
+      pensionRsrcs: { type: Number, defaultValue: 0, optional: true },
+      OPEBRsrcs: { type: Number, defaultValue: 0, optional: true },
+
+      totAssetsAndRsrcs: { type: Number, optional: true },
+
+      liabilities: {
+        type: Array,
+        optional: true,
+      },
+      'liabilities.$': Object,
+      'liabilities.$.acntPayAccLia': { type: Number, defaultValue: 0, optional: true },
+      'liabilities.$.dueToFun': { type: Number, defaultValue: 0, optional: true },
+      'liabilities.$.dueToOthFun': { type: Number, defaultValue: 0, optional: true },
+      liabilitiesTotal: { type: Number, optional: true },
+
+      longTermInYear: {
+        type: Array,
+        defaultValue: [],
+        optional: true,
+      },
+      'longTermInYear.$': Object,
+      'longTermInYear.$.accrVac': { type: Number, defaultValue: 0, optional: true },
+      'longTermInYear.$.wrkComp': { type: Number, defaultValue: 0, optional: true },
+      'longTermInYear.$.acrManRetPln': { type: Number, defaultValue: 0, optional: true },
+      'longTermInYear.$.acrLeasGuarOb': { type: Number, defaultValue: 0, optional: true },
+      'longTermInYear.$.capLeasOb': { type: Number, defaultValue: 0, optional: true },
+      'longTermInYear.$.notPayBuilA': { type: Number, defaultValue: 0, optional: true },
+      'longTermInYear.$.netPenLia': { type: Number, defaultValue: 0, optional: true },
+      'longTermInYear.$.netOPEBLia': { type: Number, defaultValue: 0, optional: true },
+      'longTermInYear.$.lineOfCredA': { type: Number, defaultValue: 0, optional: true },
+      'longTermInYear.$.lineOfCredB': { type: Number, defaultValue: 0, optional: true },
+      'longTermInYear.$.debtServ': { type: Number, defaultValue: 0, optional: true },
+      longTermInYearTotal: { type: Number, optional: true },
+
+      longTermAftYear: {
+        type: Array,
+        optional: true,
+      },
+      'longTermAftYear.$': Object,
+      'longTermAftYear.$.accrVac': { type: Number, defaultValue: 0, optional: true },
+      'longTermAftYear.$.wrkComp': { type: Number, defaultValue: 0, optional: true },
+      'longTermAftYear.$.acrManRetPln': { type: Number, defaultValue: 0, optional: true },
+      'longTermAftYear.$.acrLeasGuarOb': { type: Number, defaultValue: 0, optional: true },
+      'longTermAftYear.$.capLeasOb': { type: Number, defaultValue: 0, optional: true },
+      'longTermAftYear.$.notPayBuilA': { type: Number, defaultValue: 0, optional: true },
+      'longTermAftYear.$.netPenLia': { type: Number, defaultValue: 0, optional: true },
+      'longTermAftYear.$.netOPEBLia': { type: Number, defaultValue: 0, optional: true },
+      'longTermAftYear.$.lineOfCredA': { type: Number, defaultValue: 0, optional: true },
+      'longTermAftYear.$.lineOfCredB': { type: Number, defaultValue: 0, optional: true },
+      'longTermAftYear.$.debtServ': { type: Number, defaultValue: 0, optional: true },
+      longTermAftYearTotal: { type: Number, optional: true },
+
+      allLiabilitiesTotal: { type: Number, optional: true },
+
+      pensionRsrcsInflow: { type: Number, defaultValue: 0, optional: true },
+      OPEBRsrcsInflow: { type: Number, defaultValue: 0, optional: true },
+
+      liabInflowRsrcsTotal: { type: Number, optional: true },
+
+      commitConting: {
+        type: Array,
+        optional: true,
+      },
+      'commitConting.$': Object,
+      'commitConting.$.invCapAssNetDbt': { type: Number, defaultValue: 0, optional: true },
+      'commitConting.$.rstrFedFun': { type: Number, defaultValue: 0, optional: true },
+      'commitConting.$.unRstr': { type: Number, defaultValue: 0, optional: true },
+      totalNet: { type: Number, optional: true },
+
+      totalLiabInRsrc: { type: Number, optional: true },
     }));
   }
 
-  /**
-   * Defines a new AuditedBalanceData item.
-   * @param owner the owner of the item.
-   * @param cashStuff
-   * @return {String} the docID of the new document.
-   */
-  define({ owner, cashStuff }) {
+  define({ owner, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting }) {
     const docID = this._collection.insert({
       owner,
       cashStuff,
+      other,
+      investments,
+      loanFund,
+      assets,
+      land,
+      compBAssets,
+      rstrCash,
+      pensionRsrcs,
+      OPEBRsrcs,
+      liabilities,
+      longTermInYear,
+      longTermAftYear,
+      pensionRsrcsInflow,
+      OPEBRsrcsInflow,
+      commitConting,
     });
     return docID;
   }
 
-  /**
-   * Updates the given document.
-   * @param docID the id of the document to update.
-   * @param cashStuff
-   */
-  update(docID, { cashStuff }) {
+  update(docID, { cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting }) {
     const updateData = {};
-    if (_.isArray(cashStuff)) {
-      updateData.cashStuff = cashStuff;
-    }
+    if (_.isArray(cashStuff)) { updateData.cashStuff = cashStuff; }
+    if (_.isArray(other)) { updateData.other = other; }
+    if (_.isArray(investments)) { updateData.investments = investments; }
+    if (_.isArray(loanFund)) { updateData.loanFund = loanFund; }
+    if (_.isArray(assets)) { updateData.assets = assets; }
+    if (_.isArray(land)) { updateData.land = land; }
+    if (_.isArray(compBAssets)) { updateData.compBAssets = compBAssets; }
+    if (rstrCash) { updateData.rstrCash = rstrCash; }
+    if (pensionRsrcs) { updateData.pensionRsrcs = pensionRsrcs; }
+    if (OPEBRsrcs) { updateData.OPEBRsrcs = OPEBRsrcs; }
+    if (_.isArray(liabilities)) { updateData.liabilities = liabilities; }
+    if (_.isArray(longTermInYear)) { updateData.longTermInYear = longTermInYear; }
+    if (_.isArray(longTermAftYear)) { updateData.longTermAftYear = longTermAftYear; }
+    if (pensionRsrcsInflow) { updateData.pensionRsrcsInflow = pensionRsrcsInflow; }
+    if (OPEBRsrcsInflow) { updateData.OPEBRsrcsInflow = OPEBRsrcsInflow; }
+    if (_.isArray(commitConting)) { updateData.commitConting = commitConting; }
     this._collection.update(docID, { $set: updateData });
+
+    // Call the updateTotals method to update the totals
+    this.updateTotals(docID);
   }
 
   /**
@@ -94,7 +268,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
   /**
    * Subscription method for AuditedBalanceData owned by the current user.
    */
-  subscribeABD() {
+  subscribeAudBalData() {
     if (Meteor.isClient) {
       return Meteor.subscribe(auditedBalanceDataPublications.auditedBalanceData);
     }
@@ -105,7 +279,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
    * Subscription method for admin users.
    * It subscribes to the entire collection.
    */
-  subscribeABDAdmin() {
+  subscribeAudBalDataAdmin() {
     if (Meteor.isClient) {
       return Meteor.subscribe(auditedBalanceDataPublications.auditedBalanceDataAdmin);
     }
@@ -130,15 +304,65 @@ class AuditedBalanceDataCollection extends BaseCollection {
   dumpOne(docID) {
     const doc = this.findDoc(docID);
     const cashStuff = doc.cashStuff;
+    const other = doc.other;
+    const investments = doc.investments;
+    const loanFund = doc.loanFund;
+    const assets = doc.assets;
+    const land = doc.land;
+    const compBAssets = doc.compBAssets;
+    const rstrCash = doc.rstrCash;
+    const pensionRsrcs = doc.pensionRsrcs;
+    const OPEBRsrcs = doc.OPEBRsrcs;
     const owner = doc.owner;
-    return { cashStuff, owner };
+    return { OPEBRsrcs, pensionRsrcs, rstrCash, compBAssets, land, assets, loanFund, investments, other, cashStuff, owner };
   }
 
-  sum(arr) {
-    if (Array.isArray(arr)) {
-      return arr.reduce((acc, num) => acc + num, 0);
-    }
-    throw new Error('Input must be an array of numbers.');
+  sumArray(array) {
+    if (!array || !array.length) return 0;
+    return array.reduce((total, item) => total + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
+  }
+
+  updateTotals(docId) {
+    const doc = this.findOne(docId);
+    const totalCash = this.sumArray(doc.cashStuff);
+    const totalOther = this.sumArray(doc.other);
+    const totalInvestments = this.sumArray(doc.investments);
+    const totalLoanFund = this.sumArray(doc.loanFund);
+    const totalAssets = this.sumArray(doc.assets);
+    const totalLand = this.sumArray(doc.land);
+    const totalCompBAssets = this.sumArray(doc.compBAssets);
+    const rstrCash = doc.rstrCash;
+    const pensionRsrcs = doc.pensionRsrcs;
+    const OPEBRsrcs = doc.OPEBRsrcs;
+    const totalLiab = this.sumArray(doc.liabilities);
+    const totalLongTermInYear = this.sumArray(doc.longTermInYear);
+    const totalLongTermAftYear = this.sumArray(doc.longTermAftYear);
+    const pensionRsrcsInflow = doc.pensionRsrcsInflow;
+    const OPEBRsrcsInflow = doc.OPEBRsrcsInflow;
+    const totalCommitConting = this.sumArray(doc.commitConting);
+
+    this._collection.update(docId, {
+      $set: {
+        cashTotal: totalCash,
+        otherTotal: totalOther,
+        investmentsTotal: totalInvestments,
+        loanFundTotal: totalLoanFund,
+        investLoanTotal: totalInvestments + totalLoanFund,
+        assetsTotal: totalAssets,
+        landTotal: totalLand,
+        compBAssetsTotal: totalCompBAssets,
+        capAssetsTotal: totalAssets + totalLand + totalCompBAssets,
+        otherAssetsTotal: rstrCash + totalAssets + totalLand + totalCompBAssets + totalInvestments + totalLoanFund + totalOther,
+        assetsAndRsrcsTotal: pensionRsrcs + OPEBRsrcs + rstrCash + totalAssets + totalLand + totalCompBAssets + totalInvestments + totalLoanFund + totalOther,
+        liabilitiesTotal: totalLiab,
+        longTermInYearTotal: totalLongTermInYear,
+        longTermAftYearTotal: totalLongTermAftYear,
+        allLiabilitiesTotal: totalLiab + totalLongTermInYear + totalLongTermAftYear,
+        liabInflowRsrcsTotal: totalLiab + totalLongTermInYear + totalLongTermAftYear + pensionRsrcsInflow + OPEBRsrcsInflow,
+        totalNet: totalCommitConting,
+        totalLiabInRsrc: totalLiab + totalLongTermInYear + totalLongTermAftYear + pensionRsrcsInflow + OPEBRsrcsInflow + totalCommitConting,
+      },
+    });
   }
 }
 

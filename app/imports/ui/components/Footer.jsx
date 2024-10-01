@@ -11,14 +11,14 @@ const Footer = () => (
           <h5>ABOUT US</h5>
           <ul className="list-unstyled">
             <li><a href="https://visualizing-your-future.github.io">Who We Are</a></li>
-            <li><a href="#">Place Holder</a></li>
+            <li><a href="https://visualizing-your-future.github.io">Place Holder</a></li>
           </ul>
         </Col>
 
         <Col md={3}>
           <h5>SERVICES PROVIDED</h5>
           <ul className="list-unstyled">
-            <li><a href="#">Data Visualization</a></li>
+            <li><a href="https://visualizing-your-future.github.io">Data Visualization</a></li>
           </ul>
         </Col>
 

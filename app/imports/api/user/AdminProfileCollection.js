@@ -34,15 +34,15 @@ class AdminProfileCollection extends BaseProfileCollection {
   }
 
   /**
-   * Updates the AdminProfile. You cannot change the email or role.
+   * Updates the following values in an admin's  AdminProfile. You cannot change the email or role.
+   *
    * @param docID the id of the AdminProfile.
    * @param userID the associated User ID.
    * @param firstName new first name (optional).
    * @param lastName new last name (optional).
    * @param email new email (optional).
-   * @param password new password (optional).
    */
-  update(docID, { userID, firstName, lastName, email, password }) {
+  update(docID, { userID, firstName, lastName, email }) {
     if (Meteor.isServer) {
       this.assertDefined(docID);
       const updateData = {};
@@ -54,11 +54,8 @@ class AdminProfileCollection extends BaseProfileCollection {
       }
       if (email) {
         updateData.email = email;
-        Users.updateUsername(userID, email);
-      }
-      if (password) {
-        updateData.password = password;
-        Users.updatePassword(userID, password);
+        /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
+        Users.updateUsernameAndEmail(userID, email);
       }
       this._collection.update(docID, { $set: updateData });
     }
