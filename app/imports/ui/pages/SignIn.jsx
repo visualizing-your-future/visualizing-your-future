@@ -13,11 +13,11 @@ import { COMPONENT_IDS } from '../utilities/ComponentIDs';
  * Authentication errors modify the component’s state to be displayed.
  */
 const SignIn = () => {
-  const [error, setError] = useState('');              // For storing login error messages
-  const [redirect, setRedirect] = useState(false);     // For redirecting after successful passcode
-  const [showPasscode, setShowPasscode] = useState(false);  // To show/hide passcode input
-  const [passcode, setPasscode] = useState('');        // To store the entered passcode
-  const [passcodeError, setPasscodeError] = useState('');  // Handle incorrect passcode
+  const [error, setError] = useState(''); // For storing login error messages
+  const [redirect, setRedirect] = useState(false); // For redirecting after successful passcode
+  const [showPasscode, setShowPasscode] = useState(false); // To show/hide passcode input
+  const [passcode, setPasscode] = useState(''); // To store the entered passcode
+  const [passcodeError, setPasscodeError] = useState(''); // Handle incorrect passcode
   const [isMFAEnabled, setIsMFAEnabled] = useState(false); // MFA status
 
   // Set up the schema for the email and password fields
@@ -46,7 +46,7 @@ const SignIn = () => {
         } else {
           setRedirect(true); // No MFA, redirect to landing page directly
         }
-        setError('');          // Clear any previous errors
+        setError(''); // Clear any previous errors
       }
     });
   };
@@ -62,7 +62,7 @@ const SignIn = () => {
 
   // if correct authentication and passcode, redirect to the landing page
   if (redirect) {
-    return (<Navigate to="/" />);  // Redirecting to home page on successful passcode or login
+    return (<Navigate to="/" />); // Redirecting to home page on successful passcode or login
   }
 
   return (
@@ -101,7 +101,9 @@ const SignIn = () => {
                   className="form-control"
                 />
                 {passcodeError && <Alert variant="danger">{passcodeError}</Alert>}
-                <button className="btn btn-primary" onClick={handlePasscodeSubmit}>Submit Again</button>
+                <button type="button" className="btn btn-primary" onClick={handlePasscodeSubmit}>
+                  Submit Again
+                </button>
               </Card.Body>
             </Card>
           )}
