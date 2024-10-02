@@ -36,7 +36,8 @@ const AccountSettings = () => {
     const usrId = Meteor.userId();
     const username = Meteor.user()?.username;
 
-    let sub, subRdy, colName, userDoc, docID;
+    let sub; let subRdy; let colName; let userDoc; let
+      docID;
 
     if (Roles.userIsInRole(usrId, ROLE.ADMIN)) {
       sub = AdminProfiles.subscribeAdmin();
