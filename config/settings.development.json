@@ -4,7 +4,14 @@
     },
     { "email": "admin", "password": "changeme", "role": "ADMIN", "firstName": "Admin2", "lastName": "nopassword"
     },
-    { "email": "john@foo.com", "password": "changeme", "role": "USER" , "firstName": "John", "lastName": "Doe" }
+    { "email": "john@foo.com", "password": "changeme", "role": "USER" , "firstName": "John", "lastName": "Doe"
+    },
+    { "email": "sarah@foo.com", "password": "changeme", "role": "USER", "firstName": "Sarah", "lastName": "Green"
+    },
+    { "email": "mike@foo.com", "password": "changeme", "role": "USER", "firstName": "Mike", "lastName": "Brown"
+    },
+    { "email": "lisa@foo.com", "password": "changeme", "role": "USER", "firstName": "Lisa", "lastName": "Smith"
+    }
   ],
 
   "defaultAuditedBalanceData": [
