@@ -73,7 +73,7 @@ const Landing = () => {
     } if (currentUser) {
       return <h1 className="mt-4">Welcome {firstName || currentUser} {lastName}!</h1>;
     }
-    return <h1 className="mt-4">Welcome to Spire</h1>;
+    return <div><h1 className="mt-4">Welcome to Spire</h1> <Button variant="primary" size="lg" className="button-square mt-3" id="button-square" href="/signin">Learn More</Button></div>;
 
   };
 
