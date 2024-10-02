@@ -101,19 +101,6 @@ const EditProfile = () => {
     const { firstName, lastName, email, role } = data;
 
     /**
-     * Check if user intended to change password and input new password correctly.
-     * If so, call CLIENT side function updatePassword().
-     * If not, throw error.
-     */
-    if (role === 'ADMIN') {
-      console.log('changerole to ', role);
-      UserProfiles.changeRole(_docId, ROLES.ADMIN);
-    } else if (role === 'USER') {
-      console.log('changerole to ', role);
-      AdminProfiles.changeRole(_docId, ROLES.USER);
-    }
-
-    /**
      * Add the documentID to the data being passed to the collection update function,
      * then call the collection update function.
      */

@@ -42,7 +42,7 @@ class AdminProfileCollection extends BaseProfileCollection {
    * @param lastName new last name (optional).
    * @param email new email (optional).
    */
-  update(docID, { userID, firstName, lastName, email }) {
+  update(docID, { userID, firstName, lastName, email, role }) {
     if (Meteor.isServer) {
       this.assertDefined(docID);
       const updateData = {};
@@ -57,16 +57,12 @@ class AdminProfileCollection extends BaseProfileCollection {
         /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
         Users.updateUsernameAndEmail(userID, email);
       }
-      this._collection.update(docID, { $set: updateData });
-    }
-  }
-
-  changeRole(docID, role) {
-    console.log('changerole called');
-    if (Meteor.isServer) {
-      this.assertDefined(docID);
-      const updateData = {};
-      updateData.role = role;
+      /** Leaving this extra if statement for now, I plan to add more roles, like customer. */
+      if (role) {
+        if (role === 'USER') {
+          updateData.role = ROLE.USER;
+        }
+      }
       this._collection.update(docID, { $set: updateData });
     }
   }

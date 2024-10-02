@@ -64,19 +64,12 @@ class UserProfileCollection extends BaseProfileCollection {
         /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
         Users.updateUsernameAndEmail(userID, email);
       }
+      /** Leaving this extra if statement for now, I plan to add more roles, like customer. */
       if (role) {
-        updateData.role = role;
+        if (role === 'ADMIN') {
+          updateData.role = ROLE.ADMIN;
+        }
       }
-      this._collection.update(docID, { $set: updateData });
-    }
-  }
-
-  changeRole(docID, role) {
-    console.log('changerole called');
-    if (Meteor.isServer) {
-      this.assertDefined(docID);
-      const updateData = {};
-      updateData.role = role;
       this._collection.update(docID, { $set: updateData });
     }
   }
