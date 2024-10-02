@@ -70,7 +70,7 @@ const SignIn = () => {
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center">
-            <h1>Welcome Back!</h1>
+            <h1>Welcome!</h1>
             <h4>Please login to your account</h4>
           </Col>
 
