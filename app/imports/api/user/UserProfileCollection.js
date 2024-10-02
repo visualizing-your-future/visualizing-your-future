@@ -23,19 +23,21 @@ class UserProfileCollection extends BaseProfileCollection {
    * @param lastName The last name.
    */
   define({ email, firstName, lastName, password }) {
-    // if (Meteor.isServer) {
-    const username = email;
-    const user = this.findOne({ email, firstName, lastName });
-    if (!user) {
-      const role = ROLE.USER;
-      const userID = Users.define({ username, role, password });
-      const profileID = this._collection.insert({ email, firstName, lastName, userID, role });
-      // this._collection.update(profileID, { $set: { userID } });
-      return profileID;
+    if (Meteor.isServer) {
+      const username = email;
+      const user = this.findOne({ email, firstName, lastName });
+      if (!user) {
+        const role = ROLE.USER;
+        /** Creates a Meteor account. */
+        const userID = Users.define({ username, role, password });
+        /** Creates a MongoDB UserProfileCollection account. */
+        const profileID = this._collection.insert({ email, firstName, lastName, role, userID });
+        // this._collection.update(profileID, { $set: { userID } });
+        return profileID;
+      }
+      return user._id;
     }
-    return user._id;
-    // }
-    // return undefined;
+    return undefined;
   }
 
   /**
@@ -47,7 +49,7 @@ class UserProfileCollection extends BaseProfileCollection {
    * @param lastName new last name (optional).
    * @param email new email (optional).
    */
-  update(docID, { userID, firstName, lastName, email }) {
+  update(docID, { userID, firstName, lastName, email, role }) {
     if (Meteor.isServer) {
       this.assertDefined(docID);
       const updateData = {};
@@ -62,6 +64,19 @@ class UserProfileCollection extends BaseProfileCollection {
         /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
         Users.updateUsernameAndEmail(userID, email);
       }
+      if (role) {
+        updateData.role = role;
+      }
+      this._collection.update(docID, { $set: updateData });
+    }
+  }
+
+  changeRole(docID, role) {
+    console.log('changerole called');
+    if (Meteor.isServer) {
+      this.assertDefined(docID);
+      const updateData = {};
+      updateData.role = role;
       this._collection.update(docID, { $set: updateData });
     }
   }
@@ -140,7 +155,7 @@ class UserProfileCollection extends BaseProfileCollection {
   /**
    * Returns an array of strings, each one representing an integrity problem with this collection.
    * Returns an empty array if no problems were found.
-   * Checks the profile common fields and the role..
+   * Checks the profile common fields and the role.
    * @returns {Array} A (possibly empty) array of strings indicating integrity issues.
    */
   checkIntegrity() {
@@ -168,7 +183,7 @@ class UserProfileCollection extends BaseProfileCollection {
 }
 
 /**
- * Profides the singleton instance of this class to all other entities.
+ * Provides the singleton instance of this class to all other entities.
  * @type {UserProfileCollection}
  */
 export const UserProfiles = new UserProfileCollection();

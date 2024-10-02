@@ -18,14 +18,14 @@ class AdminProfileCollection extends BaseProfileCollection {
    */
   define({ email, firstName, lastName, password }) {
     if (Meteor.isServer) {
-      // console.log('define', email, firstName, lastName, password);
       const username = email;
       const user = this.findOne({ email, firstName, lastName });
       if (!user) {
         const role = ROLE.ADMIN;
-        const profileID = this._collection.insert({ email, firstName, lastName, userID: this.getFakeUserId(), role });
         const userID = Users.define({ username, role, password });
-        this._collection.update(profileID, { $set: { userID } });
+        const profileID = this._collection.insert({ email, firstName, lastName, role, userID });
+        // const profileID = this._collection.insert({ email, firstName, lastName, userID: this.getFakeUserId(), role });
+        // this._collection.update(profileID, { $set: { userID } });
         return profileID;
       }
       return user._id;
@@ -57,6 +57,16 @@ class AdminProfileCollection extends BaseProfileCollection {
         /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
         Users.updateUsernameAndEmail(userID, email);
       }
+      this._collection.update(docID, { $set: updateData });
+    }
+  }
+
+  changeRole(docID, role) {
+    console.log('changerole called');
+    if (Meteor.isServer) {
+      this.assertDefined(docID);
+      const updateData = {};
+      updateData.role = role;
       this._collection.update(docID, { $set: updateData });
     }
   }

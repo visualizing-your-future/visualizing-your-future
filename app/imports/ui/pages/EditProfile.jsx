@@ -15,6 +15,7 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { Users } from '../../api/user/UserCollection';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
+import { ROLES } from '../../api/role/Role';
 
 /* Renders the EditProfile page for editing a single document. */
 const EditProfile = () => {
@@ -32,9 +33,7 @@ const EditProfile = () => {
     firstName: { type: String, optional: true },
     lastName: { type: String, optional: true },
     email: { type: String, optional: true },
-    oldPassword: { type: String, optional: true },
-    newPassword: { type: String, optional: true },
-    verifyNewPassword: { type: String, optional: true },
+    role: { type: String, optional: true },
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
@@ -72,11 +71,13 @@ const EditProfile = () => {
       colName = AdminProfiles.getCollectionName();
       userDoc = AdminProfiles.findDoc(_docId);
       usrId = userDoc.userID;
+      console.log(userDoc);
     } else if (!adminRole) {
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
       userDoc = UserProfiles.findDoc(_docId);
       usrId = userDoc.userID;
+      console.log(userDoc);
     } else {
       navigate('/notauthorized');
     }
@@ -97,25 +98,26 @@ const EditProfile = () => {
     }
 
     /** Stores the values the user inputs in the page TextFields. */
-    const { firstName, lastName, email, oldPassword, newPassword, verifyNewPassword } = data;
+    const { firstName, lastName, email, role } = data;
 
     /**
      * Check if user intended to change password and input new password correctly.
      * If so, call CLIENT side function updatePassword().
      * If not, throw error.
      */
-    if (oldPassword && (newPassword === verifyNewPassword)) {
-      Users.updatePassword(oldPassword, newPassword);
-    } else if (oldPassword && (newPassword !== verifyNewPassword)) {
-      swal('Error', 'Passwords do not match.', 'error');
-      return;
+    if (role === 'ADMIN') {
+      console.log('changerole to ', role);
+      UserProfiles.changeRole(_docId, ROLES.ADMIN);
+    } else if (role === 'USER') {
+      console.log('changerole to ', role);
+      AdminProfiles.changeRole(_docId, ROLES.USER);
     }
 
     /**
      * Add the documentID to the data being passed to the collection update function,
      * then call the collection update function.
      */
-    const updateData = { id: _docId, userID, firstName, lastName, email };
+    const updateData = { id: _docId, userID, firstName, lastName, email, role };
     console.log(updateData);
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
@@ -136,9 +138,7 @@ const EditProfile = () => {
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_FIRST_NAME} name="firstName" placeholder="First Name" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last name" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_EMAIL} name="email" placeholder="email" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="oldPassword" placeholder="Old Password" type="password" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_NEW_PASSWORD} name="newPassword" placeholder="New Password" type="password" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_VERIFY_NEW_PASSWORD} name="verifyNewPassword" placeholder="Re-type New Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_ROLE} name="role" placeholder="Role" />
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
               </Card.Body>

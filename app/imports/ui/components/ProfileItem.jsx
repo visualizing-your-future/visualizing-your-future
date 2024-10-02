@@ -10,6 +10,7 @@ const ProfileItem = ({ profile }) => (
     <td>{profile.email}</td>
     <td>{profile.firstName}</td>
     <td>{profile.lastName}</td>
+    <td>{profile.role}</td>
     <td>
       <Link className={COMPONENT_IDS.LIST_PROFILES_EDIT} to={`/edit/${profile._id}`}>Edit</Link>
     </td>
@@ -22,6 +23,7 @@ ProfileItem.propTypes = {
     email: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
+    role: PropTypes.string,
     _id: PropTypes.string,
   }).isRequired,
 };
