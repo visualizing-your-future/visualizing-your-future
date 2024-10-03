@@ -17,6 +17,13 @@ export const testUpdate = (collection, docID, updateData) => {
   keys.forEach(key => expect(item[key]).to.equal(updateData[key]));
 };
 
+export const testDataUpdate = (collection, docID, updateData) => {
+  collection.update(docID, updateData);
+  const item = collection.findDoc(docID);
+  const keys = ['cashStuff', 'other', 'investments', 'loanFund', 'assets', 'land', 'compBAssets', 'rstrCash', 'pensionRsrcs', 'OPEBRsrcs', 'liabilities', 'longTermInYear', 'longTermAftYear', 'pensionRsrcsInflow', 'OPEBRsrcsInflow', 'commitConting'];
+  keys.forEach(key => { expect(item[key]).to.deep.equal(updateData[key]); });
+};
+
 export const testDumpRestore = (collection) => {
   const origDoc = collection.findOne({});
   let docID = origDoc._id;
@@ -29,7 +36,7 @@ export const testDumpRestore = (collection) => {
   const keys = Object.keys(doc);
   keys.forEach(key => {
     if (key !== '_id') {
-      expect(doc[key]).to.equal(origDoc[key]);
+      expect(doc[key]).to.deep.equal(origDoc[key]);
     }
   });
 };
