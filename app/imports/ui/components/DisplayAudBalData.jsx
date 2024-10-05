@@ -534,13 +534,13 @@ const DisplayAudBalData = ({ audBalData }) => {
 DisplayAudBalData.propTypes = {
   audBalData: PropTypes.shape({
     owner: PropTypes.string,
-    cashStuff: PropTypes.arrayOf({
+    cashStuff: PropTypes.arrayOf(PropTypes.shape({
       pettyCash: PropTypes.number,
       cash: PropTypes.number,
       cashBankCred: PropTypes.number,
-    }),
+    })),
     cashTotal: PropTypes.number,
-    other: PropTypes.arrayOf({
+    other: PropTypes.arrayOf(PropTypes.shape({
       actRec: PropTypes.number,
       dueFromFund: PropTypes.number,
       intDivRec: PropTypes.number,
@@ -549,9 +549,9 @@ DisplayAudBalData.propTypes = {
       notesDueAftYr: PropTypes.number,
       secDep: PropTypes.number,
       cashHeldByInvMng: PropTypes.number,
-    }),
+    })),
     otherTotal: PropTypes.number,
-    investments: PropTypes.arrayOf({
+    investments: PropTypes.arrayOf(PropTypes.shape({
       mutFun: PropTypes.number,
       comFun: PropTypes.number,
       hdgFun: PropTypes.number,
@@ -560,35 +560,35 @@ DisplayAudBalData.propTypes = {
       comPrefStock: PropTypes.number,
       privDbt: PropTypes.number,
       other: PropTypes.number,
-    }),
+    })),
     investmentsTotal: PropTypes.number,
-    loanFund: PropTypes.arrayOf({
+    loanFund: PropTypes.arrayOf(PropTypes.shape({
       usTreas: PropTypes.number,
       usAgenc: PropTypes.number,
-    }),
+    })),
     loanFundTotal: PropTypes.number,
     investLoanTotal: PropTypes.number,
-    assets: PropTypes.arrayOf({
+    assets: PropTypes.arrayOf(PropTypes.shape({
       bldngs: PropTypes.number,
       leashldImprv: PropTypes.number,
       frnFixEqp: PropTypes.number,
       accumDepr: PropTypes.number,
-    }),
+    })),
     assetsTotal: PropTypes.number,
-    land: PropTypes.arrayOf({
+    land: PropTypes.arrayOf(PropTypes.shape({
       landA: PropTypes.number,
       landB: PropTypes.number,
       cnstrProg: PropTypes.number,
-    }),
+    })),
     landTotal: PropTypes.number,
-    compBAssets: PropTypes.arrayOf({
+    compBAssets: PropTypes.arrayOf(PropTypes.shape({
       bldngs: PropTypes.number,
       leashldImprv: PropTypes.number,
       frnFixEqp: PropTypes.number,
       vehcl: PropTypes.number,
       accumDepr: PropTypes.number,
       land: PropTypes.number,
-    }),
+    })),
     compBAssetsTotal: PropTypes.number,
     capAssetsTotal: PropTypes.number,
     rstrCash: PropTypes.number,
@@ -596,13 +596,13 @@ DisplayAudBalData.propTypes = {
     pensionRsrcs: PropTypes.number,
     OPEBRsrcs: PropTypes.number,
     totAssetsAndRsrcs: PropTypes.number,
-    liabilities: PropTypes.arrayOf({
+    liabilities: PropTypes.arrayOf(PropTypes.shape({
       acntPayAccLia: PropTypes.number,
       dueToFun: PropTypes.number,
       dueToOthFun: PropTypes.number,
-    }),
+    })),
     liabilitiesTotal: PropTypes.number,
-    longTermInYear: PropTypes.arrayOf({
+    longTermInYear: PropTypes.arrayOf(PropTypes.shape({
       accrVac: PropTypes.number,
       wrkComp: PropTypes.number,
       acrManRetPln: PropTypes.number,
@@ -614,9 +614,9 @@ DisplayAudBalData.propTypes = {
       lineOfCredA: PropTypes.number,
       lineOfCredB: PropTypes.number,
       debtServ: PropTypes.number,
-    }),
+    })),
     longTermInYearTotal: PropTypes.number,
-    longTermAftYear: PropTypes.arrayOf({
+    longTermAftYear: PropTypes.arrayOf(PropTypes.shape({
       accrVac: PropTypes.number,
       wrkComp: PropTypes.number,
       acrManRetPln: PropTypes.number,
@@ -628,17 +628,17 @@ DisplayAudBalData.propTypes = {
       lineOfCredA: PropTypes.number,
       lineOfCredB: PropTypes.number,
       debtServ: PropTypes.number,
-    }),
+    })),
     longTermAftYearTotal: PropTypes.number,
     allLiabilitiesTotal: PropTypes.number,
     pensionRsrcsInflow: PropTypes.number,
     OPEBRsrcsInflow: PropTypes.number,
     liabInflowRsrcsTotal: PropTypes.number,
-    commitConting: PropTypes.arrayOf({
+    commitConting: PropTypes.arrayOf(PropTypes.shape({
       invCapAssNetDbt: PropTypes.number,
       rstrFedFun: PropTypes.number,
       unRstr: PropTypes.number,
-    }),
+    })),
     totalNet: PropTypes.number,
     totalLiabInRsrc: PropTypes.number,
     _id: PropTypes.string,
