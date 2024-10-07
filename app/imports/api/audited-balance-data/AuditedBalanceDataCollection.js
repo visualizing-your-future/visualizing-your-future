@@ -18,6 +18,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
       cashStuff: {
         type: Array,
         optional: true,
+        defaultValue: [],
       },
       'cashStuff.$': Object,
       'cashStuff.$.pettyCash': { type: Number, defaultValue: 0, optional: true },
@@ -28,6 +29,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
       other: {
         type: Array,
         optional: true,
+        defaultValue: [],
       },
       'other.$': Object,
       'other.$.actRec': { type: Number, defaultValue: 0, optional: true },
@@ -123,7 +125,6 @@ class AuditedBalanceDataCollection extends BaseCollection {
 
       longTermInYear: {
         type: Array,
-        defaultValue: [],
         optional: true,
       },
       'longTermInYear.$': Object,
@@ -199,6 +200,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
       OPEBRsrcsInflow,
       commitConting,
     });
+    this.updateTotals(docID);
     return docID;
   }
 
@@ -211,14 +213,14 @@ class AuditedBalanceDataCollection extends BaseCollection {
     if (_.isArray(assets)) { updateData.assets = assets; }
     if (_.isArray(land)) { updateData.land = land; }
     if (_.isArray(compBAssets)) { updateData.compBAssets = compBAssets; }
-    if (rstrCash) { updateData.rstrCash = rstrCash; }
-    if (pensionRsrcs) { updateData.pensionRsrcs = pensionRsrcs; }
-    if (OPEBRsrcs) { updateData.OPEBRsrcs = OPEBRsrcs; }
+    updateData.rstrCash = rstrCash;
+    updateData.pensionRsrcs = pensionRsrcs;
+    updateData.OPEBRsrcs = OPEBRsrcs;
     if (_.isArray(liabilities)) { updateData.liabilities = liabilities; }
     if (_.isArray(longTermInYear)) { updateData.longTermInYear = longTermInYear; }
     if (_.isArray(longTermAftYear)) { updateData.longTermAftYear = longTermAftYear; }
-    if (pensionRsrcsInflow) { updateData.pensionRsrcsInflow = pensionRsrcsInflow; }
-    if (OPEBRsrcsInflow) { updateData.OPEBRsrcsInflow = OPEBRsrcsInflow; }
+    updateData.pensionRsrcsInflow = pensionRsrcsInflow;
+    updateData.OPEBRsrcsInflow = OPEBRsrcsInflow;
     if (_.isArray(commitConting)) { updateData.commitConting = commitConting; }
     this._collection.update(docID, { $set: updateData });
 
@@ -304,17 +306,59 @@ class AuditedBalanceDataCollection extends BaseCollection {
   dumpOne(docID) {
     const doc = this.findDoc(docID);
     const cashStuff = doc.cashStuff;
+    const cashTotal = doc.cashTotal;
     const other = doc.other;
+    const otherTotal = doc.otherTotal;
     const investments = doc.investments;
+    const investmentsTotal = doc.investmentsTotal;
     const loanFund = doc.loanFund;
+    const loanFundTotal = doc.loanFundTotal;
+    const investLoanTotal = doc.investLoanTotal;
     const assets = doc.assets;
+    const assetsTotal = doc.assetsTotal;
     const land = doc.land;
+    const landTotal = doc.landTotal;
     const compBAssets = doc.compBAssets;
+    const compBAssetsTotal = doc.compBAssetsTotal;
+    const capAssetsTotal = doc.capAssetsTotal;
     const rstrCash = doc.rstrCash;
+    const otherAssetsTotal = doc.otherAssetsTotal;
     const pensionRsrcs = doc.pensionRsrcs;
     const OPEBRsrcs = doc.OPEBRsrcs;
+    const totAssetsAndRsrcs = doc.totAssetsAndRsrcs;
+    const liabilities = doc.liabilities;
+    const liabilitiesTotal = doc.liabilitiesTotal;
+    const longTermInYear = doc.longTermInYear;
+    const longTermInYearTotal = doc.longTermInYearTotal;
+    const longTermAftYear = doc.longTermAftYear;
+    const longTermAftYearTotal = doc.longTermAftYearTotal;
+    const allLiabilitiesTotal = doc.allLiabilitiesTotal;
+    const pensionRsrcsInflow = doc.pensionRsrcsInflow;
+    const OPEBRsrcsInflow = doc.OPEBRsrcsInflow;
+    const liabInflowRsrcsTotal = doc.liabInflowRsrcsTotal;
+    const commitConting = doc.commitConting;
+    const totalNet = doc.totalNet;
+    const totalLiabInRsrc = doc.totalLiabInRsrc;
     const owner = doc.owner;
-    return { OPEBRsrcs, pensionRsrcs, rstrCash, compBAssets, land, assets, loanFund, investments, other, cashStuff, owner };
+    return {
+      totalLiabInRsrc, totalNet,
+      commitConting, liabInflowRsrcsTotal,
+      OPEBRsrcsInflow, pensionRsrcsInflow,
+      allLiabilitiesTotal, longTermAftYearTotal,
+      longTermAftYear, longTermInYearTotal,
+      longTermInYear, liabilitiesTotal,
+      liabilities, totAssetsAndRsrcs,
+      OPEBRsrcs, pensionRsrcs,
+      otherAssetsTotal, rstrCash,
+      capAssetsTotal, compBAssetsTotal,
+      compBAssets, landTotal,
+      land, assetsTotal,
+      assets, investLoanTotal,
+      loanFundTotal, loanFund,
+      investmentsTotal, investments,
+      otherTotal, other,
+      cashTotal, cashStuff,
+      owner };
   }
 
   sumArray(array) {
