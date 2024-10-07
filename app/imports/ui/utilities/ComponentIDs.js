@@ -41,4 +41,6 @@ export const COMPONENT_IDS = {
   DELETE_USER_ACCOUNT: 'delete-user-account',
   LANDING_USER: 'landing-user',
   LANDING_ADMIN: 'landing-admin',
+  ACCOUNT_SETTINGS_MFA: 'mfa',
+
 };
