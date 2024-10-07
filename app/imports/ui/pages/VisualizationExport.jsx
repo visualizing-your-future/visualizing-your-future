@@ -111,7 +111,6 @@ const Comparison = ({ data }) => {
   const [selectedMetric2, setSelectedMetric2] = useState('assets');
   const [selectedMetric3, setSelectedMetric3] = useState('debt');
 
-
   const handleYearSelect = (year) => {
     setSelectedYears((prev) => {
       const isSelected = prev.includes(year);
@@ -178,10 +177,10 @@ const Comparison = ({ data }) => {
 const VisualizationExport = () => {
   const [activeKey, setActiveKey] = useState('snapshot');
   const [isDataVisible, setIsDataVisible] = useState({
-    snapshot: true,
-    '4year': true,
-    '8year': true,
-    '12year': true,
+    snapshot: false,
+    '4year': false,
+    '8year': false,
+    '12year': false,
   });
 
   const toggleDataVisibility = (key) => {
@@ -233,31 +232,31 @@ const VisualizationExport = () => {
                               <h5>{activeKey.toUpperCase()} View</h5>
                               <Row>
                                 <Col lg={6}>
-                                  <h6>Table 1: Assets and Liabilities</h6>
+                                  <h6>Table 1: Net Position</h6>
                                   {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', 'netPosition', '#f17e5d', '#246aae', '#8884d8')}
                                 </Col>
                                 <Col lg={6}>
-                                  <h6>Table 4: Cash On Hand and Debt</h6>
-                                  {renderDualChart(dataSets[activeKey], 'cashOnHand', '', '', '#82ca9d', '#e64b37', '')}
+                                  <h6>Table 4: Financing</h6>
+                                  {renderDualChart(dataSets[activeKey], 'cashOnHand', 'debt', '', '#82ca9d', '#e64b37', '#e64b37')}
                                 </Col>
                               </Row>
                               <Row>
                                 <Col lg={6}>
-                                  <h6>Table 2: Liquidity and Opex</h6>
+                                  <h6>Table 2: Years of Solvency</h6>
                                   {renderDualChart(dataSets[activeKey], 'netPosition', 'opex', '#8884d8', '#ffc658')}
                                 </Col>
                                 <Col lg={6}>
-                                  <h6>Table 5: Cash Flow</h6>
+                                  <h6>Table 5: Years of Solvency Based on Cash Flow</h6>
                                   {renderDualChart(dataSets[activeKey], 'revenues', 'opex', '#8884d8', '#ff7300')}
                                 </Col>
                               </Row>
                               <Row>
                                 <Col lg={6}>
-                                  <h6>Table 3: Liquidity</h6>
+                                  <h6>Table 3: Demand For Capital</h6>
                                   {renderDualChart(dataSets[activeKey], 'cashOnHand', 'investment', '#82ca9d', '#ff7300')}
                                 </Col>
                                 <Col lg={6}>
-                                  <h6>Table 6: Budget and Actual + Encumbrance</h6>
+                                  <h6>Table 6: Budget</h6>
                                   {renderDualChart(dataSets[activeKey], 'revenues', 'netIncome', '#246aae', '#f17e5d')}
                                 </Col>
                               </Row>
