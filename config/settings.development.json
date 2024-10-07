@@ -4,19 +4,24 @@
     },
     { "email": "admin", "password": "changeme", "role": "ADMIN", "firstName": "Admin2", "lastName": "nopassword"
     },
-    { "email": "john@foo.com", "password": "changeme", "role": "USER" , "firstName": "John", "lastName": "Doe" }
+    { "email": "john@foo.com", "password": "changeme", "role": "USER" , "firstName": "John", "lastName": "Doe"
+    },
+    { "email": "sarah@foo.com", "password": "changeme", "role": "USER", "firstName": "Sarah", "lastName": "Green"
+    },
+    { "email": "mike@foo.com", "password": "changeme", "role": "USER", "firstName": "Mike", "lastName": "Brown"
+    },
+    { "email": "lisa@foo.com", "password": "changeme", "role": "USER", "firstName": "Lisa", "lastName": "Smith"
+    }
   ],
 
   "defaultAuditedBalanceData": [
-    { "owner":  "john@foo.com" }
+    { "owner":  "john@foo.com" },
+    { "owner":  "john@foo.com" },
+    { "owner":  "john@foo.com" },
+    { "owner":  "john@foo.com" },
+    { "owner":  "admin@foo.com" }
   ],
 
-  "defaultData": [
-    { "name": "Basket", "quantity": 3, "owner": "john@foo.com", "condition": "excellent" },
-    { "name": "Bicycle", "quantity": 2, "owner": "john@foo.com", "condition": "poor" },
-    { "name": "Banana", "quantity": 2, "owner": "admin@foo.com", "condition": "good" },
-    { "name": "Boogie Board", "quantity": 2, "owner": "admin@foo.com", "condition": "excellent" }
-  ],
   "public": {
     "development": true
   }

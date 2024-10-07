@@ -1,6 +1,6 @@
 import React from 'react';
 import swal from 'sweetalert';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Card, Col, Container, Row, Button } from 'react-bootstrap';
 import { AutoForm, ErrorsField, SubmitField, TextField } from 'uniforms-bootstrap5';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
@@ -9,11 +9,10 @@ import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema from 'simpl-schema';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
-import { updateMethod } from '../../api/base/BaseCollection.methods';
+import { removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
-import { Users } from '../../api/user/UserCollection';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import { ROLES } from '../../api/role/Role';
 
@@ -48,7 +47,7 @@ const EditProfile = () => {
     let userDoc;
     /** The user's ID. */
     let usrId;
-    /** testing */
+    /** Is the profile being edited an admin or user? */
     let adminRole;
 
     /**
@@ -57,7 +56,7 @@ const EditProfile = () => {
      */
     try {
       userDoc = UserProfiles.findDoc(_docId);
-      sub = UserProfiles.subscribeProfileUser();
+      sub = UserProfiles.subscribeProfileAdmin();
       adminRole = false;
     } catch (error) {
       userDoc = AdminProfiles.findDoc(_docId);
@@ -69,15 +68,11 @@ const EditProfile = () => {
     if (adminRole) {
       subRdy = sub.ready();
       colName = AdminProfiles.getCollectionName();
-      userDoc = AdminProfiles.findDoc(_docId);
       usrId = userDoc.userID;
-      console.log(userDoc);
     } else if (!adminRole) {
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
-      userDoc = UserProfiles.findDoc(_docId);
       usrId = userDoc.userID;
-      console.log(userDoc);
     } else {
       navigate('/notauthorized');
     }
@@ -98,14 +93,13 @@ const EditProfile = () => {
     }
 
     /** Stores the values the user inputs in the page TextFields. */
-    const { firstName, lastName, email, role } = data;
+    const { firstName, lastName, email } = data;
 
     /**
      * Add the documentID to the data being passed to the collection update function,
      * then call the collection update function.
      */
     const updateData = { id: _docId, userID, firstName, lastName, email, role };
-    console.log(updateData);
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
@@ -128,6 +122,15 @@ const EditProfile = () => {
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_ROLE} name="role" placeholder="Role" />
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
+                <Button
+                  id={COMPONENT_IDS.DELETE_USER_ACCOUNT}
+                  onClick={() => {
+                    removeItMethod.callPromise({ collectionName: collectionName, instance: _docId });
+                    navigate('/profiles');
+                  }}
+                >
+                  Delete Account
+                </Button>
               </Card.Body>
             </Card>
           </AutoForm>

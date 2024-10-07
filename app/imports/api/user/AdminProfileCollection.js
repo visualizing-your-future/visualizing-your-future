@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
+import { check } from 'meteor/check';
 import BaseProfileCollection from './BaseProfileCollection';
 import { ROLE } from '../role/Role';
 import { Users } from './UserCollection';
@@ -68,15 +69,22 @@ class AdminProfileCollection extends BaseProfileCollection {
   }
 
   /**
-   * Removes this profile, given its profile ID.
-   * Also removes this user from Meteor Accounts.
-   * @param profileID The ID for this profile object.
+   * A stricter form of remove that throws an error if the document or docID could not be found in this collection.
+   * @param { String | Object } name A document or docID in this collection.
+   * @returns true
    */
-  removeIt(profileID) {
-    if (this.isDefined(profileID)) {
-      return super.removeIt(profileID);
-    }
-    return null;
+  removeIt(name) {
+    const doc = this.findDoc(name);
+    // TODO: This line always returns undefined.  Why?
+    check(doc, Object);
+    // LEAVE THESE CONSOLE.LOGS IN FOR NOW.  THEY ARE USEFUL FOR DEBUGGING.
+    // console.log('before', this._collection.findOne({ _id: doc._id }));
+    this._collection.remove(doc._id);
+    // console.log('after', this._collection.findOne({ _id: doc._id }));
+    // console.log('before', Meteor.users.findOne({ _id: doc.userID }));
+    Meteor.users.remove({ _id: doc.userID });
+    // console.log('after', Meteor.users.findOne({ _id: doc.userID }));
+    return true;
   }
 
   /**

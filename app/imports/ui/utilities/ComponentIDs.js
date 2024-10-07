@@ -39,6 +39,9 @@ export const COMPONENT_IDS = {
   ACCOUNT_SETTINGS_VERIFY_NEW_PASSWORD: 'account-settings-verify-new-password',
   ACCOUNT_SETTINGS_ROLE: 'account-settings-role',
   SAVE_ACCOUNT_CHANGES: 'save-account-changes',
+  DELETE_USER_ACCOUNT: 'delete-user-account',
   LANDING_USER: 'landing-user',
   LANDING_ADMIN: 'landing-admin',
+  ACCOUNT_SETTINGS_MFA: 'mfa',
+
 };
