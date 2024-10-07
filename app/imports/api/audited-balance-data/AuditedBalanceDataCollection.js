@@ -18,6 +18,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
       cashStuff: {
         type: Array,
         optional: true,
+        defaultValue: [],
       },
       'cashStuff.$': Object,
       'cashStuff.$.pettyCash': { type: Number, defaultValue: 0, optional: true },
@@ -28,6 +29,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
       other: {
         type: Array,
         optional: true,
+        defaultValue: [],
       },
       'other.$': Object,
       'other.$.actRec': { type: Number, defaultValue: 0, optional: true },
@@ -123,7 +125,6 @@ class AuditedBalanceDataCollection extends BaseCollection {
 
       longTermInYear: {
         type: Array,
-        defaultValue: [],
         optional: true,
       },
       'longTermInYear.$': Object,

@@ -15,7 +15,11 @@
   ],
 
   "defaultAuditedBalanceData": [
-    { "owner":  "john@foo.com" }
+    { "owner":  "john@foo.com" },
+    { "owner":  "john@foo.com" },
+    { "owner":  "john@foo.com" },
+    { "owner":  "john@foo.com" },
+    { "owner":  "admin@foo.com" }
   ],
 
   "defaultData": [
