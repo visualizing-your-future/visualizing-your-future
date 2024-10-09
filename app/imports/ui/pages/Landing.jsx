@@ -10,154 +10,138 @@ import { UserProfiles } from '../../api/user/UserProfileCollection';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import LoadingSpinner from '../components/LoadingSpinner';
 
+/**
+ * Landing page component that renders a welcome message and different button actions
+ * based on the user's role (Admin or User).
+ */
 const Landing = () => {
   const navigate = useNavigate();
 
-  // Function to handle page navigation when a button is clicked
+  /**
+   * Function to handle navigation when a button is clicked.
+   * @param {string} path - The path to navigate to.
+   */
   const handleNavigation = (path) => {
     navigate(path);
   };
 
-  // Use Meteor's reactive data tracker to fetch user details and roles in real-time
+  // Tracker to manage the current user's profile and role.
   const tracker = useTracker(() => {
     const user = Meteor.user();
     const userId = Meteor.userId();
-    let isLoading = true; //
+    let ready = false; // To track the loading state
     let isAdmin = false;
     let firstName = '';
     let lastName = '';
     let profile;
 
     if (!userId) {
-      // If the user is not logged in, set default values
-      return { currentUser: '', isAdmin: false, firstName: '', lastName: '', isLoading: false };
+      // If the user is not logged in, return default values.
+      return { currentUser: '', isAdmin: false, firstName: '', lastName: '', ready: true };
     }
 
-    // Check if the current user has the role of Admin
+    // Check if the user has the Admin role
     isAdmin = Roles.userIsInRole(userId, [ROLE.ADMIN]);
 
     if (isAdmin) {
-      // If the user is an admin, subscribe to the AdminProfiles collection
       const adminHandle = AdminProfiles.subscribeAdmin();
       if (!adminHandle.ready()) {
-        return { isLoading: true };
+        return { ready: false };
       }
-      // Retrieve the admin profile using the user's email
       profile = AdminProfiles.findOne({ email: user?.username });
     } else {
-      // If the user is not an admin, subscribe to the UserProfiles collection
       const userHandle = UserProfiles.subscribeProfileUser();
       if (!userHandle.ready()) {
-        return { isLoading: true };
+        return { ready: false };
       }
       profile = UserProfiles.findOne({ email: user?.username });
     }
 
-    /**
-     * If a profile is found, set the first and last name from the profile data
-     * Default to empty string if firstName and lastName is not available
-     */
+    // Set the first and last name if available in the profile
     if (profile) {
       firstName = profile.firstName || '';
       lastName = profile.lastName || '';
     }
 
-    isLoading = false; // Data has been loaded, stop showing the loading spinner
+    ready = true; // Data is ready for rendering
 
-    /**
-     * Return the required data for rendering the component
-     * Set currentUser to username if user exists
-     */
     return {
       currentUser: user ? user.username : '',
       firstName,
       lastName,
       isAdmin,
-      isLoading,
+      ready,
     };
   }, []);
 
-  // Destructuring the data returned from the tracker
-  const { currentUser, firstName, lastName, isAdmin, isLoading } = tracker;
+  // Destructuring the data from the tracker
+  const { currentUser, firstName, lastName, isAdmin, ready } = tracker;
 
-  if (isLoading) {
+  if (!ready) {
     return <LoadingSpinner />;
   }
 
-  // Function to generate the welcome message based on the user's role and name
+  /**
+   * Function to get the welcome message based on user role and profile.
+   * If no user is logged in, it will return the default message.
+   */
   const getWelcomeMessage = () => {
-    if (isAdmin) {
-      return <h1 className="mt-4">Welcome {firstName || currentUser} {lastName}!</h1>;
+    if (isAdmin || currentUser) {
+      // If the user is logged in, either admin or regular user, display the personalized welcome
+      return (
+        <h1 className="mt-4">
+          Welcome {firstName || currentUser} {lastName}!
+        </h1>
+      );
     }
-    if (currentUser) {
-      return <h1 className="mt-4">Welcome {firstName || currentUser} {lastName}!</h1>;
-    }
-    return <h1 className="mt-4">Welcome to Spire</h1>;
+    // If no user is logged in, display the default welcome message
+    return (
+      <div>
+        <h1 className="mt-4">Welcome to Spire</h1>
+        <Button
+          variant="primary"
+          size="lg"
+          className="button-square mt-3"
+          id="button-square"
+          href="/signin"
+        >
+          Learn More
+        </Button>
+      </div>
+    );
   };
 
-  // Renders buttons for admin users
-  const renderButtonsForAdmin = () => (
-    <Container fluid className="py-5">
-      <Container id={PAGE_IDS.LANDING} className="py-5">
-        <Row className="text-center">
-          <h3>Client Profiles</h3>
-          <div>See details per client here.</div>
-        </Row>
-        <Row className="d-flex justify-content-center mb-4 py-5">
-          <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-            {/* Button for admin to import client data */}
-            <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary" id="button-square">
-              Import Client Data
-            </Button>
-          </Col>
-          <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-            {/* Button for admin to input data */}
-            <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary" id="button-square">
-              Data Input
-            </Button>
-          </Col>
-          <Col xs={12} md={4} className="d-flex justify-content-center">
-            {/* Button for admin to view client's projections */}
-            <Button onClick={() => handleNavigation('/VisualizationExport')} className="btn btn-secondary" id="button-square">
-              See Client&apos;s Projections
-            </Button>
-          </Col>
-        </Row>
-      </Container>
-    </Container>
+  /**
+   * Generalized function to render buttons for navigation.
+   * @param {Array} buttonDetails - Array of button objects with text and path for navigation.
+   */
+  const renderButtons = (buttonDetails) => (
+    <Row className="d-flex justify-content-center mb-4 py-5">
+      {buttonDetails.map((button, index) => (
+        <Col key={index} xs={12} md={4} className="mb-2 d-flex justify-content-center">
+          <Button onClick={() => handleNavigation(button.path)} className="btn btn-secondary" id="button-square">
+            {button.text}
+          </Button>
+        </Col>
+      ))}
+    </Row>
   );
 
-  // Renders buttons for regular users
-  const renderButtonsForUser = () => (
-    <Container fluid id={PAGE_IDS.LANDING} className="py-5">
-      <Row className="justify-content-center text-center">
-        <Col xs={12} md={8}>
-          <h3 className="mb-4">User Dashboard</h3>
-          <p>Create your profile, connect with others, and explore opportunities to grow your career.</p>
-        </Col>
-      </Row>
-      <Row className="d-flex justify-content-center mb-4 py-5">
-        <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-          {/* Button for user to import client data */}
-          <Button onClick={() => handleNavigation('/clientDataImport')} className="btn btn-secondary" id="button-square">
-            Import Client Data
-          </Button>
-        </Col>
-        <Col xs={12} md={4} className="mb-2 d-flex justify-content-center">
-          {/* Button for user to input data */}
-          <Button onClick={() => handleNavigation('/dataInput')} className="btn btn-secondary" id="button-square">
-            Data Input
-          </Button>
-        </Col>
-        <Col xs={12} md={4} className="d-flex justify-content-center">
-          {/* Button for user to see client's projections */}
-          <Button onClick={() => handleNavigation('/VisualizationExport')} className="btn btn-secondary" id="button-square">
-            See Client&apos;s Projections
-          </Button>
-        </Col>
-      </Row>
-    </Container>
-  );
+  // Button configurations for admin and user
+  const adminButtons = [
+    { text: 'Import Client Data', path: '/clientDataImport' },
+    { text: 'Data Input', path: '/dataInput' },
+    { text: 'See Client\'s Projections', path: '/VisualizationExport' },
+  ];
+
+  const userButtons = [
+    { text: 'Import Client Data', path: '/clientDataImport' },
+    { text: 'Data Input', path: '/dataInput' },
+    { text: 'See Client\'s Projections', path: '/VisualizationExport' },
+  ];
+
+  // Only render buttons for logged-in users (Admin or Regular users)
+  const shouldRenderButtons = isAdmin || (currentUser && !isAdmin);
 
   return (
     <div>
@@ -173,8 +157,14 @@ const Landing = () => {
         </Container>
       </div>
 
-      {isAdmin && renderButtonsForAdmin()}
-      {currentUser && !isAdmin && renderButtonsForUser()}
+      {/* Render buttons only for logged-in users */}
+      {shouldRenderButtons && (
+        <Container fluid className="py-5">
+          {isAdmin ? renderButtons(adminButtons) : renderButtons(userButtons)}
+        </Container>
+      )}
+
+      {/* Additional content for users who are not logged in */}
       {!currentUser && (
         <Container fluid className="py-5">
           <Row className="justify-content-center text-center">
