@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Col, Container, Row, Alert } from 'react-bootstrap';
+import { Card, Col, Container, Row, Alert, Button } from 'react-bootstrap';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -12,7 +12,7 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { updateMethod } from '../../api/base/BaseCollection.methods';
+import { removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import { ROLE } from '../../api/role/Role';
 
@@ -150,6 +150,15 @@ const AccountSettings = () => {
                 </Alert>
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
+                <Button
+                  id={COMPONENT_IDS.DELETE_USER_ACCOUNT}
+                  onClick={() => {
+                    removeItMethod.callPromise({ collectionName: collectionName, instance: documentID });
+                    navigate('/');
+                  }}
+                >
+                  Delete Account
+                </Button>
               </Card.Body>
             </Card>
           </AutoForm>
