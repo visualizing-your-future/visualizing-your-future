@@ -24,7 +24,7 @@ const NavBar = () => {
             <span className="fw-bold">YOUR FUTURE</span>
           </div>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls={COMPONENT_IDS.NAVBAR_COLLAPSE} />
+        <Navbar.Toggle aria-controls={COMPONENT_IDS.NAVBAR_COLLAPSE} id="nav-toggle" />
         <Navbar.Collapse id={COMPONENT_IDS.NAVBAR_COLLAPSE}>
           <Nav className="me-auto justify-content-start">
             {currentUser ? ([

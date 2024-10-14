@@ -146,7 +146,7 @@ body {
   color: #555;
 }
 
-/* Button Styles for Landing Page */
+/* Button Styles for Main Landing Page */
 #button-square {
   background-color: #e64b37;
   color: white;
@@ -159,15 +159,56 @@ body {
   transition: background-color 0.3s, box-shadow 0.3s;
 }
 
+#button-square:hover {
+  background-color: #C9302C !important;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Button Style for Admin/User Landing Page */
+#button-landing {
+  background-color: #e64b37;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 0;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s, box-shadow 0.3s;
+
+  /* Ensure buttons are of equal width and height */
+  width: 200px; /* Set a fixed width */
+  height: 50px; /* Set a fixed height */
+
+  /* Align text in the center */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Reduce margin to bring buttons closer together */
+  margin: 0 10px; /* This sets the left-right spacing between buttons */
+}
+
+/* Hover state */
+#button-landing:hover {
+  background-color: #C9302C !important;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Container to align buttons horizontally and center them */
+#button-container {
+  display: flex;
+  justify-content: center; /* Center the buttons */
+  gap: 20px; /* Reduce gap between buttons */
+  flex-wrap: wrap;
+  margin-top: 20px; /* Adjust margin for space between rows of buttons */
+}
+
 /* Turns all text on register page black */
 .register-label-color label {
   color: #000000 !important;
 }
 
-#button-square:hover {
-  background-color: #C9302C !important;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
-}
 
 /* Footer Styles */
 .footer {

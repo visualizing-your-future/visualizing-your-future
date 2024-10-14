@@ -1,98 +1,366 @@
-import React, { useState, useEffect } from 'react';
-import swal from 'sweetalert';
-import { Card, Col, Container, Row } from 'react-bootstrap';
-import { AutoForm, ErrorsField, HiddenField, SubmitField, NumField } from 'uniforms-bootstrap5';
+import React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-// import { useParams } from 'react-router';
 import { AuditedBalanceData } from '../../api/audited-balance-data/AuditedBalanceDataCollection';
+import DisplayAudBalData from '../components/DisplayAudBalData';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
-import { updateMethod } from '../../api/base/BaseCollection.methods';
-
-const bridge = new SimpleSchema2Bridge(AuditedBalanceData._schema);
 
 const DataInput = () => {
-  const [totalCash, setTotalCash] = useState(0);
-  // useTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker
-  const { dataStuff, ready } = useTracker(() => {
-    // Get access to Stuff documents.
-    const subscription = AuditedBalanceData.subscribeABD();
-    // Determine if the subscription is ready
+  const { audBalData, ready } = useTracker(() => {
+    const subscription = AuditedBalanceData.subscribeAudBalData();
     const rdy = subscription.ready();
-    // Get the document
     const data = AuditedBalanceData.find({}, { sort: { name: 1 } }).fetch();
     return {
-      dataStuff: data,
+      audBalData: data,
       ready: rdy,
     };
   }, []);
 
-  useEffect(() => {
-    if (ready && dataStuff.length > 0 && dataStuff[0].cashStuff) {
-      const cashArray = dataStuff[0].cashStuff;
-      const total = cashArray.reduce((sum, item) => sum + (item.pettyCash || 0) + (item.cash || 0) + (item.cashBankCred || 0), 0);
-      setTotalCash(total);
-    }
-  }, [ready, dataStuff]);
-
-  // On successful submit, insert the data.
-  const submit = (data) => {
-    const { cashStuff } = data;
-    const docID = dataStuff[0]._id;
-    const collectionName = AuditedBalanceData.getCollectionName();
-    const updateData = { id: docID, cashStuff };
-    updateMethod.callPromise({ collectionName, updateData })
-      .catch(error => swal('Error', error.message, 'error'))
-      .then(() => swal('Success', 'Item updated successfully', 'success'));
-  };
-
   return (ready ? (
-    <Container id={PAGE_IDS.DATA_STUFF} className="py-3">
+    <Container id={PAGE_IDS.DATA_STUFF} className="py-3 mx-5">
       <Row className="justify-content-center pb-3">
-        <Col md={7}>
-          <Col className="text-center">
-            <h2>Audited Balance Sheet Temp</h2>
-          </Col>
+        <Col className="text-center">
+          <h2>Audited Balance Sheet Temp</h2>
         </Col>
       </Row>
-      <Row className="pb-1">
-        <Col className="col-lg-3">
-          <h6>Fiscal Year</h6>
+      <Row>
+        <Col className="col-lg-4">
+          <Row className="fw-bold">
+            Fiscal Year
+          </Row>
         </Col>
-        <Col className="col-lg-9">
+        <Col className="col-lg-8">
           <Row className="justify-content-start">
-            <Col className="col-lg-2">Year 1</Col>
+            <Col className="col">Year XX</Col>
+            <Col className="col">Year XX</Col>
+            <Col className="col">Year XX</Col>
+            <Col className="col">Year XX</Col>
+            <Col className="col">Year XX</Col>
+            <Col className="col">Year XX</Col>
+            <Col className="col">Year XX</Col>
+            <Col className="col">Year XX</Col>
           </Row>
         </Col>
         <hr className="solid" />
       </Row>
-      <Row className="justify-content-start pb-3">
-        <Col className="col-lg-3">
-          <h5>Cash and Cash Equivalents</h5>
-          <Row className="px-3">
-            <h6 className="py-3">Petty Cash</h6>
-            <h6 className="py-3">Cash</h6>
-            <h6 className="py-3">Cash in banks/Draw on Line of Credit</h6>
-            <hr className="solid mb-0" />
-            <h6 className="text-end">Total Cash and Cash Equivalents</h6>
+      <Row>
+        <Col className="col-lg-4">
+          <Row className="justify-content-start fw-bold">
+            Cash and Cash Equivalents
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '3px' }}>
+            Petty Cash
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Cash
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Cash in banks/Draw on Line of Credit
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '6px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-end" style={{ paddingTop: '2px' }}>Total Cash and Cash Equivalents</h6>
+          </Row>
+          <Row className="justify-content-start fw-bold">
+            Other Assets
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '3px' }}>
+            Accounts Receivable
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Due from other fund
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Interest and dividends receivable
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Inventory, prepaid items and other assets
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Notes receivable - due within one year
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Notes receivable - due after one year
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Security Deposits
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Cash held by investment manager
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '6px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-end" style={{ paddingTop: '2px' }}>Total Other</h6>
+          </Row>
+          <Row className="align-items-center ps-3 fw-bold">
+            Investments:
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '3px' }}>
+            Mutual Funds
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Commingled Funds
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Hedge Funds
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Private Equity
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Common Trust Fund
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Common & Preferred Stock
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Private Debt
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Other
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '6px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-center" style={{ paddingTop: '2px' }}>Subtotal - Investment</h6>
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '9px' }}>
+            U.S. Treasuries
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            U.S. Agencies
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '6px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-center" style={{ paddingTop: '2px' }}>Subtotal - Loan Fund</h6>
+          </Row>
+          <Row className="justify-content-start ps-3 fw-bold" style={{ paddingTop: '20px' }}>
+            <hr className="solid my-0" />
+            Investments
+          </Row>
+          <Row className="justify-content-start ps-3 fw-bold">
+            Capital Assets, Net:
+          </Row>
+          <Row className="align-content-center ps-5 fw-bold">
+            Assets
+          </Row>
+          <Row className="justify-content-start ps-5" style={{ paddingTop: '3px' }}>
+            Buildings
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Leasehold Improvements
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Furniture, Fixtures and Equipment
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Less Accumulated Depreciation
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '6px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-center" style={{ paddingTop: '2px' }}>Net</h6>
+          </Row>
+          <Row className="justify-content-start ps-5 fw-bold">
+            Land:
+          </Row>
+          <Row className="align-items-center ms-3 ps-5" style={{ paddingTop: '5px' }}>
+            Land A
+          </Row>
+          <Row className="align-items-center ms-3 ps-5" style={{ paddingTop: '17px' }}>
+            Land B
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Construction in Progress
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '6px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-end" style={{ paddingTop: '2px' }}>Subtotal - Capital Assets, Net</h6>
+          </Row>
+          <Row className="justify-content-start ps-5 fw-bold">
+            Limited Liability Company B&apos;s Assets
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '3px' }}>
+            Buildings
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Leasehold Improvements
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Furniture, Fixtures and Equipment
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Vehicles
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Less Accumulated Depreciation
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Land
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '6px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-end mx-0 px-0" style={{ paddingTop: '2px' }}>Subtotal - Limited Liability Company B&apos;s Assets</h6>
+          </Row>
+          <Row className="justify-content-start ps-3 fw-bold" style={{ paddingTop: '3px' }}>
+            <hr className="solid my-0" />
+            Capital Assets, Net
+          </Row>
+          <Row className="justify-content-start ps-3" style={{ paddingTop: '12px' }}>
+            Restricted Cash
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '6px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-end" style={{ paddingTop: '3px' }}>Total Other Assets</h6>
+          </Row>
+          <Row className="justify-content-start ps-3" style={{ paddingTop: '6px' }}>
+            Deferred Outflows of Resources Related to Pensions
+          </Row>
+          <Row className="justify-content-start ps-3" style={{ paddingTop: '17px' }}>
+            Deferred Outflows of Resources Related to OPEB
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '6px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-end" style={{ paddingTop: '2px' }}>Total Assets and Deferred Outflows of Resource</h6>
+          </Row>
+          <Row className="justify-content-start fw-bold">
+            Liabilities
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '3px' }}>
+            Accounts Payable and Accrued Liabilities
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Due To Fund
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Due To Other Fund
+          </Row>
+          <Row className="justify-content-start ps-3 fw-bold" style={{ paddingTop: '17px' }}>
+            Long-term Liabilities - due within one year:
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Accrued vacation
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Workers&apos; Compensation
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Accrued Management Retirement Plan
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Accrued Lease Guaranty Obligation
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Capital Lease Obligation
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Notes Payable - Building A Acquisition
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Net Pension Liability
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Net OPEB Liability
+          </Row>
+          <Row className="align-items-center ps-5 fw-bold" style={{ paddingTop: '17px' }}>
+            Line of Credit
+          </Row>
+          <Row className="align-items-center ms-3 ps-5" style={{ paddingTop: '17px' }}>
+            Line of Credit - Building A
+          </Row>
+          <Row className="align-items-center ms-3 ps-5" style={{ paddingTop: '17px' }}>
+            Line of Credit - Building B
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Debt Service
+          </Row>
+          <Row className="align-items-center ps-3 fw-bold" style={{ paddingTop: '7px' }}>
+            Long-Term Liabilities - Due Within One Year:
+          </Row>
+          <Row className="align-items-center ps-3 fw-bold" style={{ paddingTop: '5px' }}>
+            Long-Term Liabilities - Due After One Year:
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '3px' }}>
+            Accrued vacation
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Workers&apos; Compensation
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Accrued Management Retirement Plan
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Accrued Lease Guaranty Obligation
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Capital Lease Obligation
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Notes Payable - Building A Acquisition
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Net Pension Liability
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Net OPEB Liability
+          </Row>
+          <Row className="align-items-center ps-3 fw-bold" style={{ paddingTop: '17px' }}>
+            Line of Credit
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Line of Credit - Building A
+          </Row>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+            Line of Credit - Building B
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Debt Service
+          </Row>
+          <Row className="align-items-center ps-3 fw-bold" style={{ paddingTop: '10px' }}>
+            Long-Term Liabilities - Due After One Year:
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '2px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-center">Total Liabilities</h6>
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '6px' }}>
+            Deferred Inflows of Resources Related to Pensions
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Deferred Inflows of Resources Related to OPEB
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '11px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-end">Total Liabilities and Deferred Inflows of Resources</h6>
+          </Row>
+          <Row className="justify-content-start fw-bold">
+            Commitments and Contingencies
+          </Row>
+          <Row className="justify-content-start fw-bold">
+            Net Position
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '3px' }}>
+            Invested in Capital Assets, Net of Related Debt
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Restricted - Federal Funds
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '17px' }}>
+            Unrestricted
+          </Row>
+          <Row className="align-items-center ps-3" style={{ paddingTop: '10px' }}>
+            <hr className="solid my-0" />
+            <h6 className="text-center">Total Net Position</h6>
+          </Row>
+          <Row className="align-items-center ps-3">
+            <hr className="solid my-0" />
+            <h6 className="text-center">Total Liabilities, Deferred Inflows of Resources</h6>
           </Row>
         </Col>
-        <Col className="col-lg-2">
-          <Row className="pt-5">
-            <AutoForm schema={bridge} onSubmit={data => submit(data)} model={AuditedBalanceData.findOne(dataStuff._id)}>
-              <Card.Body className="my-0">
-                <NumField name="cashStuff.0.pettyCash" decimal label={null} />
-                <NumField className="m-0" name="cashStuff.0.cash" decimal label={null} />
-                <NumField className="m-0" name="cashStuff.0.cashBankCred" decimal label={null} />
-                <h6>{totalCash}</h6>
-                <SubmitField value="Update" className="pt-4" />
-                <ErrorsField />
-                <HiddenField name="owner" />
-              </Card.Body>
-            </AutoForm>
-          </Row>
-        </Col>
+        {audBalData.map((data) => (
+          <Col key={data._id}>
+            <DisplayAudBalData audBalData={data} />
+          </Col>
+        ))}
       </Row>
     </Container>
   ) : <LoadingSpinner message="Loading Data" />);

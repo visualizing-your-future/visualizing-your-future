@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
+import { check } from 'meteor/check';
 import { Roles } from 'meteor/alanning:roles';
 import BaseProfileCollection from './BaseProfileCollection';
 import { ROLE } from '../role/Role';
@@ -39,15 +40,15 @@ class UserProfileCollection extends BaseProfileCollection {
   }
 
   /**
-   * Updates the UserProfile. You cannot change the email or role.
+   * Updates the following values in a user's UserProfile. You cannot change the email or role.
+   *
    * @param docID the id of the UserProfile.
    * @param userID the associated User ID.
    * @param firstName new first name (optional).
    * @param lastName new last name (optional).
    * @param email new email (optional).
-   * @param password new password (optional).
    */
-  update(docID, { userID, firstName, lastName, email, password }) {
+  update(docID, { userID, firstName, lastName, email }) {
     if (Meteor.isServer) {
       this.assertDefined(docID);
       const updateData = {};
@@ -59,26 +60,30 @@ class UserProfileCollection extends BaseProfileCollection {
       }
       if (email) {
         updateData.email = email;
-        Users.updateUsername(userID, email);
-      }
-      if (password) {
-        updateData.password = password;
-        Users.updatePassword(userID, password);
+        /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
+        Users.updateUsernameAndEmail(userID, email);
       }
       this._collection.update(docID, { $set: updateData });
     }
   }
 
   /**
-   * Removes this profile, given its profile ID.
-   * Also removes this user from Meteor Accounts.
-   * @param profileID The ID for this profile object.
+   * A stricter form of remove that throws an error if the document or docID could not be found in this collection.
+   * @param { String | Object } name A document or docID in this collection.
+   * @returns true
    */
-  removeIt(profileID) {
-    if (this.isDefined(profileID)) {
-      return super.removeIt(profileID);
-    }
-    return null;
+  removeIt(name) {
+    const doc = this.findDoc(name);
+    // TODO: This line always returns undefined.  Why?
+    check(doc, Object);
+    // LEAVE THESE CONSOLE.LOGS IN FOR NOW.  THEY ARE USEFUL FOR DEBUGGING.
+    // console.log('before', this._collection.findOne({ _id: doc._id }));
+    this._collection.remove(doc._id);
+    // console.log('after', this._collection.findOne({ _id: doc._id }));
+    // console.log('before', Meteor.users.findOne({ _id: doc.userID }));
+    Meteor.users.remove({ _id: doc.userID });
+    // console.log('after', Meteor.users.findOne({ _id: doc.userID }));
+    return true;
   }
 
   /**

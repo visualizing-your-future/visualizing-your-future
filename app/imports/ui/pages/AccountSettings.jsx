@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Col, Container, Row } from 'react-bootstrap';
+import { Card, Col, Container, Row, Alert, Button } from 'react-bootstrap';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -12,64 +12,64 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { updateMethod } from '../../api/base/BaseCollection.methods';
+import { removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import { ROLE } from '../../api/role/Role';
+import MultiFactorAuthentication from '../components/MultiFactorAuthentication'; // Import the MFA component
 
 /**
- * SignUp component is similar to signin component, but we create a new user instead.
+ * AccountSettings Component
+ * This component allows users to update their account settings, including their name, email, password, and MFA status.
+ * The user data is retrieved based on their role (admin or user).
  */
 const AccountSettings = () => {
-  // Names the page in the browser.
+  // Set the page title
   document.title = 'Visualizing Your Future - Account Settings';
 
-  // Used to change page after submitting account changes.
   const navigate = useNavigate();
 
-  // Account settings the user can change.
+  // Define schema for the form using SimpleSchema for validation
   const schema = new SimpleSchema({
     firstName: { type: String, optional: true },
     lastName: { type: String, optional: true },
     email: { type: String, optional: true },
-    password: { type: String, optional: true },
+    oldPassword: { type: String, optional: true },
+    newPassword: { type: String, optional: true },
+    verifyNewPassword: { type: String, optional: true },
+    isMFAEnabled: { type: Boolean, optional: true, defaultValue: false },
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
   /**
-   * Don't know what this is, might not be needed?
-   *
-   * State handler.
-   * const [error, setError] = useState('');
+   * useTracker Hook
+   * - Fetches the current user's document based on their role (admin or user).
+   * - Subscribes to the appropriate profile collection (AdminProfiles or UserProfiles).
    */
-
   const { userID, subReady, collectionName, userDocument, documentID } = useTracker(() => {
-    const username = Meteor.user().username;
-    let sub;
-    let subRdy;
-    let colName;
-    let userDoc;
-    let docID;
-
+    let sub; let subRdy; let colName; let userDoc; let
+      docID;
     const usrId = Meteor.userId();
+    const username = Meteor.user()?.username;
+
     if (Roles.userIsInRole(usrId, ROLE.ADMIN)) {
+      // Subscription for admin users
       sub = AdminProfiles.subscribeAdmin();
       subRdy = sub.ready();
       colName = AdminProfiles.getCollectionName();
       userDoc = AdminProfiles.findOne({ email: username });
-      /**
-       * Meteor.userID() returns the userID.
-       * This returns the document ID value (not the entire document).
-       */
       docID = AdminProfiles.getID(Meteor.user().username);
     } else if (Roles.userIsInRole(usrId, ROLE.USER)) {
+      // Subscription for regular users
       sub = UserProfiles.subscribeProfileUser();
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
       userDoc = UserProfiles.findOne({ email: username });
       docID = UserProfiles.getID(Meteor.user().username);
     } else {
+      // If not authorized, navigate to 'notauthorized' page
       navigate('/notauthorized');
     }
+
     return {
       userID: usrId,
       subReady: subRdy,
@@ -79,46 +79,116 @@ const AccountSettings = () => {
     };
   }, []);
 
+  const [saveSuccess, setSaveSuccess] = useState(false); // Track whether the save was successful
+  const [mfaStatus, setMfaStatus] = useState(false); // Local state for MFA status
+
+  /**
+   * useEffect Hook
+   * - Syncs the `mfaStatus` with the user document or localStorage.
+   * - Runs when `userDocument` changes.
+   */
+  useEffect(() => {
+    if (userDocument?.isMFAEnabled !== undefined) {
+      setMfaStatus(userDocument.isMFAEnabled);
+    } else {
+      const storedMFA = localStorage.getItem('isMFAEnabled') === 'true';
+      setMfaStatus(storedMFA);
+    }
+  }, [userDocument]);
+
+  /**
+   * submit Function
+   * - Handles form submission to update user account settings.
+   * - Updates user profile data including the MFA status.
+   */
   const submit = (data) => {
-    const { firstName, lastName, email, password } = data;
-    const updateData = { id: documentID, userID, firstName, lastName, email, password };
+    if (!Meteor.user()) {
+      swal('Error', 'You are not logged in.', 'error');
+      return;
+    }
+
+    const { firstName, lastName, email, oldPassword, newPassword, verifyNewPassword, isMFAEnabled } = data;
+
+    // Handle password change if provided
+    if (oldPassword && newPassword === verifyNewPassword) {
+      Meteor.call('users.changePassword', oldPassword, newPassword, (err) => {
+        if (err) {
+          swal('Error', 'Password change failed.', 'error');
+        } else {
+          swal('Success', 'Password changed successfully.', 'success');
+        }
+      });
+    } else if (oldPassword && newPassword !== verifyNewPassword) {
+      swal('Error', 'Passwords do not match.', 'error');
+      return;
+    }
+
+    // Prepare data for updating the user's profile
+    const updateData = { id: documentID, userID, firstName, lastName, email, isMFAEnabled };
     updateMethod.callPromise({ collectionName: collectionName, updateData })
-      .catch(error => swal('Error', error.message, 'error'))
-      .then(() => swal('Success', 'Item updated successfully', 'success'));
-    /**
-     * TODO: implement logic to determine if password changed.
-     * Currently, if the password is changed, the user is logged out, but redirected to the
-     * userAccountSettings page with no access to anything.
-     *
-     * Should redirect to userAccountSettings page if password or email was NOT changed.
-     * Redirect to signin page if password or email was changed.
-     */
-    navigate('/userAccountSettings');
+      .then(() => {
+        setMfaStatus(isMFAEnabled);
+        swal('Success', `Account settings updated. MFA is now ${isMFAEnabled ? 'enabled' : 'disabled'}.`, 'success');
+        setSaveSuccess(true);
+      })
+      .catch(error => swal('Error', error.message, 'error'));
+
+    localStorage.setItem('isMFAEnabled', isMFAEnabled); // Persist MFA status in localStorage
   };
 
-  return subReady ? (
+  // If subscription data is not ready, show a loading spinner
+  if (!subReady) {
+    return <LoadingSpinner />;
+  }
+
+  return (
     <Container id={PAGE_IDS.ACCOUNT_SETTINGS} className="py-3">
       <Row className="justify-content-center">
         <Col xs={5}>
           <Col className="text-center">
             <h2>Edit User Account Information</h2>
           </Col>
-          <AutoForm model={userDocument} schema={bridge} onSubmit={data => submit(data)}>
+          {saveSuccess && (
+            <Alert variant="success" onClose={() => setSaveSuccess(false)} dismissible>
+              Your account settings have been saved successfully!
+            </Alert>
+          )}
+
+          {/* AutoForm to handle user profile settings */}
+          <AutoForm model={{ ...userDocument, isMFAEnabled: mfaStatus }} schema={bridge} onSubmit={data => submit(data)}>
             <Card>
               <Card.Body>
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_FIRST_NAME} name="firstName" placeholder="First Name" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last name" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_EMAIL} name="email" placeholder="email" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_PASSWORD} name="password" placeholder="Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last Name" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_EMAIL} name="email" placeholder="Email" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="oldPassword" placeholder="Old Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_NEW_PASSWORD} name="newPassword" placeholder="New Password" type="password" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_VERIFY_NEW_PASSWORD} name="verifyNewPassword" placeholder="Re-type New Password" type="password" />
+
+                {/* Call the MultiFactorAuthentication component to handle MFA */}
+                <MultiFactorAuthentication
+                  userDocument={userDocument}
+                  setMfaStatus={setMfaStatus}
+                />
+
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
+                <Button
+                  id={COMPONENT_IDS.DELETE_USER_ACCOUNT}
+                  onClick={() => {
+                    removeItMethod.callPromise({ collectionName: collectionName, instance: documentID });
+                    navigate('/');
+                  }}
+                >
+                  Delete Account
+                </Button>
               </Card.Body>
             </Card>
           </AutoForm>
         </Col>
       </Row>
     </Container>
-  ) : <LoadingSpinner />;
+  );
 };
 
 export default AccountSettings;

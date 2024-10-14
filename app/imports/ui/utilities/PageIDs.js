@@ -9,7 +9,9 @@ export const PAGE_IDS = {
   DATA_STUFF: 'data-stuff', /* Goes from NAVBAR_DATA_INPUT */
   ADMIN: 'list-stuff-admin',
   ACCOUNT_SETTINGS: 'account-settings',
+  EDIT_USER_PROFILE: 'edit-user-profile',
   LIST_PROFILES: 'list-profiles', /* Goes from NAVBAR_LIST_PROFILES_ADMIN */
+  EDIT_PROFILE: 'edit-profile',
   MANAGE_DATABASE: 'manage-database',
   NOT_AUTHORIZED: 'not-authorized',
   NOT_FOUND: 'not-found',
