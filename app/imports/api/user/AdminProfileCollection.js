@@ -35,6 +35,28 @@ class AdminProfileCollection extends BaseProfileCollection {
   }
 
   /**
+   * Defines the profile associated with an Admin and the associated Meteor account.
+   * @param email The email associated with this profile. Will be the username.
+   * @param password The password for this user.
+   * @param firstName The first name.
+   * @param lastName The last name.
+   */
+  changeRoleDefine({ userID, email, firstName, lastName }) {
+    if (Meteor.isServer) {
+      const user = this.findOne({ email, firstName, lastName });
+      if (!user) {
+        console.log('user not found in collection. Creating new user.');
+        const role = ROLE.ADMIN;
+        const profileID = this._collection.insert({ email, firstName, lastName, role, userID });
+        console.log('profileID', profileID);
+        return profileID;
+      }
+      return user._id;
+    }
+    return undefined;
+  }
+
+  /**
    * Updates the following values in an admin's  AdminProfile. You cannot change the email or role.
    *
    * @param docID the id of the AdminProfile.

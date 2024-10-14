@@ -1,7 +1,7 @@
 import React from 'react';
 import swal from 'sweetalert';
 import { Card, Col, Container, Row, Button } from 'react-bootstrap';
-import { AutoForm, ErrorsField, SubmitField, TextField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, SubmitField, TextField, SelectField } from 'uniforms-bootstrap5';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -18,37 +18,27 @@ import { ROLES } from '../../api/role/Role';
 
 /* Renders the EditProfile page for editing a single document. */
 const EditProfile = () => {
-  /** Names the page in the browser. */
   document.title = 'Edit User Profile';
-
-  /** User's document ID is passed as a parameter. */
   const _docId = useParams();
-
-  /** Used to change page after submitting account changes. */
   const navigate = useNavigate();
+  const roleTypes = ['Admin', 'User'];
 
   /** Account settings the user can change. */
   const schema = new SimpleSchema({
     firstName: { type: String, optional: true },
     lastName: { type: String, optional: true },
     email: { type: String, optional: true },
-    role: { type: String, optional: true },
+    roleType: { type: String, optional: true, allowedValues: roleTypes },
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
   const { userID, subReady, collectionName, userDocument } = useTracker(() => {
-    /** Subscription to UserProfiles or AdminProfiles. */
-    let sub;
-    /** Is the subscription ready? */
-    let subRdy;
-    /** Collection name. */
-    let colName;
-    /** Entire user document. */
-    let userDoc;
-    /** The user's ID. */
-    let usrId;
-    /** Is the profile being edited an admin or user? */
-    let adminRole;
+    let sub; /** Subscription to UserProfiles or AdminProfiles. */
+    let subRdy; /** Is the subscription ready? */
+    let colName; /** Collection name. */
+    let userDoc; /** Entire user document. */
+    let usrId; /** The user's ID. */
+    let adminRole; /** Is the profile being edited an admin or user? */
 
     /**
      * Try to find the user's document ID in the UserProfiles collection first.
@@ -73,6 +63,7 @@ const EditProfile = () => {
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
       usrId = userDoc.userID;
+      console.log(userDoc);
     } else {
       navigate('/notauthorized');
     }
@@ -92,14 +83,16 @@ const EditProfile = () => {
       return;
     }
 
-    /** Stores the values the user inputs in the page TextFields. */
-    const { firstName, lastName, email } = data;
+    /** Stores the values the user inputs. */
+    const { firstName, lastName, email, roleType } = data;
+    console.log('before', roleType);
 
     /**
      * Add the documentID to the data being passed to the collection update function,
      * then call the collection update function.
      */
-    const updateData = { id: _docId, userID, firstName, lastName, email, role };
+    const updateData = { id: _docId, userID, firstName, lastName, email, role: roleType };
+    console.log(updateData);
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
@@ -119,9 +112,21 @@ const EditProfile = () => {
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_FIRST_NAME} name="firstName" placeholder="First Name" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last name" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_EMAIL} name="email" placeholder="email" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_ROLE} name="role" placeholder="Role" />
+                <Row>
+                  <SelectField
+                    id={COMPONENT_IDS.ACCOUNT_SETTINGS_ROLE}
+                    name="roleType"
+                  >
+                    {roleTypes.map((aRoleType) => (
+                      <option value={aRoleType}>{aRoleType}</option>
+                    ))}
+                  </SelectField>
+                </Row>
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
+                <Row>
+                  &nbsp;
+                </Row>
                 <Button
                   id={COMPONENT_IDS.DELETE_USER_ACCOUNT}
                   onClick={() => {

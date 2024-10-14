@@ -5,6 +5,7 @@ import { Roles } from 'meteor/alanning:roles';
 import BaseProfileCollection from './BaseProfileCollection';
 import { ROLE } from '../role/Role';
 import { Users } from './UserCollection';
+import { AdminProfiles } from './AdminProfileCollection';
 
 export const profilePublications = {
   profile: 'Profile',
@@ -49,26 +50,34 @@ class UserProfileCollection extends BaseProfileCollection {
    * @param firstName new first name (optional).
    * @param lastName new last name (optional).
    * @param email new email (optional).
+   * @param role new role (optional).
    */
   update(docID, { userID, firstName, lastName, email, role }) {
     if (Meteor.isServer) {
       this.assertDefined(docID);
       const updateData = {};
-      if (firstName) {
+      const userDoc = this.findDoc(docID);
+      if (userDoc.firstName !== firstName) {
         updateData.firstName = firstName;
       }
-      if (lastName) {
+      if (userDoc.lastName !== lastName) {
         updateData.lastName = lastName;
       }
-      if (email) {
+      if (userDoc.email !== email) {
         updateData.email = email;
-        /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
+        // Sign in checks meteor/accounts-base, not BaseProfileCollection schema.
         Users.updateUsernameAndEmail(userID, email);
       }
       /** Leaving this extra if statement for now, I plan to add more roles, like customer. */
-      if (role) {
-        if (role === 'ADMIN') {
-          updateData.role = ROLE.ADMIN;
+      if (role !== 'User') {
+        if (role === 'Admin') {
+          // Change role in Meteor.users
+          Users.changeRole(userID, ROLE.ADMIN);
+          // Add user to new admin profiles collection
+          AdminProfiles.changeRoleDefine({ userID, email, firstName, lastName });
+          // Remove user from user profiles collection
+          this._collection.remove(docID);
+          return;
         }
       }
       this._collection.update(docID, { $set: updateData });
@@ -77,11 +86,11 @@ class UserProfileCollection extends BaseProfileCollection {
 
   /**
    * A stricter form of remove that throws an error if the document or docID could not be found in this collection.
-   * @param { String | Object } name A document or docID in this collection.
+   * @param { String | Object } docID A document or docID in this collection.
    * @returns true
    */
-  removeIt(name) {
-    const doc = this.findDoc(name);
+  removeIt(docID) {
+    const doc = this.findDoc(docID);
     // TODO: This line always returns undefined.  Why?
     check(doc, Object);
     // LEAVE THESE CONSOLE.LOGS IN FOR NOW.  THEY ARE USEFUL FOR DEBUGGING.
