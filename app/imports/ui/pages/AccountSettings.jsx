@@ -4,7 +4,7 @@ import { Card, Col, Container, Row, Alert, Button } from 'react-bootstrap';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import { AutoForm, ErrorsField, SubmitField, TextField, BoolField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, SubmitField, TextField } from 'uniforms-bootstrap5';
 import { useTracker } from 'meteor/react-meteor-data';
 import swal from 'sweetalert';
 import { Roles } from 'meteor/alanning:roles';
@@ -15,12 +15,20 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import { ROLE } from '../../api/role/Role';
+import MultiFactorAuthentication from '../components/MultiFactorAuthentication'; // Import the MFA component
 
+/**
+ * AccountSettings Component
+ * This component allows users to update their account settings, including their name, email, password, and MFA status.
+ * The user data is retrieved based on their role (admin or user).
+ */
 const AccountSettings = () => {
+  // Set the page title
   document.title = 'Visualizing Your Future - Account Settings';
 
   const navigate = useNavigate();
 
+  // Define schema for the form using SimpleSchema for validation
   const schema = new SimpleSchema({
     firstName: { type: String, optional: true },
     lastName: { type: String, optional: true },
@@ -32,36 +40,33 @@ const AccountSettings = () => {
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
+  /**
+   * useTracker Hook
+   * - Fetches the current user's document based on their role (admin or user).
+   * - Subscribes to the appropriate profile collection (AdminProfiles or UserProfiles).
+   */
   const { userID, subReady, collectionName, userDocument, documentID } = useTracker(() => {
-
-    /** Subscription to UserProfiles or AdminProfiles. */
-    let sub;
-    /** Is the subscription ready? */
-    let subRdy;
-    /** Collection name. */
-    let colName;
-    /** Entire user document. */
-    let userDoc;
-    /** The user's document ID. */
-    let docID;
-    /** The user's ID. */
-
+    let sub; let subRdy; let colName; let userDoc; let
+      docID;
     const usrId = Meteor.userId();
     const username = Meteor.user()?.username;
 
     if (Roles.userIsInRole(usrId, ROLE.ADMIN)) {
+      // Subscription for admin users
       sub = AdminProfiles.subscribeAdmin();
       subRdy = sub.ready();
       colName = AdminProfiles.getCollectionName();
       userDoc = AdminProfiles.findOne({ email: username });
       docID = AdminProfiles.getID(Meteor.user().username);
     } else if (Roles.userIsInRole(usrId, ROLE.USER)) {
+      // Subscription for regular users
       sub = UserProfiles.subscribeProfileUser();
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
       userDoc = UserProfiles.findOne({ email: username });
       docID = UserProfiles.getID(Meteor.user().username);
     } else {
+      // If not authorized, navigate to 'notauthorized' page
       navigate('/notauthorized');
     }
 
@@ -74,9 +79,14 @@ const AccountSettings = () => {
     };
   }, []);
 
-  const [saveSuccess, setSaveSuccess] = useState(false);
-  const [mfaStatus, setMfaStatus] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false); // Track whether the save was successful
+  const [mfaStatus, setMfaStatus] = useState(false); // Local state for MFA status
 
+  /**
+   * useEffect Hook
+   * - Syncs the `mfaStatus` with the user document or localStorage.
+   * - Runs when `userDocument` changes.
+   */
   useEffect(() => {
     if (userDocument?.isMFAEnabled !== undefined) {
       setMfaStatus(userDocument.isMFAEnabled);
@@ -86,6 +96,11 @@ const AccountSettings = () => {
     }
   }, [userDocument]);
 
+  /**
+   * submit Function
+   * - Handles form submission to update user account settings.
+   * - Updates user profile data including the MFA status.
+   */
   const submit = (data) => {
     if (!Meteor.user()) {
       swal('Error', 'You are not logged in.', 'error');
@@ -94,6 +109,7 @@ const AccountSettings = () => {
 
     const { firstName, lastName, email, oldPassword, newPassword, verifyNewPassword, isMFAEnabled } = data;
 
+    // Handle password change if provided
     if (oldPassword && newPassword === verifyNewPassword) {
       Meteor.call('users.changePassword', oldPassword, newPassword, (err) => {
         if (err) {
@@ -107,6 +123,7 @@ const AccountSettings = () => {
       return;
     }
 
+    // Prepare data for updating the user's profile
     const updateData = { id: documentID, userID, firstName, lastName, email, isMFAEnabled };
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .then(() => {
@@ -116,9 +133,10 @@ const AccountSettings = () => {
       })
       .catch(error => swal('Error', error.message, 'error'));
 
-    localStorage.setItem('isMFAEnabled', isMFAEnabled);
+    localStorage.setItem('isMFAEnabled', isMFAEnabled); // Persist MFA status in localStorage
   };
 
+  // If subscription data is not ready, show a loading spinner
   if (!subReady) {
     return <LoadingSpinner />;
   }
@@ -135,19 +153,24 @@ const AccountSettings = () => {
               Your account settings have been saved successfully!
             </Alert>
           )}
+
+          {/* AutoForm to handle user profile settings */}
           <AutoForm model={{ ...userDocument, isMFAEnabled: mfaStatus }} schema={bridge} onSubmit={data => submit(data)}>
             <Card>
               <Card.Body>
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_FIRST_NAME} name="firstName" placeholder="First Name" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last name" />
+                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last Name" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_EMAIL} name="email" placeholder="Email" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="oldPassword" placeholder="Old Password" type="password" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_NEW_PASSWORD} name="newPassword" placeholder="New Password" type="password" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_VERIFY_NEW_PASSWORD} name="verifyNewPassword" placeholder="Re-type New Password" type="password" />
-                <BoolField id={COMPONENT_IDS.ACCOUNT_SETTINGS_MFA} name="isMFAEnabled" label="Enable Multi-Factor Authentication" />
-                <Alert variant="info">
-                  Multi-Factor Authentication is currently <strong>{mfaStatus ? 'enabled' : 'disabled'}</strong>.
-                </Alert>
+
+                {/* Call the MultiFactorAuthentication component to handle MFA */}
+                <MultiFactorAuthentication
+                  userDocument={userDocument}
+                  setMfaStatus={setMfaStatus}
+                />
+
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
                 <Button
