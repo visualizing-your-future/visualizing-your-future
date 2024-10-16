@@ -43,14 +43,32 @@ class UserProfileCollection extends BaseProfileCollection {
   }
 
   /**
-   * Updates the following values in a user's UserProfile. You cannot change the email or role.
-   *
-   * @param docID the id of the UserProfile.
-   * @param userID the associated User ID.
-   * @param firstName new first name (optional).
-   * @param lastName new last name (optional).
-   * @param email new email (optional).
-   * @param role new role (optional).
+   * Verifies user does not exist in this collection, then adds them.
+   * @param userID User's Meteor.users._id.
+   * @param email User's email
+   * @param firstName User's first name.
+   * @param lastName User's last name.
+   */
+  changeRoleDefine({ userID, email, firstName, lastName }) {
+    if (Meteor.isServer) {
+      const user = this.findOne({ email, firstName, lastName });
+      if (!user) {
+        const role = ROLE.USER;
+        return this._collection.insert({ email, firstName, lastName, role, userID });
+      }
+      return user._id;
+    }
+    return undefined;
+  }
+
+  /**
+   * Updates the following values in a user's UserProfile.
+   * @param docID the _id of the User's profile in the User collection.
+   * @param userID User's Meteor.users._id (will not change).
+   * @param firstName (New) first name.
+   * @param lastName (New) last name.
+   * @param email (New) email.
+   * @param role (New) role.
    */
   update(docID, { userID, firstName, lastName, email, role }) {
     if (Meteor.isServer) {

@@ -4,6 +4,7 @@ import { check } from 'meteor/check';
 import BaseProfileCollection from './BaseProfileCollection';
 import { ROLE } from '../role/Role';
 import { Users } from './UserCollection';
+import { UserProfiles } from './UserProfileCollection';
 
 class AdminProfileCollection extends BaseProfileCollection {
   constructor() {
@@ -35,21 +36,18 @@ class AdminProfileCollection extends BaseProfileCollection {
   }
 
   /**
-   * Defines the profile associated with an Admin and the associated Meteor account.
-   * @param email The email associated with this profile. Will be the username.
-   * @param password The password for this user.
-   * @param firstName The first name.
-   * @param lastName The last name.
+   * Verifies user does not exist in this collection, then adds them.
+   * @param userID User's Meteor.users._id.
+   * @param email User's email
+   * @param firstName User's first name.
+   * @param lastName User's last name.
    */
   changeRoleDefine({ userID, email, firstName, lastName }) {
     if (Meteor.isServer) {
       const user = this.findOne({ email, firstName, lastName });
       if (!user) {
-        console.log('user not found in collection. Creating new user.');
         const role = ROLE.ADMIN;
-        const profileID = this._collection.insert({ email, firstName, lastName, role, userID });
-        console.log('profileID', profileID);
-        return profileID;
+        return this._collection.insert({ email, firstName, lastName, role, userID });
       }
       return user._id;
     }
@@ -57,33 +55,40 @@ class AdminProfileCollection extends BaseProfileCollection {
   }
 
   /**
-   * Updates the following values in an admin's  AdminProfile. You cannot change the email or role.
-   *
-   * @param docID the id of the AdminProfile.
-   * @param userID the associated User ID.
-   * @param firstName new first name (optional).
-   * @param lastName new last name (optional).
-   * @param email new email (optional).
+   * Updates the following values in a user's UserProfile.
+   * @param docID the _id of the User's profile in the User collection.
+   * @param userID User's Meteor.users._id (will not change).
+   * @param firstName (New) first name.
+   * @param lastName (New) last name.
+   * @param email (New) email.
+   * @param role (New) role.
    */
   update(docID, { userID, firstName, lastName, email, role }) {
     if (Meteor.isServer) {
       this.assertDefined(docID);
       const updateData = {};
-      if (firstName) {
+      const userDoc = this.findDoc(docID);
+      if (userDoc.firstName !== firstName) {
         updateData.firstName = firstName;
       }
-      if (lastName) {
+      if (userDoc.lastName !== lastName) {
         updateData.lastName = lastName;
       }
-      if (email) {
+      if (userDoc.email !== email) {
         updateData.email = email;
-        /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
+        // Sign in checks meteor/accounts-base, not BaseProfileCollection schema.
         Users.updateUsernameAndEmail(userID, email);
       }
       /** Leaving this extra if statement for now, I plan to add more roles, like customer. */
-      if (role) {
-        if (role === 'USER') {
-          updateData.role = ROLE.USER;
+      if (role !== 'Admin') {
+        if (role === 'User') {
+          // Change role in Meteor.users
+          Users.changeRole(userID, ROLE.USER);
+          // Add user to new admin profiles collection
+          UserProfiles.changeRoleDefine({ userID, email, firstName, lastName });
+          // Remove user from user profiles collection
+          this._collection.remove(docID);
+          return;
         }
       }
       this._collection.update(docID, { $set: updateData });
