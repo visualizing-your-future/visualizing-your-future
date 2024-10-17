@@ -67,14 +67,13 @@ class AdminProfileCollection extends BaseProfileCollection {
     if (Meteor.isServer) {
       this.assertDefined(docID);
       const updateData = {};
-      const userDoc = this.findDoc(docID);
-      if (userDoc.firstName !== firstName) {
+      if (firstName) {
         updateData.firstName = firstName;
       }
-      if (userDoc.lastName !== lastName) {
+      if (lastName) {
         updateData.lastName = lastName;
       }
-      if (userDoc.email !== email) {
+      if (email) {
         updateData.email = email;
         // Sign in checks meteor/accounts-base, not BaseProfileCollection schema.
         Users.updateUsernameAndEmail(userID, email);
@@ -88,12 +87,9 @@ class AdminProfileCollection extends BaseProfileCollection {
           UserProfiles.changeRoleDefine({ userID, email, firstName, lastName });
           // Remove user from user profiles collection
           this._collection.remove(docID);
-          return;
         }
       }
-      if (Object.keys(updateData).length !== 0) {
-        this._collection.update(docID, { $set: updateData });
-      }
+      this._collection.update(docID, { $set: updateData });
     }
   }
 

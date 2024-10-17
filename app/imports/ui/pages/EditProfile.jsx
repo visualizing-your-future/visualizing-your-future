@@ -89,7 +89,6 @@ const EditProfile = () => {
      * then call the collection update function.
      */
     const updateData = { id: _docId, userID, firstName, lastName, email, role: roleType };
-    console.log(updateData);
     updateMethod.callPromise({ collectionName: collectionName, updateData })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
