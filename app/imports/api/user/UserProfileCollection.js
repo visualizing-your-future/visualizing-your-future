@@ -98,7 +98,9 @@ class UserProfileCollection extends BaseProfileCollection {
           return;
         }
       }
-      this._collection.update(docID, { $set: updateData });
+      if (Object.keys(updateData).length !== 0) {
+        this._collection.update(docID, { $set: updateData });
+      }
     }
   }
 

@@ -14,7 +14,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
-import { ROLES } from '../../api/role/Role';
 
 /* Renders the EditProfile page for editing a single document. */
 const EditProfile = () => {
@@ -63,7 +62,6 @@ const EditProfile = () => {
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
       usrId = userDoc.userID;
-      console.log(userDoc);
     } else {
       navigate('/notauthorized');
     }
@@ -85,7 +83,6 @@ const EditProfile = () => {
 
     /** Stores the values the user inputs. */
     const { firstName, lastName, email, roleType } = data;
-    console.log('before', roleType);
 
     /**
      * Add the documentID to the data being passed to the collection update function,
@@ -117,9 +114,8 @@ const EditProfile = () => {
                     id={COMPONENT_IDS.ACCOUNT_SETTINGS_ROLE}
                     name="roleType"
                   >
-                    {roleTypes.map((aRoleType) => (
-                      <option value={aRoleType}>{aRoleType}</option>
-                    ))}
+                    {roleTypes.map((aRoleType, key) => (
+                      <option value={aRoleType} key={key}>{aRoleType}</option>))}
                   </SelectField>
                 </Row>
                 <ErrorsField />
