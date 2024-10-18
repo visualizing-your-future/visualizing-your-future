@@ -28,24 +28,8 @@ const DataInput = () => {
         <Col className="col-lg-4">
           <Row className="fw-bold">
             Fiscal Year
+            <hr className="solid" />
           </Row>
-        </Col>
-        <Col className="col-lg-8">
-          <Row className="justify-content-start">
-            <Col className="col">Year XX</Col>
-            <Col className="col">Year XX</Col>
-            <Col className="col">Year XX</Col>
-            <Col className="col">Year XX</Col>
-            <Col className="col">Year XX</Col>
-            <Col className="col">Year XX</Col>
-            <Col className="col">Year XX</Col>
-            <Col className="col">Year XX</Col>
-          </Row>
-        </Col>
-        <hr className="solid" />
-      </Row>
-      <Row>
-        <Col className="col-lg-4">
           <Row className="justify-content-start fw-bold">
             Cash and Cash Equivalents
           </Row>

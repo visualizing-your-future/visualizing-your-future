@@ -15,15 +15,15 @@
   ],
 
   "defaultAuditedBalanceData": [
-    { "owner":  "john@foo.com" },
-    { "owner":  "john@foo.com" },
-    { "owner":  "john@foo.com" },
-    { "owner":  "john@foo.com" },
-    { "owner":  "john@foo.com" },
-    { "owner":  "john@foo.com" },
-    { "owner":  "john@foo.com" },
-    { "owner":  "john@foo.com" },
-    { "owner":  "admin@foo.com" }
+    { "owner":  "john@foo.com", "year": 1 },
+    { "owner":  "john@foo.com", "year": 2 },
+    { "owner":  "john@foo.com", "year": 3 },
+    { "owner":  "john@foo.com", "year": 4 },
+    { "owner":  "john@foo.com", "year": 5 },
+    { "owner":  "john@foo.com", "year": 6 },
+    { "owner":  "john@foo.com", "year": 7 },
+    { "owner":  "john@foo.com", "year": 8 },
+    { "owner":  "admin@foo.com", "year": 1 }
   ],
 
   "public": {

@@ -15,6 +15,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
   constructor() {
     super('AuditedBalanceData', new SimpleSchema({
       owner: String,
+      year: Number,
       cashStuff: {
         type: Array,
         optional: true,
@@ -180,9 +181,10 @@ class AuditedBalanceDataCollection extends BaseCollection {
     }));
   }
 
-  define({ owner, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting }) {
+  define({ owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting }) {
     const docID = this._collection.insert({
       owner,
+      year,
       cashStuff,
       other,
       investments,
@@ -339,6 +341,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
     const commitConting = doc.commitConting;
     const totalNet = doc.totalNet;
     const totalLiabInRsrc = doc.totalLiabInRsrc;
+    const year = doc.year;
     const owner = doc.owner;
     return {
       totalLiabInRsrc, totalNet,
@@ -358,7 +361,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
       investmentsTotal, investments,
       otherTotal, other,
       cashTotal, cashStuff,
-      owner };
+      year, owner };
   }
 
   sumArray(array) {
