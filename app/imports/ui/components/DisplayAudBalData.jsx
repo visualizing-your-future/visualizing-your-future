@@ -96,6 +96,10 @@ const DisplayAudBalData = ({ audBalData }) => {
   return (
     <AutoForm schema={bridge} onSubmit={data => submit(audBalData, data)} model={AuditedBalanceData.findOne(audBalData._id)}>
       <Card.Body>
+        <Row>
+          Year {audBalData.year}
+          <hr className="solid" />
+        </Row>
         <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
             <NumField name="cashStuff.0.pettyCash" style={{ height: '25px' }} decimal label={null} />
@@ -536,6 +540,7 @@ const DisplayAudBalData = ({ audBalData }) => {
 DisplayAudBalData.propTypes = {
   audBalData: PropTypes.shape({
     owner: PropTypes.string,
+    year: PropTypes.number,
     cashStuff: PropTypes.arrayOf(PropTypes.shape({
       pettyCash: PropTypes.number,
       cash: PropTypes.number,
