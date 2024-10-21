@@ -87,12 +87,20 @@ class UserCollection {
    * Checks user input old password vs password stored in database.
    * If it matches, update password to the new password.
    * This is a client side only function.
-   *
    * @param oldPassword The user's old password.
    * @param newPassword The user's new password.
    */
   updatePassword(oldPassword, newPassword) {
     Accounts.changePassword(oldPassword, newPassword);
+  }
+
+  /**
+   * Changes the role of the user.
+   * @param userID The _id of the user's Meteor.users document.
+   * @param role The new role.
+   */
+  changeRole(userID, role) {
+    Roles.setUserRoles(userID, [role]);
   }
 
   /**

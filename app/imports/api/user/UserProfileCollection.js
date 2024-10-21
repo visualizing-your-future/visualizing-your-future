@@ -1,9 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
+import { check } from 'meteor/check';
 import { Roles } from 'meteor/alanning:roles';
 import BaseProfileCollection from './BaseProfileCollection';
 import { ROLE } from '../role/Role';
 import { Users } from './UserCollection';
+import { AdminProfiles } from './AdminProfileCollection';
 
 export const profilePublications = {
   profile: 'Profile',
@@ -23,31 +25,52 @@ class UserProfileCollection extends BaseProfileCollection {
    * @param lastName The last name.
    */
   define({ email, firstName, lastName, password }) {
-    // if (Meteor.isServer) {
-    const username = email;
-    const user = this.findOne({ email, firstName, lastName });
-    if (!user) {
-      const role = ROLE.USER;
-      const userID = Users.define({ username, role, password });
-      const profileID = this._collection.insert({ email, firstName, lastName, userID, role });
-      // this._collection.update(profileID, { $set: { userID } });
-      return profileID;
+    if (Meteor.isServer) {
+      const username = email;
+      const user = this.findOne({ email, firstName, lastName });
+      if (!user) {
+        const role = ROLE.USER;
+        /** Creates a Meteor account. */
+        const userID = Users.define({ username, role, password });
+        /** Creates a MongoDB UserProfileCollection account. */
+        const profileID = this._collection.insert({ email, firstName, lastName, role, userID });
+        // this._collection.update(profileID, { $set: { userID } });
+        return profileID;
+      }
+      return user._id;
     }
-    return user._id;
-    // }
-    // return undefined;
+    return undefined;
   }
 
   /**
-   * Updates the following values in a user's UserProfile. You cannot change the email or role.
-   *
-   * @param docID the id of the UserProfile.
-   * @param userID the associated User ID.
-   * @param firstName new first name (optional).
-   * @param lastName new last name (optional).
-   * @param email new email (optional).
+   * Verifies user does not exist in this collection, then adds them.
+   * @param userID User's Meteor.users._id.
+   * @param email User's email
+   * @param firstName User's first name.
+   * @param lastName User's last name.
    */
-  update(docID, { userID, firstName, lastName, email }) {
+  changeRoleDefine({ userID, email, firstName, lastName }) {
+    if (Meteor.isServer) {
+      const user = this.findOne({ email, firstName, lastName });
+      if (!user) {
+        const role = ROLE.USER;
+        return this._collection.insert({ email, firstName, lastName, role, userID });
+      }
+      return user._id;
+    }
+    return undefined;
+  }
+
+  /**
+   * Updates the following values in a user's UserProfile.
+   * @param docID the _id of the User's profile in the User collection.
+   * @param userID User's Meteor.users._id (will not change).
+   * @param firstName (New) first name.
+   * @param lastName (New) last name.
+   * @param email (New) email.
+   * @param role (New) role.
+   */
+  update(docID, { userID, firstName, lastName, email, role }) {
     if (Meteor.isServer) {
       this.assertDefined(docID);
       const updateData = {};
@@ -59,23 +82,41 @@ class UserProfileCollection extends BaseProfileCollection {
       }
       if (email) {
         updateData.email = email;
-        /** Sign in checks meteor/accounts-base, not BaseProfileCollection schema. */
+        // Sign in checks meteor/accounts-base, not BaseProfileCollection schema.
         Users.updateUsernameAndEmail(userID, email);
+      }
+      /** Leaving this extra if statement for now, I plan to add more roles, like customer. */
+      if (role !== 'User') {
+        if (role === 'Admin') {
+          // Change role in Meteor.users
+          Users.changeRole(userID, ROLE.ADMIN);
+          // Add user to new admin profiles collection
+          AdminProfiles.changeRoleDefine({ userID, email, firstName, lastName });
+          // Remove user from user profiles collection
+          this._collection.remove(docID);
+        }
       }
       this._collection.update(docID, { $set: updateData });
     }
   }
 
   /**
-   * Removes this profile, given its profile ID.
-   * Also removes this user from Meteor Accounts.
-   * @param profileID The ID for this profile object.
+   * A stricter form of remove that throws an error if the document or docID could not be found in this collection.
+   * @param { String | Object } docID A document or docID in this collection.
+   * @returns true
    */
-  removeIt(profileID) {
-    if (this.isDefined(profileID)) {
-      return super.removeIt(profileID);
-    }
-    return null;
+  removeIt(docID) {
+    const doc = this.findDoc(docID);
+    // TODO: This line always returns undefined.  Why?
+    check(doc, Object);
+    // LEAVE THESE CONSOLE.LOGS IN FOR NOW.  THEY ARE USEFUL FOR DEBUGGING.
+    // console.log('before', this._collection.findOne({ _id: doc._id }));
+    this._collection.remove(doc._id);
+    // console.log('after', this._collection.findOne({ _id: doc._id }));
+    // console.log('before', Meteor.users.findOne({ _id: doc.userID }));
+    Meteor.users.remove({ _id: doc.userID });
+    // console.log('after', Meteor.users.findOne({ _id: doc.userID }));
+    return true;
   }
 
   /**
@@ -140,7 +181,7 @@ class UserProfileCollection extends BaseProfileCollection {
   /**
    * Returns an array of strings, each one representing an integrity problem with this collection.
    * Returns an empty array if no problems were found.
-   * Checks the profile common fields and the role..
+   * Checks the profile common fields and the role.
    * @returns {Array} A (possibly empty) array of strings indicating integrity issues.
    */
   checkIntegrity() {
@@ -168,7 +209,7 @@ class UserProfileCollection extends BaseProfileCollection {
 }
 
 /**
- * Profides the singleton instance of this class to all other entities.
+ * Provides the singleton instance of this class to all other entities.
  * @type {UserProfileCollection}
  */
 export const UserProfiles = new UserProfileCollection();

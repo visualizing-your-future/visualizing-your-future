@@ -96,7 +96,11 @@ const DisplayAudBalData = ({ audBalData }) => {
   return (
     <AutoForm schema={bridge} onSubmit={data => submit(audBalData, data)} model={AuditedBalanceData.findOne(audBalData._id)}>
       <Card.Body>
-        <Row className="align-items-center ">
+        <Row>
+          Year {audBalData.year}
+          <hr className="solid" />
+        </Row>
+        <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
             <NumField name="cashStuff.0.pettyCash" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -116,7 +120,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <h6>$ {totalCash.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="align-items-center ">
+        <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
             <NumField name="other.0.actRec" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -161,7 +165,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <h6>$ {totalOther.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="align-items-center ">
+        <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
             <NumField name="investments.0.mutFun" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -221,12 +225,13 @@ const DisplayAudBalData = ({ audBalData }) => {
             <h6>$ {totalLoanFund.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="justify-content-start">
+        <Row className="justify-content-start" style={{ paddingTop: '18px' }}>
           <Col>
+            <hr className="solid my-0" />
             <h6>$ {totalInvestLoan.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '40px' }}>
           <Col>
             <NumField name="assets.0.bldngs" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -251,7 +256,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <h6>$ {totalAssets.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
             <NumField name="land.0.landA" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -271,7 +276,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <h6>$ {totalLand.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
             <NumField name="compBAssets.0.bldngs" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -306,12 +311,13 @@ const DisplayAudBalData = ({ audBalData }) => {
             <h6>$ {totalCompBAssets.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="justify-content-start">
+        <Row className="justify-content-start" style={{ paddingTop: '3px' }}>
           <Col>
+            <hr className="solid my-0" />
             <h6>$ {totalCapAssets.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="justify-content-start">
+        <Row className="justify-content-start" style={{ paddingTop: '2px' }}>
           <Col>
             <NumField name="rstrCash" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -336,7 +342,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <h6>$ {totalAssetsAndRsrcs.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '18px' }}>
           <Col>
             <NumField name="liabilities.0.acntPayAccLia" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -351,7 +357,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <NumField name="liabilities.0.dueToOthFun" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '41px' }}>
           <Col>
             <NumField name="longTermInYear.0.accrVac" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -391,7 +397,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <NumField name="longTermInYear.0.netOPEBLia" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '41px' }}>
           <Col>
             <NumField name="longTermInYear.0.lineOfCredA" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -411,7 +417,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <h6>$ {totalLongTermInYear.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '18px' }}>
           <Col>
             <NumField name="longTermAftYear.0.accrVac" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -451,7 +457,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <NumField name="longTermAftYear.0.netOPEBLia" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '40px' }}>
           <Col>
             <NumField name="longTermAftYear.0.lineOfCredA" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -493,7 +499,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <h6>$ {totalLiabInflowRsrcs.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '44px' }}>
           <Col>
             <NumField name="commitConting.0.invCapAssNetDbt" style={{ height: '25px' }} decimal label={null} />
           </Col>
@@ -514,7 +520,7 @@ const DisplayAudBalData = ({ audBalData }) => {
             <h6>$ {totalCommitConting.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '1px' }}>
           <Col>
             <hr className="solid my-0" />
             <h6>$ {totalLiabInRsrc.toFixed(2)}</h6>
@@ -534,6 +540,7 @@ const DisplayAudBalData = ({ audBalData }) => {
 DisplayAudBalData.propTypes = {
   audBalData: PropTypes.shape({
     owner: PropTypes.string,
+    year: PropTypes.number,
     cashStuff: PropTypes.arrayOf(PropTypes.shape({
       pettyCash: PropTypes.number,
       cash: PropTypes.number,

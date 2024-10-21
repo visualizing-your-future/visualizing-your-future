@@ -39,6 +39,7 @@ const ListProfiles = () => {
                 <th>Email</th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>Role</th>
               </tr>
             </thead>
             <tbody>
