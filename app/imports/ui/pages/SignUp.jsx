@@ -10,6 +10,9 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
 import { defineMethod } from '../../api/base/BaseCollection.methods';
+import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
+import swal from 'sweetalert';
+import { Stuffs } from '../../api/stuff/StuffCollection';
 
 /**
  * SignUp component is similar to signin component, but we create a new user instead.w
@@ -88,15 +91,23 @@ const SignUp = () => {
   const bridge = new SimpleSchema2Bridge(schema);
 
   /* Handle SignUp submission. Create user account and a profile entry, then redirect to the home page. */
-  const submit = (doc) => {
-    const collectionName = UserProfiles.getCollectionName();
-    const definitionData = doc;
+  const submit = (data) => {
+    let collectionName;
+
+    if (data.accountType === 'Accountant') {
+      collectionName = AccountantProfiles.getCollectionName();
+    }
+    // else if (data.accountType === 'Client') {
+    // collectionName = ClientProfiles.getCollectionName();
+    // }
 
     // create the new UserProfile
+    const definitionData = data;
     defineMethod.callPromise({ collectionName, definitionData })
+      .catch(registrationError => swal('Error', registrationError.message, 'error'))
       .then(() => {
         // log the new user in.
-        const { email, password } = doc;
+        const { email, password } = data;
         Meteor.loginWithPassword(email, password, (err) => {
           if (err) {
             setError(err.reason);

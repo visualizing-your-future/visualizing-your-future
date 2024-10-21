@@ -60,7 +60,7 @@ const AccountSettings = () => {
       docID = AdminProfiles.getID(Meteor.user().username);
     } else if (Roles.userIsInRole(usrId, ROLE.USER)) {
       // Subscription for regular users
-      sub = UserProfiles.subscribeProfileUser();
+      sub = UserProfiles.subscribeUserProfilesUser();
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
       userDoc = UserProfiles.findOne({ email: username });

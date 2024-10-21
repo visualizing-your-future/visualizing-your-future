@@ -5,7 +5,7 @@ import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 
 /** Renders a single row in the List Profiles table. See pages/ListProfiles.jsx. */
 
-const ProfileItem = ({ profile }) => (
+const UserProfileItem = ({ profile }) => (
   <tr>
     <td>{profile.email}</td>
     <td>{profile.firstName}</td>
@@ -18,7 +18,7 @@ const ProfileItem = ({ profile }) => (
 );
 
 // Require a document to be passed to this component.
-ProfileItem.propTypes = {
+UserProfileItem.propTypes = {
   profile: PropTypes.shape({
     email: PropTypes.string,
     firstName: PropTypes.string,
@@ -28,4 +28,4 @@ ProfileItem.propTypes = {
   }).isRequired,
 };
 
-export default ProfileItem;
+export default UserProfileItem;

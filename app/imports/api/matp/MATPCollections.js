@@ -3,6 +3,7 @@ import { Stuffs } from '../stuff/StuffCollection';
 import { AuditedBalanceData } from '../audited-balance-data/AuditedBalanceDataCollection';
 import { AdminProfiles } from '../user/AdminProfileCollection';
 import { UserProfiles } from '../user/UserProfileCollection';
+import { AccountantProfiles } from '../user/AccountantProfileCollection';
 
 class MATPClass {
   collections;
@@ -15,9 +16,11 @@ class MATPClass {
     // list of all the MATPCollections collections
     this.collections = [
       AdminProfiles,
-      Stuffs,
       AuditedBalanceData,
       UserProfiles,
+      AccountantProfiles,
+      // This can probably be deleted...
+      Stuffs,
     ];
     /*
      * A list of collection class instances in the order required for them to be sequentially loaded from a file.
@@ -25,6 +28,7 @@ class MATPClass {
     this.collectionLoadSequence = [
       AdminProfiles,
       UserProfiles,
+      AccountantProfiles,
       Stuffs,
       AuditedBalanceData,
     ];

@@ -8,19 +8,20 @@ import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import SimpleSchema from 'simpl-schema';
-import { UserProfiles } from '../../api/user/UserProfileCollection';
 import { removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
+import { UserProfiles } from '../../api/user/UserProfileCollection';
+import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
 
 /* Renders the EditProfile page for editing a single document. */
 const EditProfile = () => {
   document.title = 'Edit User Profile';
   const _docId = useParams();
   const navigate = useNavigate();
-  const roleTypes = ['Admin', 'User'];
+  const roleTypes = ['Admin', 'User', 'Accountant'];
 
   /** Account settings the user can change. */
   const schema = new SimpleSchema({
@@ -37,7 +38,7 @@ const EditProfile = () => {
     let colName; /** Collection name. */
     let userDoc; /** Entire user document. */
     let usrId; /** The user's ID. */
-    let adminRole; /** Is the profile being edited an admin or user? */
+    let theRole; /** Is the profile being edited an admin or user? */
 
     /**
      * Try to find the user's document ID in the UserProfiles collection first.
@@ -45,22 +46,32 @@ const EditProfile = () => {
      */
     try {
       userDoc = UserProfiles.findDoc(_docId);
-      sub = UserProfiles.subscribeProfileAdmin();
-      adminRole = false;
+      sub = UserProfiles.subscribeUserProfilesAdmin();
+      theRole = 'user';
     } catch (error) {
-      userDoc = AdminProfiles.findDoc(_docId);
-      sub = AdminProfiles.subscribeAdmin();
-      adminRole = true;
+      try {
+        userDoc = AdminProfiles.findDoc(_docId);
+        sub = AdminProfiles.subscribeAdmin();
+        theRole = 'admin';
+      } catch (error2) {
+        userDoc = AccountantProfiles.findDoc(_docId);
+        sub = AccountantProfiles.subscribeAccountantProfilesAdmin();
+        theRole = 'accountant';
+      }
     }
 
     /** Check if user is an admin or a user, then assign relevant info. */
-    if (adminRole) {
+    if (theRole === 'admin') {
       subRdy = sub.ready();
       colName = AdminProfiles.getCollectionName();
       usrId = userDoc.userID;
-    } else if (!adminRole) {
+    } else if (theRole === 'user') {
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
+      usrId = userDoc.userID;
+    } else if (theRole === 'accountant') {
+      subRdy = sub.ready();
+      colName = AccountantProfiles.getCollectionName();
       usrId = userDoc.userID;
     } else {
       navigate('/notauthorized');

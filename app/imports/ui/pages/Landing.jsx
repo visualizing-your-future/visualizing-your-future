@@ -50,7 +50,7 @@ const Landing = () => {
       }
       profile = AdminProfiles.findOne({ email: user?.username });
     } else {
-      const userHandle = UserProfiles.subscribeProfileUser();
+      const userHandle = UserProfiles.subscribeUserProfilesUser();
       if (!userHandle.ready()) {
         return { ready: false };
       }
