@@ -3,6 +3,8 @@ import { ROLE } from '../../api/role/Role';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
 import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
+import { ClientProfiles } from '../../api/user/ClientProfileCollection';
+import { BossAccountantProfiles } from '../../api/user/BossAccountantProfileCollection';
 
 /* eslint-disable no-console */
 
@@ -14,6 +16,10 @@ function createUser(email, role, firstName, lastName, password) {
     UserProfiles.define({ email, firstName, lastName, password });
   } else if (role === ROLE.ACCOUNTANT) {
     AccountantProfiles.define({ email, firstName, lastName, password });
+  } else if (role === ROLE.CLIENT) {
+    ClientProfiles.define({ email, firstName, lastName, password });
+  } else if (role === ROLE.BOSSACCOUNTANT) {
+    BossAccountantProfiles.define({ email, firstName, lastName, password });
   }
 }
 

@@ -81,11 +81,20 @@ class AdminProfileCollection extends BaseProfileCollection {
       /** Leaving this extra if statement for now, I plan to add more roles, like customer. */
       if (role !== 'Admin') {
         if (role === 'User') {
-          // Change role in Meteor.users
           Users.changeRole(userID, ROLE.USER);
-          // Add user to new admin profiles collection
           UserProfiles.changeRoleDefine({ userID, email, firstName, lastName });
-          // Remove user from user profiles collection
+          this._collection.remove(docID);
+        } else if (role === 'Accountant') {
+          Users.changeRole(userID, ROLE.ACCOUNTANT);
+          UserProfiles.changeRoleDefine({ userID, email, firstName, lastName });
+          this._collection.remove(docID);
+        } else if (role === 'Client') {
+          Users.changeRole(userID, ROLE.CLIENT);
+          UserProfiles.changeRoleDefine({ userID, email, firstName, lastName });
+          this._collection.remove(docID);
+        } else if (role === 'BossAccountant') {
+          Users.changeRole(userID, ROLE.BOSSACCOUNTANT);
+          UserProfiles.changeRoleDefine({ userID, email, firstName, lastName });
           this._collection.remove(docID);
         }
       }
@@ -100,15 +109,9 @@ class AdminProfileCollection extends BaseProfileCollection {
    */
   removeIt(name) {
     const doc = this.findDoc(name);
-    // TODO: This line always returns undefined.  Why?
     check(doc, Object);
-    // LEAVE THESE CONSOLE.LOGS IN FOR NOW.  THEY ARE USEFUL FOR DEBUGGING.
-    // console.log('before', this._collection.findOne({ _id: doc._id }));
     this._collection.remove(doc._id);
-    // console.log('after', this._collection.findOne({ _id: doc._id }));
-    // console.log('before', Meteor.users.findOne({ _id: doc.userID }));
     Meteor.users.remove({ _id: doc.userID });
-    // console.log('after', Meteor.users.findOne({ _id: doc.userID }));
     return true;
   }
 

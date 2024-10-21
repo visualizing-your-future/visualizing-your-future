@@ -15,13 +15,15 @@ import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
 import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
+import { ClientProfiles } from '../../api/user/ClientProfileCollection';
+import { BossAccountantProfiles } from '../../api/user/BossAccountantProfileCollection';
 
 /* Renders the EditProfile page for editing a single document. */
 const EditProfile = () => {
   document.title = 'Edit User Profile';
   const _docId = useParams();
   const navigate = useNavigate();
-  const roleTypes = ['Admin', 'User', 'Accountant'];
+  const roleTypes = ['Admin', 'User', 'Accountant', 'Client', 'BossAccountant'];
 
   /** Account settings the user can change. */
   const schema = new SimpleSchema({
@@ -50,13 +52,25 @@ const EditProfile = () => {
       theRole = 'user';
     } catch (error) {
       try {
-        userDoc = AdminProfiles.findDoc(_docId);
-        sub = AdminProfiles.subscribeAdmin();
-        theRole = 'admin';
+        userDoc = ClientProfiles.findDoc(_docId);
+        sub = ClientProfiles.subscribeClientProfilesAdmin();
+        theRole = 'client';
       } catch (error2) {
-        userDoc = AccountantProfiles.findDoc(_docId);
-        sub = AccountantProfiles.subscribeAccountantProfilesAdmin();
-        theRole = 'accountant';
+        try {
+          userDoc = AccountantProfiles.findDoc(_docId);
+          sub = AccountantProfiles.subscribeAccountantProfilesAdmin();
+          theRole = 'accountant';
+        } catch (error3) {
+          try {
+            userDoc = BossAccountantProfiles.findDoc(_docId);
+            sub = BossAccountantProfiles.subscribeBossAccountantProfilesAdmin();
+            theRole = 'bossAccountant';
+          } catch (error4) {
+            userDoc = AdminProfiles.findDoc(_docId);
+            sub = AdminProfiles.subscribeAdmin();
+            theRole = 'admin';
+          }
+        }
       }
     }
 
@@ -72,6 +86,14 @@ const EditProfile = () => {
     } else if (theRole === 'accountant') {
       subRdy = sub.ready();
       colName = AccountantProfiles.getCollectionName();
+      usrId = userDoc.userID;
+    } else if (theRole === 'client') {
+      subRdy = sub.ready();
+      colName = ClientProfiles.getCollectionName();
+      usrId = userDoc.userID;
+    } else if (theRole === 'bossAccountant') {
+      subRdy = sub.ready();
+      colName = BossAccountantProfiles.getCollectionName();
       usrId = userDoc.userID;
     } else {
       navigate('/notauthorized');

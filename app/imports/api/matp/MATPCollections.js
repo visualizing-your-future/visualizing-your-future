@@ -4,6 +4,8 @@ import { AuditedBalanceData } from '../audited-balance-data/AuditedBalanceDataCo
 import { AdminProfiles } from '../user/AdminProfileCollection';
 import { UserProfiles } from '../user/UserProfileCollection';
 import { AccountantProfiles } from '../user/AccountantProfileCollection';
+import { ClientProfiles } from '../user/ClientProfileCollection';
+import { BossAccountantProfiles } from '../user/BossAccountantProfileCollection';
 
 class MATPClass {
   collections;
@@ -19,6 +21,8 @@ class MATPClass {
       AuditedBalanceData,
       UserProfiles,
       AccountantProfiles,
+      ClientProfiles,
+      BossAccountantProfiles,
       // This can probably be deleted...
       Stuffs,
     ];
@@ -29,6 +33,8 @@ class MATPClass {
       AdminProfiles,
       UserProfiles,
       AccountantProfiles,
+      ClientProfiles,
+      BossAccountantProfiles,
       Stuffs,
       AuditedBalanceData,
     ];

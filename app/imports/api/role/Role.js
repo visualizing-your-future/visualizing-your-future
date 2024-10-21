@@ -15,7 +15,7 @@ export const ROLE = {
   // What do we want to allow them to see?
   CLIENT: 'CLIENT',
   // Only role that can upload and modify approved, audited data.
-  CFO: 'CFO',
+  BOSSACCOUNTANT: 'BOSSACCOUNTANT',
 };
 
 export const ROLES = _.values(ROLE);

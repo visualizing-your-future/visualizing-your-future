@@ -5,23 +5,23 @@ import { Roles } from 'meteor/alanning:roles';
 import BaseProfileCollection from './BaseProfileCollection';
 import { ROLE } from '../role/Role';
 import { Users } from './UserCollection';
+import { UserProfiles } from './UserProfileCollection';
 import { AdminProfiles } from './AdminProfileCollection';
 import { AccountantProfiles } from './AccountantProfileCollection';
-import { ClientProfiles } from './ClientProfileCollection';
 import { BossAccountantProfiles } from './BossAccountantProfileCollection';
 
-export const userProfilePublications = {
-  userProfile: 'UserProfile',
-  userProfileAdmin: 'UserProfileAdmin',
+export const clientProfilePublications = {
+  clientProfile: 'ClientProfile',
+  clientProfileAdmin: 'ClientProfileAdmin',
 };
 
-class UserProfileCollection extends BaseProfileCollection {
+class ClientProfileCollection extends BaseProfileCollection {
   constructor() {
-    super('UserProfile', new SimpleSchema({}));
+    super('ClientProfile', new SimpleSchema({}));
   }
 
   /**
-   * Defines the profile associated with an User and the associated Meteor account.
+   * Defines the profile associated with an Admin and the associated Meteor account.
    * @param email The email associated with this profile. Will be the username.
    * @param password The password for this user.
    * @param firstName The first name.
@@ -32,7 +32,7 @@ class UserProfileCollection extends BaseProfileCollection {
       const username = email;
       const user = this.findOne({ email, firstName, lastName });
       if (!user) {
-        const role = ROLE.USER;
+        const role = ROLE.CLIENT;
         const userID = Users.define({ username, role, password });
         return this._collection.insert({ email, firstName, lastName, role, userID });
       }
@@ -52,7 +52,7 @@ class UserProfileCollection extends BaseProfileCollection {
     if (Meteor.isServer) {
       const user = this.findOne({ email, firstName, lastName });
       if (!user) {
-        const role = ROLE.USER;
+        const role = ROLE.CLIENT;
         return this._collection.insert({ email, firstName, lastName, role, userID });
       }
       return user._id;
@@ -85,18 +85,18 @@ class UserProfileCollection extends BaseProfileCollection {
         Users.updateUsernameAndEmail(userID, email);
       }
       // Changes role in Meteor.users, adds user to new role collection, then removes user from this collection.
-      if (role !== 'User') {
+      if (role !== 'Client') {
         if (role === 'Admin') {
           Users.changeRole(userID, ROLE.ADMIN);
           AdminProfiles.changeRoleDefine({ userID, email, firstName, lastName });
           this._collection.remove(docID);
+        } else if (role === 'User') {
+          Users.changeRole(userID, ROLE.USER);
+          UserProfiles.changeRoleDefine({ userID, email, firstName, lastName });
+          this._collection.remove(docID);
         } else if (role === 'Accountant') {
           Users.changeRole(userID, ROLE.ACCOUNTANT);
           AccountantProfiles.changeRoleDefine({ userID, email, firstName, lastName });
-          this._collection.remove(docID);
-        } else if (role === 'Client') {
-          Users.changeRole(userID, ROLE.CLIENT);
-          ClientProfiles.changeRoleDefine({ userID, email, firstName, lastName });
           this._collection.remove(docID);
         } else if (role === 'BossAccountant') {
           Users.changeRole(userID, ROLE.BOSSACCOUNTANT);
@@ -110,11 +110,11 @@ class UserProfileCollection extends BaseProfileCollection {
 
   /**
    * A stricter form of remove that throws an error if the document or docID could not be found in this collection.
-   * @param { String | Object } docID A document or docID in this collection.
+   * @param { String | Object } name A document or docID in this collection.
    * @returns true
    */
-  removeIt(docID) {
-    const doc = this.findDoc(docID);
+  removeIt(name) {
+    const doc = this.findDoc(name);
     check(doc, Object);
     this._collection.remove(doc._id);
     Meteor.users.remove({ _id: doc.userID });
@@ -129,7 +129,7 @@ class UserProfileCollection extends BaseProfileCollection {
     if (Meteor.isServer) {
       const instance = this;
       /** This subscription publishes only the documents associated with the logged in user */
-      Meteor.publish(userProfilePublications.userProfile, function publish() {
+      Meteor.publish(clientProfilePublications.clientProfile, function publish() {
         if (this.userId) {
           const username = Meteor.users.findOne(this.userId).username;
           return instance._collection.find({ email: username });
@@ -138,7 +138,7 @@ class UserProfileCollection extends BaseProfileCollection {
       });
 
       /** This subscription publishes all documents regardless of user, but only if the logged in user is the Admin. */
-      Meteor.publish(userProfilePublications.userProfileAdmin, function publish() {
+      Meteor.publish(clientProfilePublications.clientProfileAdmin, function publish() {
         if (this.userId && Roles.userIsInRole(this.userId, ROLE.ADMIN)) {
           return instance._collection.find();
         }
@@ -151,9 +151,9 @@ class UserProfileCollection extends BaseProfileCollection {
    * Subscription method for users.
    * It subscribes to the entire collection?
    */
-  subscribeUserProfilesUser() {
+  subscribeClientProfilesUser() {
     if (Meteor.isClient) {
-      return Meteor.subscribe(userProfilePublications.userProfile);
+      return Meteor.subscribe(clientProfilePublications.clientProfile);
     }
     return null;
   }
@@ -162,43 +162,43 @@ class UserProfileCollection extends BaseProfileCollection {
    * Subscription method for admin users.
    * It subscribes to the entire collection.
    */
-  subscribeUserProfilesAdmin() {
+  subscribeClientProfilesAdmin() {
     if (Meteor.isClient) {
-      return Meteor.subscribe(userProfilePublications.userProfileAdmin);
+      return Meteor.subscribe(clientProfilePublications.clientProfileAdmin);
     }
     return null;
   }
 
   /**
    * TODO CAM: Update this documentation since we want to be able to sign up new users.
-   * Implementation of assertValidRoleForMethod. Asserts that userId is logged in as an Admin or User.
+   * Implementation of assertValidRoleForMethod. Asserts that userId is logged in as an Admin or Admin.
    * This is used in the define, update, and removeIt Meteor methods associated with each class.
-   * @throws { Meteor.Error } If there is no logged in user, or the user is not an Admin or User.
+   * @param userId The userId of the logged in user. Can be null or undefined
+   * @throws { Meteor.Error } If there is no logged in user, or the user is not an Admin or Admin.
    */
   assertValidRoleForMethod(userId) {
-    this.assertRole(userId, [ROLE.ADMIN, ROLE.USER]);
-    return true;
+    this.assertRole(userId, [ROLE.ADMIN, ROLE.CLIENT]);
   }
 
   /**
    * Returns an array of strings, each one representing an integrity problem with this collection.
    * Returns an empty array if no problems were found.
-   * Checks the profile common fields and the role.
+   * Checks the profile common fields and the role..
    * @returns {Array} A (possibly empty) array of strings indicating integrity issues.
    */
   checkIntegrity() {
     const problems = [];
     this.find().forEach((doc) => {
-      if (doc.role !== ROLE.USER) {
-        problems.push(`UserProfile instance does not have ROLE.USER: ${doc}`);
+      if (doc.role !== ROLE.CLIENT) {
+        problems.push(`ClientProfile instance does not have ROLE.CLIENT: ${doc}`);
       }
     });
     return problems;
   }
 
   /**
-   * Returns an object representing the UserProfile docID in a format acceptable to define().
-   * @param docID The docID of a UserProfile
+   * Returns an object representing the AdminProfile docID in a format acceptable to define().
+   * @param docID The docID of a AdminProfile
    * @returns { Object } An object representing the definition of docID.
    */
   dumpOne(docID) {
@@ -211,7 +211,7 @@ class UserProfileCollection extends BaseProfileCollection {
 }
 
 /**
- * Provides the singleton instance of this class to all other entities.
- * @type {UserProfileCollection}
+ * Profides the singleton instance of this class to all other entities.
+ * @type {ClientProfileCollection}
  */
-export const UserProfiles = new UserProfileCollection();
+export const ClientProfiles = new ClientProfileCollection();

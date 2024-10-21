@@ -19,7 +19,7 @@ export const defineMethod = new ValidatedMethod({
   validate: null,
   run({ collectionName, definitionData }) {
     if (Meteor.isServer) {
-      console.log('basecollection.define', collectionName, this.userId, definitionData);
+      // console.log('basecollection.define', collectionName, this.userId, definitionData);
       const collection = MATPCollections.getCollection(collectionName);
       // This line is useless.  You have to make the account before you get a userId.
       // collection.assertValidRoleForMethod(this.userId);

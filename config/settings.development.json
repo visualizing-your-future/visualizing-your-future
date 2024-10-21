@@ -6,9 +6,9 @@
     },
     { "email": "john@foo.com", "password": "changeme", "role": "ACCOUNTANT" , "firstName": "John", "lastName": "Doe"
     },
-    { "email": "sarah@foo.com", "password": "changeme", "role": "ACCOUNTANT", "firstName": "Sarah", "lastName": "Green"
+    { "email": "sarah@foo.com", "password": "changeme", "role": "CLIENT", "firstName": "Sarah", "lastName": "Green"
     },
-    { "email": "mike@foo.com", "password": "changeme", "role": "USER", "firstName": "Mike", "lastName": "Brown"
+    { "email": "mike@foo.com", "password": "changeme", "role": "BOSSACCOUNTANT", "firstName": "Mike", "lastName": "Brown"
     },
     { "email": "lisa@foo.com", "password": "changeme", "role": "USER", "firstName": "Lisa", "lastName": "Smith"
     }

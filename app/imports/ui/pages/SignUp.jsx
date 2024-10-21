@@ -6,13 +6,12 @@ import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import { AutoForm, ErrorsField, SubmitField, TextField, RadioField } from 'uniforms-bootstrap5';
+import swal from 'sweetalert';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
-import { UserProfiles } from '../../api/user/UserProfileCollection';
 import { defineMethod } from '../../api/base/BaseCollection.methods';
 import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
-import swal from 'sweetalert';
-import { Stuffs } from '../../api/stuff/StuffCollection';
+import { ClientProfiles } from '../../api/user/ClientProfileCollection';
 
 /**
  * SignUp component is similar to signin component, but we create a new user instead.w
@@ -96,10 +95,9 @@ const SignUp = () => {
 
     if (data.accountType === 'Accountant') {
       collectionName = AccountantProfiles.getCollectionName();
+    } else if (data.accountType === 'Client') {
+      collectionName = ClientProfiles.getCollectionName();
     }
-    // else if (data.accountType === 'Client') {
-    // collectionName = ClientProfiles.getCollectionName();
-    // }
 
     // create the new UserProfile
     const definitionData = data;

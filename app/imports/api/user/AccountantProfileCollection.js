@@ -7,6 +7,8 @@ import { ROLE } from '../role/Role';
 import { Users } from './UserCollection';
 import { UserProfiles } from './UserProfileCollection';
 import { AdminProfiles } from './AdminProfileCollection';
+import { ClientProfiles } from './ClientProfileCollection';
+import { BossAccountantProfiles } from './BossAccountantProfileCollection';
 
 export const accountantProfilePublications = {
   accountantProfile: 'AccountantProfile',
@@ -31,9 +33,7 @@ class AccountantProfileCollection extends BaseProfileCollection {
       const user = this.findOne({ email, firstName, lastName });
       if (!user) {
         const role = ROLE.ACCOUNTANT;
-        console.log('define role', role);
         const userID = Users.define({ username, role, password });
-        console.log('define userID', userID);
         return this._collection.insert({ email, firstName, lastName, role, userID });
       }
       return user._id;
@@ -90,10 +90,17 @@ class AccountantProfileCollection extends BaseProfileCollection {
           Users.changeRole(userID, ROLE.ADMIN);
           AdminProfiles.changeRoleDefine({ userID, email, firstName, lastName });
           this._collection.remove(docID);
-        }
-        if (role === 'User') {
+        } else if (role === 'User') {
           Users.changeRole(userID, ROLE.USER);
           UserProfiles.changeRoleDefine({ userID, email, firstName, lastName });
+          this._collection.remove(docID);
+        } else if (role === 'Client') {
+          Users.changeRole(userID, ROLE.CLIENT);
+          ClientProfiles.changeRoleDefine({ userID, email, firstName, lastName });
+          this._collection.remove(docID);
+        } else if (role === 'BossAccountant') {
+          Users.changeRole(userID, ROLE.BOSSACCOUNTANT);
+          BossAccountantProfiles.changeRoleDefine({ userID, email, firstName, lastName });
           this._collection.remove(docID);
         }
       }
@@ -108,15 +115,9 @@ class AccountantProfileCollection extends BaseProfileCollection {
    */
   removeIt(name) {
     const doc = this.findDoc(name);
-    // TODO: This line always returns undefined.  Why?
     check(doc, Object);
-    // LEAVE THESE CONSOLE.LOGS IN FOR NOW.  THEY ARE USEFUL FOR DEBUGGING.
-    // console.log('before', this._collection.findOne({ _id: doc._id }));
     this._collection.remove(doc._id);
-    // console.log('after', this._collection.findOne({ _id: doc._id }));
-    // console.log('before', Meteor.users.findOne({ _id: doc.userID }));
     Meteor.users.remove({ _id: doc.userID });
-    // console.log('after', Meteor.users.findOne({ _id: doc.userID }));
     return true;
   }
 
@@ -176,9 +177,7 @@ class AccountantProfileCollection extends BaseProfileCollection {
    * @throws { Meteor.Error } If there is no logged in user, or the user is not an Admin or Admin.
    */
   assertValidRoleForMethod(userId) {
-    console.log('assert called');
-    const test = this.assertRole(userId, [ROLE.ADMIN, ROLE.ACCOUNTANT]);
-    console.log(test);
+    this.assertRole(userId, [ROLE.ADMIN, ROLE.ACCOUNTANT]);
   }
 
   /**
