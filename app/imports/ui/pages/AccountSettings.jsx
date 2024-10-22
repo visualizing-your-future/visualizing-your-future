@@ -34,10 +34,6 @@ const AccountSettings = () => {
     }
   }, [ready, user]);
 
-  const handleMfaPasscodeChange = (event) => {
-    setMfaPasscode(event.target.value); // Handle passcode input change
-  };
-
   const submit = (data) => {
     // Update user's account settings, including MFA passcode and status
     const updatedData = {
