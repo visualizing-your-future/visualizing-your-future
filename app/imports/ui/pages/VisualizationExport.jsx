@@ -13,18 +13,18 @@ const yAxisTickFormatter = (value) => `$${(value / 1_000_000).toFixed(1)} M` // 
 ;
 // Snapshot data
 const snapshotData = [
-  { year: 'YEAR 1', assets: 689525419, liabilities: 141198657, netPosition: 548326762, cashOnHand: 20091667, investment: 402514152, utility: 33543139, debt: 66193143, revenues: 35693705, opex: 35603263, netIncome: 290160023, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 2', assets: 698716700, liabilities: 117607300, netPosition: 581109400, cashOnHand: 22647878, investment: 410021540, utility: 33890716, debt: 41686286, revenues: 35567019, opex: 36014771, netIncome: 295047575, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 3', assets: 691355317, liabilities: 116810541, netPosition: 574544776, cashOnHand: 18695599, investment: 409541918, utility: 34229610, debt: 41179429, revenues: 35914282, opex: 36803493, netIncome: 300172211, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 4', assets: 700301819, liabilities: 113248353, netPosition: 587053466, cashOnHand: 21592948, investment: 418441322, utility: 34571906, debt: 37672571, revenues: 36670341, opex: 37218414, netIncome: 304110328, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 5', assets: 701042985, liabilities: 109830826, netPosition: 591212159, cashOnHand: 17757200, investment: 427149326, utility: 34916256, debt: 34165714, revenues: 37234517, opex: 37666058, netIncome: 309263674, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 6', assets: 710578887, liabilities: 106283192, netPosition: 604295695, cashOnHand: 20972538, investment: 435928758, utility: 35263474, debt: 30658857, revenues: 38102065, opex: 38215618, netIncome: 313607024, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 7', assets: 713017483, liabilities: 102772409, netPosition: 610245073, cashOnHand: 17415528, investment: 444325230, utility: 35966746, debt: 27152000, revenues: 39997851, opex: 38832666, netIncome: 322938926, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 8', assets: 722460461, liabilities: 99636285, netPosition: 622824176, cashOnHand: 21208373, investment: 452349231, utility: 36322892, debt: 24000000, revenues: 39920149, opex: 39532314, netIncome: 327376670, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 9', assets: 724022577, liabilities: 96626677, netPosition: 627395900, cashOnHand: 17584723, investment: 459947864, utility: 36682021, debt: 21000000, revenues: 40349674, opex: 40180479, netIncome: 331958693, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 10', assets: 734013691, liabilities: 93628457, netPosition: 640385234, cashOnHand: 21119245, investment: 467595644, utility: 37044141, debt: 18000000, revenues: 40751477, opex: 40840605, netIncome: 336658355, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 11', assets: 737837542, liabilities: 90630473, netPosition: 647207069, cashOnHand: 17193578, investment: 475341162, utility: 37409267, debt: 15000000, revenues: 41142891, opex: 41534037, netIncome: 341415247, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
-  { year: 'YEAR 12', assets: 748903774, liabilities: 87628202, netPosition: 661275572, cashOnHand: 20404255, investment: 483198717, utility: 37409267, debt: 12000000, revenues: 41534656, opex: 42249646, netIncome: 341415247, liquidity: 0, perpetuity: 0, cashInFlow: 0, cashOutFlow: 0, netCashFlow: 0, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 1', assets: 689525419, liabilities: 141198657, netPosition: 548326762, cashOnHand: 20091667, debt: 66193143, opex: 35603263, liquidity: 422605819, perpetuity: 0, cashInFlow: 35693705, cashOutFlow: 36110120, netCashFlow: 416415, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 2', assets: 698716700, liabilities: 117607300, netPosition: 581109400, cashOnHand: 22647878, debt: 41686286, opex: 36014771, liquidity: 432669418, perpetuity: 0, cashInFlow: 35567019, cashOutFlow: 36521628, netCashFlow: 954609, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 3', assets: 691355317, liabilities: 116810541, netPosition: 574544776, cashOnHand: 18695599, debt: 41179429, opex: 36803493, liquidity: 428237517, perpetuity: 0, cashInFlow: 35914282, cashOutFlow: 37310350, netCashFlow: 1396068, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 4', assets: 700301819, liabilities: 113248353, netPosition: 587053466, cashOnHand: 21592948, debt: 37672571, opex: 37218414, liquidity: 440034270, perpetuity: 0, cashInFlow: 36670341, cashOutFlow: 37725271, netCashFlow: 1054930, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 5', assets: 701042985, liabilities: 109830826, netPosition: 591212159, cashOnHand: 17757200, debt: 34165714, opex: 37666058, liquidity: 444906527, perpetuity: 0, cashInFlow: 37234517, cashOutFlow: 38172915, netCashFlow: 938399, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 6', assets: 710578887, liabilities: 106283192, netPosition: 604295695, cashOnHand: 20972538, debt: 30658857, opex: 38215618, liquidity: 456901296, perpetuity: 0, cashInFlow: 38102065, cashOutFlow: 38722475, netCashFlow: 620410, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 7', assets: 713017483, liabilities: 102772409, netPosition: 610245073, cashOnHand: 17415528, debt: 27152000, opex: 38832666, liquidity: 461740759, perpetuity: 0, cashInFlow: 38997851, cashOutFlow: 39339523, netCashFlow: 341672, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 8', assets: 722460461, liabilities: 99636285, netPosition: 622824176, cashOnHand: 21208373, debt: 24000000, opex: 39532314, liquidity: 473557604, perpetuity: 0, cashInFlow: 39920149, cashOutFlow: 39684314, netCashFlow: 235835, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 9', assets: 724022577, liabilities: 96626677, netPosition: 627395900, cashOnHand: 17584723, debt: 21000000, opex: 40180479, liquidity: 477532588, perpetuity: 0, cashInFlow: 40349674, cashOutFlow: 40180479, netCashFlow: 169195, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 10', assets: 734013691, liabilities: 93628457, netPosition: 640385234, cashOnHand: 21119245, debt: 18000000, opex: 40840605, liquidity: 488714889, perpetuity: 0, cashInFlow: 40751477, cashOutFlow: 40840605, netCashFlow: 89128, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 11', assets: 737837542, liabilities: 90630473, netPosition: 647207069, cashOnHand: 17193578, debt: 15000000, opex: 41534037, liquidity: 492534740, perpetuity: 0, cashInFlow: 41142891, cashOutFlow: 41534037, netCashFlow: 391145, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
+  { year: 'YEAR 12', assets: 748903774, liabilities: 87628202, netPosition: 661275572, cashOnHand: 20404255, debt: 12000000, opex: 42249646, liquidity: 503602972, perpetuity: 0, cashInFlow: 41534656, cashOutFlow: 42249646, netCashFlow: 714990, budget: 0, actualAndEncumbrance: 0, changeAE: 0 },
 
 ];
 
@@ -36,22 +36,18 @@ const dataSets = {
   '12year': snapshotData, // All 12 years
 };
 
-// Function to render the Excel-like table for snapshot
 const renderSnapshotTable = (data) => (
-  <Table striped bordered hover>
-    <thead>
+  <div className="table-container">
+    <Table striped bordered hover>
+      <thead>
       <tr>
         <th>Year</th>
         <th>Assets</th>
         <th>Liabilities</th>
         <th>Net Position</th>
         <th>Cash on Hand</th>
-        <th>Investment</th>
-        <th>Utility</th>
         <th>Debt</th>
-        <th>Revenues</th>
         <th>Opex</th>
-        <th>Net Income</th>
         <th>Liquidity</th>
         <th>Perpetuity</th>
         <th>Cash In Flow</th>
@@ -61,8 +57,8 @@ const renderSnapshotTable = (data) => (
         <th>Actual + Encumbrance</th>
         <th>Change of Actual + Encumbrance</th>
       </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       {data.map((entry, index) => (
         <tr key={index}>
           <td>{entry.year}</td>
@@ -70,12 +66,8 @@ const renderSnapshotTable = (data) => (
           <td>{currencyFormatter(entry.liabilities)}</td>
           <td>{currencyFormatter(entry.netPosition)}</td>
           <td>{currencyFormatter(entry.cashOnHand)}</td>
-          <td>{currencyFormatter(entry.investment)}</td>
-          <td>{currencyFormatter(entry.utility)}</td>
           <td>{currencyFormatter(entry.debt)}</td>
-          <td>{currencyFormatter(entry.revenues)}</td>
           <td>{currencyFormatter(entry.opex)}</td>
-          <td>{currencyFormatter(entry.netIncome)}</td>
           <td>{currencyFormatter(entry.liquidity)}</td>
           <td>{currencyFormatter(entry.perpetuity)}</td>
           <td>{currencyFormatter(entry.cashInFlow)}</td>
@@ -86,11 +78,11 @@ const renderSnapshotTable = (data) => (
           <td>{currencyFormatter(entry.changeAE)}</td>
         </tr>
       ))}
-    </tbody>
-  </Table>
+      </tbody>
+    </Table>
+  </div>
 );
-
-// Function to render a dual line chart for comparison
+// Function to render a dual line chart for comparison (3 options)
 const renderDualChart = (data, key1, key2, key3, color1, color2, color3) => (
   <ResponsiveContainer width="100%" height={250}>
     <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -105,7 +97,7 @@ const renderDualChart = (data, key1, key2, key3, color1, color2, color3) => (
     </LineChart>
   </ResponsiveContainer>
 );
-// Function to render a dual line chart for comparison
+// Function to render a dual line chart for comparison (2 options)
 const renderDoubleChart = (data, key1, key2, color1, color2) => (
   <ResponsiveContainer width="100%" height={250}>
     <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -165,25 +157,29 @@ const Comparison = ({ data }) => {
       <h5>Select Years to Compare</h5>
       <Form>
         {/* eslint-disable-next-line react/prop-types */}
-        {data.map((entry, index) => (
-          <Form.Check
-            key={index}
-            type="checkbox"
-            id={`year-${index}`}
-            label={entry.year}
-            checked={selectedYears.includes(entry.year)}
-            onChange={() => handleYearSelect(entry.year)}
-          />
-        ))}
+        <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto' }}>
+          {/* eslint-disable-next-line react/prop-types */}
+          {data.map((entry, index) => (
+            <Button
+              key={index}
+              variant={selectedYears.includes(entry.year) ? 'button-square' : 'button-square'}
+              style={{ marginRight: '15px' }}
+              active={selectedYears.includes(entry.year)}
+              onClick={() => handleYearSelect(entry.year)}
+            >
+              {entry.year}
+            </Button>
+          ))}
+        </div>
         <Form.Group controlId="metric1">
           <Form.Label>Choose First Metric:</Form.Label>
           <Form.Control as="select" value={selectedMetric1} onChange={(e) => handleMetricChange(e.target.value, true)}>
+            <option value="assets">Assets</option>
+            <option value="liabilitites">Liabilities</option>
             <option value="netPosition">Net Position</option>
             <option value="cashOnHand">Cash on Hand</option>
             <option value="debt">Debt</option>
-            <option value="revenues">Revenues</option>
             <option value="opex">Opex</option>
-            <option value="netIncome">Net Income</option>
             <option value="liquidity">Liquidity</option>
             <option value="perpetuitiy">Perpetuity</option>
             <option value="cashInFlow">Cash In Flow</option>
@@ -198,12 +194,11 @@ const Comparison = ({ data }) => {
           <Form.Label>Choose Second Metric:</Form.Label>
           <Form.Control as="select" value={selectedMetric2} onChange={(e) => handleMetricChange(e.target.value, false)}>
             <option value="assets">Assets</option>
-            <option value="liabilities">Liabilities</option>
+            <option value="liabilitites">Liabilities</option>
+            <option value="netPosition">Net Position</option>
             <option value="cashOnHand">Cash on Hand</option>
             <option value="debt">Debt</option>
-            <option value="revenues">Revenues</option>
             <option value="opex">Opex</option>
-            <option value="netIncome">Net Income</option>
             <option value="liquidity">Liquidity</option>
             <option value="perpetuitiy">Perpetuity</option>
             <option value="cashInFlow">Cash In Flow</option>
@@ -215,7 +210,11 @@ const Comparison = ({ data }) => {
           </Form.Control>
         </Form.Group>
       </Form>
-      {filteredData.length > 0 && renderDualChart(filteredData, selectedMetric1, selectedMetric2, '#8884d8', '#82ca9d')}
+      {filteredData.length > 0 && (
+        <div style={{ marginTop: '40px', height:'110%' }}> {/* Keep square aspect ratio */}
+          {renderDoubleChart(filteredData, selectedMetric1, selectedMetric2, '#8884d8', '#82ca9d', { width: 400, height: 400 })} {/* Pass width and height */}
+        </div>
+      )}
     </Card.Body>
   );
 };
@@ -278,33 +277,23 @@ const VisualizationExport = () => {
                             <>
                               <h5>{activeKey.toUpperCase()} View</h5>
                               <Row>
-                                <Col lg={6}>
-                                  <h6>Table 1: Net Position</h6>
-                                  {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', 'netPosition', '#f17e5d', '#246aae', '#8884d8')}
+                                <Col md={6}>
+                                  <h4>Equity Metrics</h4>
+                                  <h6>Net Position</h6>
+                                  {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', 'netPosition', 'green', 'red', 'blue')}
+                                  <h6>Years of Solvency</h6>
+                                  {renderDualChart(dataSets[activeKey], 'liquidity', 'opex', 'perpetuity', '#8884d8', '#ffc658')}
+                                  <h6>Demand for Capital</h6>
+                                  {renderSingleChart(dataSets[activeKey], 'liquidity', '#ff7300')}
                                 </Col>
-                                <Col lg={6}>
-                                  <h6>Table 4: Financing</h6>
-                                  {renderDualChart(dataSets[activeKey], 'cashOnHand', 'debt', '', '#82ca9d', '#e64b37', '#e64b37')}
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col lg={6}>
-                                  <h6>Table 2: Years of Solvency</h6>
-                                  {renderDualChart(dataSets[activeKey], 'netPosition', 'opex', '#8884d8', '#ffc658')}
-                                </Col>
-                                <Col lg={6}>
-                                  <h6>Table 5: Years of Solvency Based on Cash Flow</h6>
-                                  {renderDualChart(dataSets[activeKey], 'revenues', 'opex', '#8884d8', '#ff7300')}
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col lg={6}>
-                                  <h6>Table 3: Demand For Capital</h6>
-                                  {renderDualChart(dataSets[activeKey], 'cashOnHand', 'investment', '#82ca9d', '#ff7300')}
-                                </Col>
-                                <Col lg={6}>
-                                  <h6>Table 6: Budget</h6>
-                                  {renderDualChart(dataSets[activeKey], 'revenues', 'netIncome', '#246aae', '#f17e5d')}
+                                <Col md={6}>
+                                  <h4>Cash Flow Metrics</h4>
+                                  <h6>Financing</h6>
+                                  {renderDoubleChart(dataSets[activeKey], 'cashOnHand', 'debt', '#82ca9d', '#e64b37')}
+                                  <h6>Years of Solvency Based on Cash Flow</h6>
+                                  {renderDualChart(dataSets[activeKey], 'cashInFlow', 'cashOutFlow', 'netCashFlow', '#8884d8', '#ff7300', 'orange')}
+                                  <h6>Budget</h6>
+                                  {renderDualChart(dataSets[activeKey], 'budget', 'actualAndEncumbrance', 'changeAE', '#f17e5d', 'brown', 'pink')}
                                 </Col>
                               </Row>
                             </>

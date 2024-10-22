@@ -288,3 +288,14 @@ body {
 .footer img {
   max-width: 100%;
 }
+
+/* Snapshot scroll for VisualizationExport.jsx */
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+}
