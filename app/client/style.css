@@ -212,7 +212,7 @@ body {
 
 /* Footer Styles */
 .footer {
-  background-color: #f9f9f9;
+  background-color: #e64b37; /* Dark background for the footer */
   padding: 40px 0;
   font-family: 'Open Sans', sans-serif;
 }
@@ -220,7 +220,7 @@ body {
 .footer h5 {
   font-size: 1.25rem;
   font-weight: 500;
-  color: #333;
+  color: #fff; /* White color for headings */
   margin-bottom: 20px;
 }
 
@@ -232,26 +232,26 @@ body {
 .footer ul li {
   margin-bottom: 10px;
   font-size: 1rem;
-  color: #555;
+  color: white; /* Lighter gray for list items */
 }
 
 .footer a {
-  color: #e64b37;
+  color: white; /* Original link color */
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .footer a:hover {
-  color: #C9302C;
+  color: black; /* Hover color for links */
 }
 
 .footer .list-inline-item a {
   font-size: 1.5rem;
-  color: #555;
+  color: #ddd; /* Adjusted for inline items */
 }
 
 .footer .list-inline-item a:hover {
-  color: #e64b37;
+  color: black; /* Hover color for inline items */
 }
 
 .footer-logo {
@@ -271,20 +271,31 @@ body {
 
 .footer address {
   font-style: normal;
-  color: #666;
+  color: white; /* Lighter gray for address text */
 }
 
 .footer hr {
-  border-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 255, 255, 0.1); /* Light border */
 }
 
 .footer .py-3 {
-  color: #666;
+  color: #fff; /* White color for the copyright section */
   font-size: 0.9rem;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #ddd; /* Light border */
   padding-top: 20px;
 }
 
 .footer img {
   max-width: 100%;
+}
+
+/* Snapshot scroll for VisualizationExport.jsx */
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
 }
