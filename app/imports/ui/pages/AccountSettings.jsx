@@ -15,7 +15,8 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import { ROLE } from '../../api/role/Role';
-import MultiFactorAuthentication from '../components/MultiFactorAuthentication'; // Import the MFA component
+import MultiFactorAuthentication from '../components/MultiFactorAuthentication';
+import SecurityQuestions from '../components/SecurityQuestions'; // Import the MFA component
 
 /**
  * AccountSettings Component
@@ -81,7 +82,8 @@ const AccountSettings = () => {
 
   const [saveSuccess, setSaveSuccess] = useState(false); // Track whether the save was successful
   const [mfaStatus, setMfaStatus] = useState(false); // Local state for MFA status
-
+  const [securityQuestion, setSecurityQuestion] = useState('');
+  const [securityAnswer, setSecurityAnswer] = useState('');
   /**
    * useEffect Hook
    * - Syncs the `mfaStatus` with the user document or localStorage.
@@ -158,8 +160,14 @@ const AccountSettings = () => {
           <AutoForm model={{ ...userDocument, isMFAEnabled: mfaStatus }} schema={bridge} onSubmit={data => submit(data)}>
             <Card>
               <Card.Body>
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_FIRST_NAME} name="firstName" placeholder="First Name" />
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last Name" />
+                <Row>
+                  <Col md={6}>
+                    <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_FIRST_NAME} name="firstName" placeholder="First Name" />
+                  </Col>
+                  <Col md={6}>
+                    <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_LAST_NAME} name="lastName" placeholder="Last Name" />
+                  </Col>
+                </Row>
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_EMAIL} name="email" placeholder="Email" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_OLD_PASSWORD} name="oldPassword" placeholder="Old Password" type="password" />
                 <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_NEW_PASSWORD} name="newPassword" placeholder="New Password" type="password" />
@@ -170,7 +178,15 @@ const AccountSettings = () => {
                   userDocument={userDocument}
                   setMfaStatus={setMfaStatus}
                 />
-
+                {/* Security Questions Component */}
+                {mfaStatus && (
+                  <SecurityQuestions
+                    securityQuestion={securityQuestion}
+                    setSecurityQuestion={setSecurityQuestion}
+                    securityAnswer={securityAnswer}
+                    setSecurityAnswer={setSecurityAnswer}
+                  />
+                )}
                 <ErrorsField />
                 <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
                 <Button

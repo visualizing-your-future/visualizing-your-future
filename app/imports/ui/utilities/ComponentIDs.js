@@ -43,5 +43,6 @@ export const COMPONENT_IDS = {
   LANDING_USER: 'landing-user',
   LANDING_ADMIN: 'landing-admin',
   ACCOUNT_SETTINGS_MFA: 'mfa',
-
+  ACCOUNT_SETTINGS_SECURITY_QUESTION: 'account-settings-security-question',
+  ACCOUNT_SETTINGS_SECURITY_ANSWER: 'account-settings-security-answer',
 };
