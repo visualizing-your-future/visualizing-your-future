@@ -26,6 +26,17 @@
     { "owner":  "admin@foo.com", "year": 1 }
   ],
 
+  "defaultWP2503": [
+    { "year": 2, "penAcc": 15.00, "retHlthInsur":  7.96, "othrPostEmpBen": 0.00, "empHlthFnd": 7.02, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.22, "unempComp": 0.91, "penAdm": 0.00},
+    { "year": 3, "penAcc": 15.50, "retHlthInsur":  10.35, "othrPostEmpBen": 0.00, "empHlthFnd": 6.84, "SS": 6.20, "medicare": 1.45, "wrkComp": 0.88, "unempComp": 0.31, "penAdm": 0.01},
+    { "year": 4, "penAcc": 16.00, "retHlthInsur":  10.12, "othrPostEmpBen": 0.00, "empHlthFnd": 6.81, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.16, "unempComp": 0.25, "penAdm": 0.00},
+    { "year": 5, "penAcc": 16.50, "retHlthInsur":  10.12, "othrPostEmpBen": 0.00, "empHlthFnd": 6.81, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.16, "unempComp": 0.25, "penAdm": 0.00},
+    { "year": 6, "penAcc": 17.00, "retHlthInsur":  8.07, "othrPostEmpBen": 7.78, "empHlthFnd": 7.62, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.27, "unempComp": 0.15, "penAdm": 0.00},
+    { "year": 7, "penAcc": 17.00, "retHlthInsur":  9.39, "othrPostEmpBen": 12.69, "empHlthFnd": 7.60, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.06, "unempComp": 0.09, "penAdm": 0.00},
+    { "year": 8, "penAcc": 18.00, "retHlthInsur":  10.14, "othrPostEmpBen": 14.33, "empHlthFnd": 7.69, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.24, "unempComp": 0.02, "penAdm": 0.01},
+    { "year": 9, "penAcc": 19.00, "retHlthInsur":  10.14, "othrPostEmpBen": 14.33, "empHlthFnd": 7.69, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.24, "unempComp": 0.02, "penAdm": 0.01}
+  ],
+
   "public": {
     "development": true
   }

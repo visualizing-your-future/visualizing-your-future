@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Stuffs } from '../stuff/StuffCollection';
 import { AuditedBalanceData } from '../audited-balance-data/AuditedBalanceDataCollection';
+import { WP2503 } from '../WP2503/WP2503';
 import { AdminProfiles } from '../user/AdminProfileCollection';
 import { UserProfiles } from '../user/UserProfileCollection';
 import { AccountantProfiles } from '../user/AccountantProfileCollection';
@@ -19,6 +20,7 @@ class MATPClass {
     this.collections = [
       AdminProfiles,
       AuditedBalanceData,
+      WP2503,
       UserProfiles,
       AccountantProfiles,
       ClientProfiles,
@@ -37,6 +39,7 @@ class MATPClass {
       BossAccountantProfiles,
       Stuffs,
       AuditedBalanceData,
+      WP2503,
     ];
 
     /*
