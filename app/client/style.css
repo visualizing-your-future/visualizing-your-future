@@ -175,18 +175,12 @@ body {
   border-radius: 0;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   transition: background-color 0.3s, box-shadow 0.3s;
-
-  /* Ensure buttons are of equal width and height */
-  width: 200px; /* Set a fixed width */
-  height: 50px; /* Set a fixed height */
-
-  /* Align text in the center */
+  width: 200px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* Reduce margin to bring buttons closer together */
-  margin: 0 10px; /* This sets the left-right spacing between buttons */
+  margin: 0 10px;
 }
 
 /* Hover state */
@@ -195,13 +189,12 @@ body {
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Container to align buttons horizontally and center them */
 #button-container {
   display: flex;
-  justify-content: center; /* Center the buttons */
-  gap: 20px; /* Reduce gap between buttons */
+  justify-content: center;
+  gap: 20px;
   flex-wrap: wrap;
-  margin-top: 20px; /* Adjust margin for space between rows of buttons */
+  margin-top: 20px;
 }
 
 /* Turns all text on register page black */
@@ -210,9 +203,9 @@ body {
 }
 
 
-/* Footer Styles */
+/* Footer.js */
 .footer {
-  background-color: #e64b37; /* Dark background for the footer */
+  background-color: #e64b37;
   padding: 40px 0;
   font-family: 'Open Sans', sans-serif;
 }
@@ -220,7 +213,7 @@ body {
 .footer h5 {
   font-size: 1.25rem;
   font-weight: 500;
-  color: #fff; /* White color for headings */
+  color: #fff;
   margin-bottom: 20px;
 }
 
@@ -232,26 +225,26 @@ body {
 .footer ul li {
   margin-bottom: 10px;
   font-size: 1rem;
-  color: white; /* Lighter gray for list items */
+  color: white;
 }
 
 .footer a {
-  color: white; /* Original link color */
+  color: white;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .footer a:hover {
-  color: black; /* Hover color for links */
+  color: black;
 }
 
 .footer .list-inline-item a {
   font-size: 1.5rem;
-  color: #ddd; /* Adjusted for inline items */
+  color: #ddd;
 }
 
 .footer .list-inline-item a:hover {
-  color: black; /* Hover color for inline items */
+  color: black;
 }
 
 .footer-logo {
@@ -271,17 +264,17 @@ body {
 
 .footer address {
   font-style: normal;
-  color: white; /* Lighter gray for address text */
+  color: white;
 }
 
 .footer hr {
-  border-color: rgba(255, 255, 255, 0.1); /* Light border */
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .footer .py-3 {
-  color: #fff; /* White color for the copyright section */
+  color: #fff;
   font-size: 0.9rem;
-  border-top: 1px solid #ddd; /* Light border */
+  border-top: 1px solid #ddd;
   padding-top: 20px;
 }
 
@@ -289,7 +282,7 @@ body {
   max-width: 100%;
 }
 
-/* Snapshot scroll for VisualizationExport.jsx */
+/* VisualizationExport.jsx */
 .table-container {
   max-height: 400px;
   overflow-y: auto;
