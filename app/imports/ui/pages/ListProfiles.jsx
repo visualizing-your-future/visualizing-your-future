@@ -53,7 +53,7 @@ const ListProfiles = () => {
     <Container id={PAGE_IDS.LIST_PROFILES} className="py-3">
       <Row className="justify-content-center">
         <Col md={7}>
-          <Col className="text-center"><h2>List Profiles</h2></Col>
+          <Col className="text-center"><h2>User Profiles</h2></Col>
           <Table striped bordered hover>
             <thead>
               <tr>
@@ -66,9 +66,26 @@ const ListProfiles = () => {
             <tbody>
               {userProfileItems.map((profile) => <UserProfileItem key={profile._id} profile={profile} />)}
               {accountantProfileItems.map((profile) => <AccountantProfileItem key={profile._id} profile={profile} />)}
-              {clientProfileItems.map((profile) => <ClientProfileItem key={profile._id} profile={profile} />)}
               {bossAccountantProfileItems.map((profile) => <BossAccountantProfileItem key={profile._id} profile={profile} />)}
               {adminProfileItems.map((profile) => <AdminProfileItem key={profile._id} profile={profile} />)}
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
+      <Row className="justify-content-center">
+        <Col md={7}>
+          <Col className="text-center"><h2>Client Profiles</h2></Col>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Company Name</th>
+                <th>Client Key</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              {clientProfileItems.map((profile) => <ClientProfileItem key={profile._id} profile={profile} />)}
             </tbody>
           </Table>
         </Col>

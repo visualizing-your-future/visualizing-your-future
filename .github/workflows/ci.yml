@@ -37,7 +37,10 @@ jobs:
         shell: bash -l {0}
 
         #Fix these all file/test files related to these test before add them back to the run
+        # only this one is run
         # meteor npm run test-unit
+
+        # these arent run
         # meteor npm run test-integration
         # meteor npm run test-acceptance-ci
         run: |

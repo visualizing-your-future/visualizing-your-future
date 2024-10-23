@@ -92,20 +92,25 @@ const SignUp = () => {
   /* Handle SignUp submission. Create user account and a profile entry, then redirect to the home page. */
   const submit = (data) => {
     let collectionName;
+    let firstName;
+    let lastName;
+    const email = data.email;
+    const password = data.password;
 
     if (data.accountType === 'Accountant') {
       collectionName = AccountantProfiles.getCollectionName();
+      firstName = data.firstName;
+      lastName = data.lastName;
     } else if (data.accountType === 'Client') {
       collectionName = ClientProfiles.getCollectionName();
+      firstName = data.companyName;
+      lastName = data.clientKey;
     }
 
-    // create the new UserProfile
-    const definitionData = data;
+    const definitionData = { firstName, lastName, email, password };
     defineMethod.callPromise({ collectionName, definitionData })
       .catch(registrationError => swal('Error', registrationError.message, 'error'))
       .then(() => {
-        // log the new user in.
-        const { email, password } = data;
         Meteor.loginWithPassword(email, password, (err) => {
           if (err) {
             setError(err.reason);
