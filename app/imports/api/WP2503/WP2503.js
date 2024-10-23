@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import { check } from 'meteor/check';
+import { _ } from 'meteor/underscore';
 import { Roles } from 'meteor/alanning:roles';
 import BaseCollection from '../base/BaseCollection';
 import { ROLE } from '../role/Role';
@@ -12,7 +13,7 @@ export const wp2503Publications = {
 
 class WP2503Collection extends BaseCollection {
   constructor() {
-    super('Stuffs', new SimpleSchema({
+    super('WP2503', new SimpleSchema({
       year: Number,
       penAcc: Number,
       retHlthInsur: Number,
@@ -30,9 +31,9 @@ class WP2503Collection extends BaseCollection {
    * Defines a new WP2503 item.
    * @param name the name of the item.
    */
-  define({ name }) {
+  define({ year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm }) {
     const docID = this._collection.insert({
-      name,
+      year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm,
     });
     return docID;
   }
@@ -40,13 +41,50 @@ class WP2503Collection extends BaseCollection {
   /**
    * Updates the given document.
    * @param docID the id of the document to update.
-   * @param name the new name (optional).
+   * @param year the new name (optional).
+   * @param penAcc the new name (optional).
+   * @param retHlthInsur the new name (optional).
+   * @param othrPostEmpBen the new name (optional).
+   * @param empHlthFnd the new name (optional).
+   * @param SS the new name (optional).
+   * @param medicare the new name (optional).
+   * @param wrkComp the new name (optional).
+   * @param unempComp the new name (optional).
+   * @param penAdm the new name (optional).
    */
-  update(docID, { name }) {
+  update(docID, { year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm }) {
     const updateData = {};
-    if (name) {
-      updateData.name = name;
+    if (_.isNumber(year)) {
+      updateData.year = year;
     }
+    if (_.isNumber(penAcc)) {
+      updateData.penAcc = penAcc;
+    }
+    if (_.isNumber(retHlthInsur)) {
+      updateData.retHlthInsur = retHlthInsur;
+    }
+    if (_.isNumber(othrPostEmpBen)) {
+      updateData.othrPostEmpBen = othrPostEmpBen;
+    }
+    if (_.isNumber(empHlthFnd)) {
+      updateData.empHlthFnd = empHlthFnd;
+    }
+    if (_.isNumber(SS)) {
+      updateData.SS = SS;
+    }
+    if (_.isNumber(medicare)) {
+      updateData.medicare = medicare;
+    }
+    if (_.isNumber(wrkComp)) {
+      updateData.wrkComp = wrkComp;
+    }
+    if (_.isNumber(unempComp)) {
+      updateData.unempComp = unempComp;
+    }
+    if (_.isNumber(penAdm)) {
+      updateData.penAdm = penAdm;
+    }
+    this._collection.update(docID, { $set: updateData });
   }
 
   /**
@@ -67,13 +105,12 @@ class WP2503Collection extends BaseCollection {
    */
   publish() {
     if (Meteor.isServer) {
-      // get the StuffCollection instance.
+      // get the WP2503Collection instance.
       const instance = this;
       /** This subscription publishes only the documents associated with the logged in user */
       Meteor.publish(wp2503Publications.wp2503, function publish() {
         if (this.userId) {
-          const username = Meteor.users.findOne(this.userId).username;
-          return instance._collection.find({ owner: username });
+          return instance._collection.find();
         }
         return this.ready();
       });
@@ -122,12 +159,20 @@ class WP2503Collection extends BaseCollection {
   /**
    * Returns an object representing the definition of docID in a format appropriate to the restoreOne or define function.
    * @param docID
-   * @return {{owner: (*|number), condition: *, quantity: *, name}}
    */
   dumpOne(docID) {
     const doc = this.findDoc(docID);
-    const name = doc.name;
-    return { name };
+    const year = doc.year;
+    const penAcc = doc.penAcc;
+    const retHlthInsur = doc.retHlthInsur;
+    const othrPostEmpBen = doc.othrPostEmpBen;
+    const empHlthFnd = doc.empHlthFnd;
+    const SS = doc.SS;
+    const medicare = doc.medicare;
+    const wrkComp = doc.wrkComp;
+    const unempComp = doc.unempComp;
+    const penAdm = doc.penAdm;
+    return { year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm };
   }
 }
 

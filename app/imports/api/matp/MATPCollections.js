@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Stuffs } from '../stuff/StuffCollection';
 import { AuditedBalanceData } from '../audited-balance-data/AuditedBalanceDataCollection';
+import { WP2503 } from '../WP2503/WP2503';
 import { AdminProfiles } from '../user/AdminProfileCollection';
 import { UserProfiles } from '../user/UserProfileCollection';
 
@@ -17,6 +18,7 @@ class MATPClass {
       AdminProfiles,
       Stuffs,
       AuditedBalanceData,
+      WP2503,
       UserProfiles,
     ];
     /*
@@ -27,6 +29,7 @@ class MATPClass {
       UserProfiles,
       Stuffs,
       AuditedBalanceData,
+      WP2503,
     ];
 
     /*
