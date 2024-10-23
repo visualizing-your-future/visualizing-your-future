@@ -26,6 +26,14 @@
     { "owner":  "admin@foo.com", "year": 1 }
   ],
 
+  "defaultWP2503": [
+    { "year": 2, "penAcc": 15.00, "retHlthInsur":  7.96, "othrPostEmpBen": 0.00, "empHlthFnd": 7.02, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.22, "unempComp": 0.91, "penAdm": 0.00},
+    { "year": 3, "penAcc": 15.50, "retHlthInsur":  10.35, "othrPostEmpBen": 0.00, "empHlthFnd": 6.84, "SS": 6.20, "medicare": 1.45, "wrkComp": 0.88, "unempComp": 0.31, "penAdm": 0.01},
+    { "year": 4, "penAcc": 16.00, "retHlthInsur":  10.12, "othrPostEmpBen": 0.00, "empHlthFnd": 6.81, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.16, "unempComp": 0.25, "penAdm": 0.00},
+    { "year": 5, "penAcc": 16.50, "retHlthInsur":  10.12, "othrPostEmpBen": 0.00, "empHlthFnd": 6.81, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.16, "unempComp": 0.25, "penAdm": 0.00},
+    { "year": 6, "penAcc": 16.50, "retHlthInsur":  10.12, "othrPostEmpBen": 0.00, "empHlthFnd": 6.81, "SS": 6.20, "medicare": 1.45, "wrkComp": 1.16, "unempComp": 0.15, "penAdm": 0.00}
+  ],
+
   "public": {
     "development": true
   }
