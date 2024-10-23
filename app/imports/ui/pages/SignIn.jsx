@@ -7,61 +7,62 @@ import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import { AutoForm, ErrorsField, SubmitField, TextField } from 'uniforms-bootstrap5';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
-import { UserProfiles } from '../../api/user/UserProfileCollection';
 
+/**
+ * Signin page overrides the form’s submit event and calls Meteor’s loginWithPassword().
+ * Authentication errors modify the component’s state to be displayed.
+ */
 const SignIn = () => {
-  const [error, setError] = useState('');
-  const [redirect, setRedirect] = useState(false);
-  const [showSecurityQuestion, setShowSecurityQuestion] = useState(false);
-  const [securityQuestion, setSecurityQuestion] = useState('');
-  const [securityAnswer, setSecurityAnswer] = useState('');
-  const [enteredAnswer, setEnteredAnswer] = useState('');
-  const [answerError, setAnswerError] = useState('');
+  const [error, setError] = useState(''); // For storing login error messages
+  const [redirect, setRedirect] = useState(false); // For redirecting after successful passcode
+  const [showPasscode, setShowPasscode] = useState(false); // To show/hide passcode input
+  const [passcode, setPasscode] = useState(''); // To store the entered passcode
+  const [passcodeError, setPasscodeError] = useState(''); // Handle incorrect passcode
+  const [isMFAEnabled, setIsMFAEnabled] = useState(false); // MFA status
 
+  // Set up the schema for the email and password fields
   const schema = new SimpleSchema({
     email: String,
     password: String,
   });
   const bridge = new SimpleSchema2Bridge(schema);
 
+  // Fetch MFA status when the component mounts
   useEffect(() => {
     // Assume the MFA status is stored in localStorage (could also be fetched from a database)
     const storedMFA = localStorage.getItem('isMFAEnabled') === 'true';
-    if (storedMFA) {
-      const user = Meteor.user();
-      if (user) {
-        const userProfile = UserProfiles.findOne({ email: user.username });
-        setSecurityQuestion(userProfile?.securityQuestion);
-        setSecurityAnswer(userProfile?.securityAnswer);
-      }
-    }
+    setIsMFAEnabled(storedMFA);
   }, []);
 
+  // Handle initial signin submission using Meteor's account mechanism.
   const submit = (doc) => {
     const { email, password } = doc;
     Meteor.loginWithPassword(email, password, (err) => {
       if (err) {
         setError(err.reason);
       } else {
-        const userProfile = UserProfiles.findOne({ email });
-        setSecurityQuestion(userProfile?.securityQuestion);
-        setSecurityAnswer(userProfile?.securityAnswer);
-        setShowSecurityQuestion(true);
-        setError('');
+        if (isMFAEnabled) {
+          setShowPasscode(true); // Show the passcode field if MFA is enabled
+        } else {
+          setRedirect(true); // No MFA, redirect to landing page directly
+        }
+        setError(''); // Clear any previous errors
       }
     });
   };
 
-  const handleSecurityQuestionSubmit = () => {
-    if (enteredAnswer.toLowerCase() === securityAnswer.toLowerCase()) {
-      setRedirect(true);
+  // Handle passcode submission
+  const handlePasscodeSubmit = () => {
+    if (passcode === '123') {
+      setRedirect(true); // Correct passcode, redirect to landing page
     } else {
-      setAnswerError('Incorrect answer. Please try again.');
+      setPasscodeError('Incorrect passcode. Please try again.');
     }
   };
 
+  // if correct authentication and passcode, redirect to the landing page
   if (redirect) {
-    return <Navigate to="/" />;
+    return (<Navigate to="/" />); // Redirecting to home page on successful passcode or login
   }
 
   return (
@@ -73,7 +74,8 @@ const SignIn = () => {
             <h4>Please login to your account</h4>
           </Col>
 
-          {!showSecurityQuestion ? (
+          {!showPasscode ? (
+            // Render the initial login form
             <AutoForm schema={bridge} onSubmit={data => submit(data)}>
               <Card>
                 <Card.Body>
@@ -85,22 +87,22 @@ const SignIn = () => {
               </Card>
             </AutoForm>
           ) : (
+            // Render the passcode input form
             <Card>
               <Card.Body>
-                <h4>Security Question</h4>
-                <TextField id={COMPONENT_IDS.ACCOUNT_SETTINGS_SECURITY_QUESTION} name="security-answer" placeholder="Security" />
+                <h4>Enter Passcode</h4>
                 <input
                   type="text"
-                  id="security-answer"
-                  name="security-answer"
-                  placeholder="Enter your answer"
-                  value={enteredAnswer}
-                  onChange={(e) => setEnteredAnswer(e.target.value)}
+                  id="passcode"
+                  name="passcode"
+                  placeholder="Enter passcode"
+                  value={passcode}
+                  onChange={(e) => setPasscode(e.target.value)}
                   className="form-control"
                 />
-                {answerError && <Alert variant="danger">{answerError}</Alert>}
-                <button type="button" className="btn btn-primary mt-2" onClick={handleSecurityQuestionSubmit}>
-                  Submit Answer
+                {passcodeError && <Alert variant="danger">{passcodeError}</Alert>}
+                <button type="button" className="btn btn-primary" onClick={handlePasscodeSubmit}>
+                  Submit Again
                 </button>
               </Card.Body>
             </Card>

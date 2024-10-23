@@ -14,18 +14,29 @@ const SecurityQuestions = ({ securityQuestion, setSecurityQuestion, securityAnsw
     'What was the first exam you failed?',
   ];
 
-  const handleQuestionChange = (e) => setSecurityQuestion(e.target.value);
-  const handleAnswerChange = (e) => setSecurityAnswer(e.target.value);
+  const handleQuestionChange = (e) => {
+    setSecurityQuestion(e.target.value);
+  };
+
+  const handleAnswerChange = (e) => {
+    setSecurityAnswer(e.target.value);
+  };
 
   return (
     <div className="mt-3">
       <h4>Set Your Security Question</h4>
       <Form.Group controlId="securityQuestion">
         <Form.Label>Select a security question</Form.Label>
-        <Form.Control as="select" value={securityQuestion} onChange={handleQuestionChange}>
+        <Form.Control
+          as="select"
+          value={securityQuestion || ''} // Ensure value is a string and not undefined/null
+          onChange={handleQuestionChange}
+        >
           <option value="">Select a question...</option>
           {questions.map((q, index) => (
-            <option key={index} value={q}>{q}</option>
+            <option key={index} value={q}>
+              {q}
+            </option>
           ))}
         </Form.Control>
       </Form.Group>
@@ -35,7 +46,7 @@ const SecurityQuestions = ({ securityQuestion, setSecurityQuestion, securityAnsw
         <Form.Control
           type="text"
           placeholder="Enter your answer"
-          value={securityAnswer}
+          value={securityAnswer || ''} // Ensure value is a string and not undefined/null
           onChange={handleAnswerChange}
         />
       </Form.Group>
