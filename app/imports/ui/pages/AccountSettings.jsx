@@ -4,7 +4,7 @@ import { Card, Col, Container, Row, Alert, Button } from 'react-bootstrap';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import { AutoForm, ErrorsField, SubmitField, TextField } from 'uniforms-bootstrap5';
+import { AutoForm, ErrorsField, TextField } from 'uniforms-bootstrap5';
 import { useTracker } from 'meteor/react-meteor-data';
 import swal from 'sweetalert';
 import { Roles } from 'meteor/alanning:roles';
@@ -144,10 +144,10 @@ const AccountSettings = () => {
   }
 
   return (
-    <Container id={PAGE_IDS.ACCOUNT_SETTINGS} className="py-3">
+    <Container id={PAGE_IDS.ACCOUNT_SETTINGS} className="d-flex justify-content-center align-items-center py-3">
       <Row className="justify-content-center">
-        <Col xs={5}>
-          <Col className="text-center">
+        <Col>
+          <Col className="text-center mb-3">
             <h2>Edit User Account Information</h2>
           </Col>
           {saveSuccess && (
@@ -188,22 +188,37 @@ const AccountSettings = () => {
                   />
                 )}
                 <ErrorsField />
-                <SubmitField id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES} value="Save Changes" />
-                <Button
-                  id={COMPONENT_IDS.DELETE_USER_ACCOUNT}
-                  onClick={() => {
-                    removeItMethod.callPromise({ collectionName: collectionName, instance: documentID });
-                    navigate('/');
-                  }}
-                >
-                  Delete Account
-                </Button>
+                <Row className="align-items-center mt-3">
+                  <Col>
+                    <Button
+                      id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES}
+                      className="saveButton"
+                      style={{ width: '100%' }}
+                    >
+                      Save Changes
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button
+                      id={COMPONENT_IDS.DELETE_USER_ACCOUNT}
+                      onClick={() => {
+                        removeItMethod.callPromise({ collectionName: collectionName, instance: documentID });
+                        navigate('/');
+                      }}
+                      className="saveButton"
+                      style={{ width: '100%' }}
+                    >
+                      Delete Account
+                    </Button>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </AutoForm>
         </Col>
       </Row>
     </Container>
+
   );
 };
 
