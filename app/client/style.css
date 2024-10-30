@@ -207,10 +207,14 @@ body {
   background-color: #e64b37 !important;
   color: white !important;
   padding: 10px !important;
-  border-radius: 0px !important;
+  border-radius: 5px;
 
 }
-
+/* Hover state */
+.saveButton:hover {
+  background-color: #C9302C !important;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
+}
 
 /* Footer.js */
 .footer {
