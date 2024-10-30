@@ -203,7 +203,7 @@ body {
 }
 
 /* General Buttons */
-.saveButton {
+.classic-button {
   background-color: #e64b37 !important;
   color: white !important;
   padding: 10px !important;
@@ -211,7 +211,7 @@ body {
 
 }
 /* Hover state */
-.saveButton:hover {
+.classic-button:hover {
   background-color: #C9302C !important;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
 }

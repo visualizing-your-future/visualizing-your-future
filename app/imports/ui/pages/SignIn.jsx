@@ -79,7 +79,7 @@ const SignIn = () => {
             <AutoForm schema={bridge} onSubmit={data => submit(data)}>
               <Card>
                 <Card.Body>
-                  <TextField id={COMPONENT_IDS.SIGN_IN_FORM_EMAIL} name="email" placeholder="E-mail Address" />
+                  <TextField id={COMPONENT_IDS.SIGN_IN_FORM_EMAIL} name="email" placeholder="E-mail Address or Username" />
                   <TextField id={COMPONENT_IDS.SIGN_IN_FORM_PASSWORD} name="password" placeholder="Password" type="password" />
                   <ErrorsField />
                   <SubmitField id={COMPONENT_IDS.SIGN_IN_FORM_SUBMIT} />

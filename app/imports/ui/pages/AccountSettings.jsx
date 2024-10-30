@@ -161,6 +161,21 @@ const AccountSettings = () => {
     localStorage.setItem('isMFAEnabled', isMFAEnabled); // Persist MFA status in localStorage
   };
 
+  // Modify the `submit` function to accept form data from the button click
+  const handleSaveChanges = () => {
+    const formData = {
+      firstName: userDocument.firstName || '',
+      lastName: userDocument.lastName || '',
+      email: userDocument.email || '',
+      oldPassword: '',
+      newPassword: '',
+      verifyNewPassword: '',
+      isMFAEnabled: mfaStatus,
+    };
+
+    submit(formData); // Call the submit function with form data
+  };
+
   // If subscription data is not ready, show a loading spinner
   if (!subReady) {
     return <LoadingSpinner />;
@@ -215,7 +230,8 @@ const AccountSettings = () => {
                   <Col>
                     <Button
                       id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES}
-                      className="saveButton"
+                      className="classic-button"
+                      onClick={handleSaveChanges} // Call handleSaveChanges on click
                       style={{ width: '100%' }}
                     >
                       Save Changes
@@ -228,7 +244,7 @@ const AccountSettings = () => {
                         removeItMethod.callPromise({ collectionName: collectionName, instance: documentID });
                         navigate('/');
                       }}
-                      className="saveButton"
+                      className="classic-button"
                       style={{ width: '100%' }}
                     >
                       Delete Account
