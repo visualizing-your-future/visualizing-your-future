@@ -42,7 +42,7 @@ const App = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signout" element={<SignOut />} />
-          <Route path="/userAccountSettings" element={<AccountSettings />} />
+          <Route path="/userAccountSettings" element={<ProtectedRoute><AccountSettings /></ProtectedRoute>} />
           <Route path="/landing" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
           <Route path="/dataInput" element={<AllAccountantProtectedRoute ready={ready}><DataInput /></AllAccountantProtectedRoute>} />
           <Route path="/clientDataImport" element={<BossAccountantProtectedRoute ready={ready}><ClientDataImport /></BossAccountantProtectedRoute>} />

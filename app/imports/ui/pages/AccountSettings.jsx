@@ -10,10 +10,13 @@ import swal from 'sweetalert';
 import { Roles } from 'meteor/alanning:roles';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
+import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
+import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
+import { BossAccountantProfiles } from '../../api/user/BossAccountantProfileCollection';
+import { ClientProfiles } from '../../api/user/ClientProfileCollection';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
-import { AdminProfiles } from '../../api/user/AdminProfileCollection';
 import { ROLE } from '../../api/role/Role';
 import MultiFactorAuthentication from '../components/MultiFactorAuthentication';
 import SecurityQuestions from '../components/SecurityQuestions'; // Import the MFA component
@@ -47,25 +50,45 @@ const AccountSettings = () => {
    * - Subscribes to the appropriate profile collection (AdminProfiles or UserProfiles).
    */
   const { userID, subReady, collectionName, userDocument, documentID } = useTracker(() => {
-    let sub; let subRdy; let colName; let userDoc; let
+    let sub;
+    let subRdy;
+    let colName;
+    let userDoc;
+    let
       docID;
     const usrId = Meteor.userId();
     const username = Meteor.user()?.username;
 
     if (Roles.userIsInRole(usrId, ROLE.ADMIN)) {
-      // Subscription for admin users
       sub = AdminProfiles.subscribeAdmin();
       subRdy = sub.ready();
       colName = AdminProfiles.getCollectionName();
       userDoc = AdminProfiles.findOne({ email: username });
       docID = AdminProfiles.getID(Meteor.user().username);
     } else if (Roles.userIsInRole(usrId, ROLE.USER)) {
-      // Subscription for regular users
       sub = UserProfiles.subscribeUserProfilesUser();
       subRdy = sub.ready();
       colName = UserProfiles.getCollectionName();
       userDoc = UserProfiles.findOne({ email: username });
       docID = UserProfiles.getID(Meteor.user().username);
+    } else if (Roles.userIsInRole(usrId, ROLE.ACCOUNTANT)) {
+      sub = AccountantProfiles.subscribeAccountantProfilesUser();
+      subRdy = sub.ready();
+      colName = AccountantProfiles.getCollectionName();
+      userDoc = AccountantProfiles.findOne({ email: username });
+      docID = AccountantProfiles.getID(Meteor.user().username);
+    } else if (Roles.userIsInRole(usrId, ROLE.BOSSACCOUNTANT)) {
+      sub = BossAccountantProfiles.subscribeBossAccountantProfilesUser();
+      subRdy = sub.ready();
+      colName = BossAccountantProfiles.getCollectionName();
+      userDoc = BossAccountantProfiles.findOne({ email: username });
+      docID = BossAccountantProfiles.getID(Meteor.user().username);
+    } else if (Roles.userIsInRole(usrId, ROLE.CLIENT)) {
+      sub = ClientProfiles.subscribeClientProfilesUser();
+      subRdy = sub.ready();
+      colName = ClientProfiles.getCollectionName();
+      userDoc = ClientProfiles.findOne({ email: username });
+      docID = ClientProfiles.getID(Meteor.user().username);
     } else {
       // If not authorized, navigate to 'notauthorized' page
       navigate('/notauthorized');
