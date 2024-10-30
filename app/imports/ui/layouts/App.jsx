@@ -6,11 +6,9 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
-import ListStuff from '../pages/ListStuff';
 import DataInput from '../pages/DataInput';
 import Admin from '../pages/Admin';
 import ListProfiles from '../pages/ListProfiles';
-import AddStuff from '../pages/AddStuff';
 import NotFound from '../pages/NotFound';
 import SignUp from '../pages/SignUp';
 import SignOut from '../pages/SignOut';
@@ -45,15 +43,13 @@ const App = () => {
           <Route path="/signout" element={<SignOut />} />
           <Route path="/userAccountSettings" element={<AccountSettings />} />
           <Route path="/landing" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
-          <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
-          <Route path="/dataInput" element={<ProtectedRoute><DataInput /></ProtectedRoute>} />
-          <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
-          <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
-          <Route path="/edit/:_id" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
-          <Route path="/visualizationExport" element={<ProtectedRoute><VisualizationExport /></ProtectedRoute>} />
+          <Route path="/dataInput" element={<AllAccountantProtectedRoute ready={ready}><DataInput /></AllAccountantProtectedRoute>} />
+          <Route path="/clientDataImport" element={<BossAccountantProtectedRoute ready={ready}><ClientDataImport /></BossAccountantProtectedRoute>} />
+          <Route path="/edit/:_id" element={<AdminProtectedRoute ready={ready}><EditProfile /></AdminProtectedRoute>} />
+          <Route path="/visualizationExport" element={<AllAccountantProtectedRoute ready={ready}><VisualizationExport /></AllAccountantProtectedRoute>} />
           <Route path="/admin" element={<AdminProtectedRoute ready={ready}><Admin /></AdminProtectedRoute>} />
           <Route path="/profiles" element={<AdminProtectedRoute ready={ready}><ListProfiles /></AdminProtectedRoute>} />
-          <Route path="/manage-database" element={<AdminProtectedRoute ready={ready}><ManageDatabase /></AdminProtectedRoute>} />
+          <Route path="/manage-database" element={<BossAccountantProtectedRoute ready={ready}><ManageDatabase /></BossAccountantProtectedRoute>} />
           <Route path="/clients" element={<AdminProtectedRoute ready={ready}><ClientData /></AdminProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
@@ -72,7 +68,6 @@ const App = () => {
 
 const ProtectedRoute = ({ children }) => {
   const isLogged = Meteor.userId() !== null;
-  console.log('ProtectedRoute', isLogged);
   return isLogged ? children : <Navigate to="/signin" />;
 };
 
@@ -90,8 +85,75 @@ const AdminProtectedRoute = ({ ready, children }) => {
     return <LoadingSpinner />;
   }
   const isAdmin = Roles.userIsInRole(Meteor.userId(), [ROLE.ADMIN]);
-  console.log('AdminProtectedRoute', isLogged, isAdmin);
   return (isLogged && isAdmin) ? children : <Navigate to="/notauthorized" />;
+};
+
+/**
+ * AccountantProtectedRoute (see React Router v6 sample)
+ * Checks for Meteor login and admin role before routing to the requested page, otherwise goes to signin page.
+ * @param {any} { component: Component, ...rest }
+ */
+const AccountantProtectedRoute = ({ ready, children }) => {
+  const isLogged = Meteor.userId() !== null;
+  if (!isLogged) {
+    return <Navigate to="/signin" />;
+  }
+  if (!ready) {
+    return <LoadingSpinner />;
+  }
+  const isAccountant = Roles.userIsInRole(Meteor.userId(), [ROLE.ACCOUNTANT]);
+  return (isLogged && isAccountant) ? children : <Navigate to="/notauthorized" />;
+};
+
+/**
+ * BossAccountantProtectedRoute (see React Router v6 sample)
+ * Checks for Meteor login and admin role before routing to the requested page, otherwise goes to signin page.
+ * @param {any} { component: Component, ...rest }
+ */
+const BossAccountantProtectedRoute = ({ ready, children }) => {
+  const isLogged = Meteor.userId() !== null;
+  if (!isLogged) {
+    return <Navigate to="/signin" />;
+  }
+  if (!ready) {
+    return <LoadingSpinner />;
+  }
+  const isBossAccountant = Roles.userIsInRole(Meteor.userId(), [ROLE.BOSSACCOUNTANT]);
+  return (isLogged && isBossAccountant) ? children : <Navigate to="/notauthorized" />;
+};
+
+/**
+ * AllAccountantProtectedRoute (see React Router v6 sample)
+ * Checks for Meteor login and admin role before routing to the requested page, otherwise goes to signin page.
+ * @param {any} { component: Component, ...rest }
+ */
+const AllAccountantProtectedRoute = ({ ready, children }) => {
+  const isLogged = Meteor.userId() !== null;
+  if (!isLogged) {
+    return <Navigate to="/signin" />;
+  }
+  if (!ready) {
+    return <LoadingSpinner />;
+  }
+  const isAllAccountant = Roles.userIsInRole(Meteor.userId(), [ROLE.BOSSACCOUNTANT, ROLE.ACCOUNTANT]);
+  return (isLogged && isAllAccountant) ? children : <Navigate to="/notauthorized" />;
+};
+
+/**
+ * ClientProtectedRoute (see React Router v6 sample)
+ * Checks for Meteor login and admin role before routing to the requested page, otherwise goes to signin page.
+ * @param {any} { component: Component, ...rest }
+ */
+const ClientProtectedRoute = ({ ready, children }) => {
+  const isLogged = Meteor.userId() !== null;
+  if (!isLogged) {
+    return <Navigate to="/signin" />;
+  }
+  if (!ready) {
+    return <LoadingSpinner />;
+  }
+  const isClient = Roles.userIsInRole(Meteor.userId(), [ROLE.CLIENT]);
+  return (isLogged && isClient) ? children : <Navigate to="/notauthorized" />;
 };
 
 // Require a component and location to be passed to each ProtectedRoute.
@@ -110,6 +172,50 @@ AdminProtectedRoute.propTypes = {
 };
 
 AdminProtectedRoute.defaultProps = {
+  ready: false,
+  children: <Landing />,
+};
+
+// Require a component and location to be passed to each AccountantProtectedRoute.
+AccountantProtectedRoute.propTypes = {
+  ready: PropTypes.bool,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+};
+
+AccountantProtectedRoute.defaultProps = {
+  ready: false,
+  children: <Landing />,
+};
+
+// Require a component and location to be passed to each BossAccountantProtectedRoute.
+BossAccountantProtectedRoute.propTypes = {
+  ready: PropTypes.bool,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+};
+
+BossAccountantProtectedRoute.defaultProps = {
+  ready: false,
+  children: <Landing />,
+};
+
+// Require a component and location to be passed to each AllAccountantProtectedRoute.
+AllAccountantProtectedRoute.propTypes = {
+  ready: PropTypes.bool,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+};
+
+AllAccountantProtectedRoute.defaultProps = {
+  ready: false,
+  children: <Landing />,
+};
+
+// Require a component and location to be passed to each ClientProtectedRoute.
+ClientProtectedRoute.propTypes = {
+  ready: PropTypes.bool,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+};
+
+ClientProtectedRoute.defaultProps = {
   ready: false,
   children: <Landing />,
 };

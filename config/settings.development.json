@@ -1,29 +1,27 @@
 {
   "defaultAccounts": [
-    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN", "firstName": "Admin", "lastName": "MATRP"
+    { "email": "user", "password": "changeme", "role": "USER", "firstName": "Lisa", "lastName": "Smith"
     },
-    { "email": "admin", "password": "changeme", "role": "ADMIN", "firstName": "Admin2", "lastName": "nopassword"
+    { "email": "admin", "password": "changeme", "role": "ADMIN", "firstName": "Admin", "lastName": "MATRP"
     },
-    { "email": "john@foo.com", "password": "changeme", "role": "ACCOUNTANT" , "firstName": "John", "lastName": "Doe"
+    { "email": "accountant", "password": "changeme", "role": "ACCOUNTANT" , "firstName": "John", "lastName": "Doe"
     },
-    { "email": "sarah@foo.com", "password": "changeme", "role": "CLIENT", "firstName": "Sarah", "lastName": "Green"
+    { "email": "boss", "password": "changeme", "role": "BOSSACCOUNTANT", "firstName": "Mike", "lastName": "Brown"
     },
-    { "email": "mike@foo.com", "password": "changeme", "role": "BOSSACCOUNTANT", "firstName": "Mike", "lastName": "Brown"
-    },
-    { "email": "lisa@foo.com", "password": "changeme", "role": "USER", "firstName": "Lisa", "lastName": "Smith"
+    { "email": "client", "password": "changeme", "role": "CLIENT", "firstName": "Sarah", "lastName": "Green"
     }
   ],
 
   "defaultAuditedBalanceData": [
-    { "owner":  "john@foo.com", "year": 1 },
-    { "owner":  "john@foo.com", "year": 2 },
-    { "owner":  "john@foo.com", "year": 3 },
-    { "owner":  "john@foo.com", "year": 4 },
-    { "owner":  "john@foo.com", "year": 5 },
-    { "owner":  "john@foo.com", "year": 6 },
-    { "owner":  "john@foo.com", "year": 7 },
-    { "owner":  "john@foo.com", "year": 8 },
-    { "owner":  "admin@foo.com", "year": 1 }
+    { "owner":  "accountant", "year": 1 },
+    { "owner":  "accountant", "year": 2 },
+    { "owner":  "accountant", "year": 3 },
+    { "owner":  "accountant", "year": 4 },
+    { "owner":  "accountant", "year": 5 },
+    { "owner":  "accountant", "year": 6 },
+    { "owner":  "accountant", "year": 7 },
+    { "owner":  "accountant", "year": 8 },
+    { "owner":  "accountant", "year": 1 }
   ],
 
   "defaultWP2503": [
