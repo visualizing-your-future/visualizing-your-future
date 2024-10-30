@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
 import ListStuff from '../pages/ListStuff';
 import DataInput from '../pages/DataInput';
+import WP2503Page from '../pages/WP2503Page';
 import Admin from '../pages/Admin';
 import ListProfiles from '../pages/ListProfiles';
 import AddStuff from '../pages/AddStuff';
@@ -47,6 +48,7 @@ const App = () => {
           <Route path="/landing" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
           <Route path="/list" element={<ProtectedRoute><ListStuff /></ProtectedRoute>} />
           <Route path="/dataInput" element={<ProtectedRoute><DataInput /></ProtectedRoute>} />
+          <Route path="/wp2503" element={<ProtectedRoute><WP2503Page /></ProtectedRoute>} />
           <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
           <Route path="/add" element={<ProtectedRoute><AddStuff /></ProtectedRoute>} />
           <Route path="/edit/:_id" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />

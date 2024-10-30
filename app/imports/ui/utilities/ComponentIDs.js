@@ -43,5 +43,11 @@ export const COMPONENT_IDS = {
   LANDING_USER: 'landing-user',
   LANDING_ADMIN: 'landing-admin',
   ACCOUNT_SETTINGS_MFA: 'mfa',
+  WP_1007: 'wp-1007',
+  WP_1008: 'wp-1008',
+  WP_2005_2: 'wp-2005-2',
+  WP_2503: 'wp-2503',
+  WP_4001: 'wp-4001',
+  WP_4002: 'wp-4002',
 
 };

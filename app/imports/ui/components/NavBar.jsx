@@ -4,7 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { NavLink } from 'react-router-dom';
 import { Roles } from 'meteor/alanning:roles';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { BoxArrowRight, CloudDownload, PersonFill, PersonPlusFill } from 'react-bootstrap-icons';
+import { BoxArrowRight, CloudDownload, PersonFill, PersonPlusFill, Table } from 'react-bootstrap-icons';
 import { ROLE } from '../../api/role/Role';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 
@@ -28,7 +28,15 @@ const NavBar = () => {
         <Navbar.Collapse id={COMPONENT_IDS.NAVBAR_COLLAPSE}>
           <Nav className="me-auto justify-content-start">
             {currentUser ? ([
-              <Nav.Link id={COMPONENT_IDS.NAVBAR_DATA_INPUT} as={NavLink} to="/dataInput" key="dataInput">Data Input (Temp)</Nav.Link>,
+              <Nav.Link id={COMPONENT_IDS.NAVBAR_DATA_INPUT} as={NavLink} to="/dataInput" key="dataInput">Audited Balance</Nav.Link>,
+              <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Workpapers">
+                <NavDropdown.Item id={COMPONENT_IDS.WP_1007} as={NavLink} to="/wp1007"><Table /> 1007</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.WP_1008} as={NavLink} to="/wp1008"><Table /> 1008</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.WP_2005_2} as={NavLink} to="/wp2005-2"><Table /> 2005-2</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.WP_2503} as={NavLink} to="/wp2503"><Table /> 2503</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.WP_4001} as={NavLink} to="/wp4001"><Table /> 4001</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.WP_4002} as={NavLink} to="/wp4002"><Table /> 4002</NavDropdown.Item>
+              </NavDropdown>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/clientDataImport" key="clients">Client Data</Nav.Link>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_VISUALIZATION_EXPORT} as={NavLink} to="/visualizationExport" key="visualizationExport">Visualization</Nav.Link>,
             ]) : ''}
