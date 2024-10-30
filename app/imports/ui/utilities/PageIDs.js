@@ -19,6 +19,12 @@ export const PAGE_IDS = {
   SIGN_OUT: 'sign-out',
   SIGN_UP: 'sign-up',
   DATA_INPUT: 'data-input',
+  WP_1007: 'wp-1007',
+  WP_1008: 'wp-1008',
+  WP_2005_2: 'wp-2005-2',
+  WP_2503: 'wp-2503',
+  WP_4001: 'wp-4001',
+  WP_4002: 'wp-4002',
   CLIENT_DATA: 'client-data',
   CLIENT_DATA_IMPORT: 'client-data-import', /* Goes from NAVBAR_CLIENT_DATA */
   VISUALIZATION_EXPORT: 'visualization-export',

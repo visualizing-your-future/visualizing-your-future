@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
 import DataInput from '../pages/DataInput';
+import WP2503Page from '../pages/WP2503Page';
 import Admin from '../pages/Admin';
 import ListProfiles from '../pages/ListProfiles';
 import NotFound from '../pages/NotFound';
@@ -41,12 +42,17 @@ const App = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signout" element={<SignOut />} />
-          <Route path="/userAccountSettings" element={<AccountSettings />} />
+          <Route path="/userAccountSettings" element={<ProtectedRoute><AccountSettings /></ProtectedRoute>} />
           <Route path="/landing" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
           <Route path="/dataInput" element={<AllAccountantProtectedRoute ready={ready}><DataInput /></AllAccountantProtectedRoute>} />
           <Route path="/clientDataImport" element={<BossAccountantProtectedRoute ready={ready}><ClientDataImport /></BossAccountantProtectedRoute>} />
           <Route path="/edit/:_id" element={<AdminProtectedRoute ready={ready}><EditProfile /></AdminProtectedRoute>} />
           <Route path="/visualizationExport" element={<AllAccountantProtectedRoute ready={ready}><VisualizationExport /></AllAccountantProtectedRoute>} />
+          <Route path="/dataInput" element={<ProtectedRoute><DataInput /></ProtectedRoute>} />
+          <Route path="/wp2503" element={<ProtectedRoute><WP2503Page /></ProtectedRoute>} />
+          <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
+          <Route path="/edit/:_id" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+          <Route path="/visualizationExport" element={<ProtectedRoute><VisualizationExport /></ProtectedRoute>} />
           <Route path="/admin" element={<AdminProtectedRoute ready={ready}><Admin /></AdminProtectedRoute>} />
           <Route path="/profiles" element={<AdminProtectedRoute ready={ready}><ListProfiles /></AdminProtectedRoute>} />
           <Route path="/manage-database" element={<BossAccountantProtectedRoute ready={ready}><ManageDatabase /></BossAccountantProtectedRoute>} />
