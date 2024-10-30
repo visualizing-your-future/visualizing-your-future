@@ -45,4 +45,10 @@ export const COMPONENT_IDS = {
   ACCOUNT_SETTINGS_MFA: 'mfa',
   ACCOUNT_SETTINGS_SECURITY_QUESTION: 'account-settings-security-question',
   ACCOUNT_SETTINGS_SECURITY_ANSWER: 'account-settings-security-answer',
+  WP_1007: 'wp-1007',
+  WP_1008: 'wp-1008',
+  WP_2005_2: 'wp-2005-2',
+  WP_2503: 'wp-2503',
+  WP_4001: 'wp-4001',
+  WP_4002: 'wp-4002',
 };
