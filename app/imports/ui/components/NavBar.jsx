@@ -4,7 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { NavLink } from 'react-router-dom';
 import { Roles } from 'meteor/alanning:roles';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { BoxArrowRight, CloudDownload, PersonFill, PersonPlusFill, Table } from 'react-bootstrap-icons';
+import { BoxArrowRight, CloudDownload, PersonFill, PersonPlusFill } from 'react-bootstrap-icons';
 import { ROLE } from '../../api/role/Role';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 
@@ -27,7 +27,14 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls={COMPONENT_IDS.NAVBAR_COLLAPSE} id="nav-toggle" />
         <Navbar.Collapse id={COMPONENT_IDS.NAVBAR_COLLAPSE}>
           <Nav className="me-auto justify-content-start">
-            {currentUser ? ([
+            {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.USER]) ? ([
+            ]) : ''}
+            {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.ADMIN]) ? ([
+              <Nav.Link id={COMPONENT_IDS.NAVBAR_ADMIN} as={NavLink} to="/admin" key="admin">Admin (WIP)</Nav.Link>,
+              <Nav.Link id={COMPONENT_IDS.NAVBAR_LIST_PROFILES_ADMIN} as={NavLink} to="/profiles" key="profiles">Edit User Accounts</Nav.Link>,
+              <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/clients" key="clients">Client Page (Does not work)</Nav.Link>,
+            ]) : ''}
+            {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.ACCOUNTANT, ROLE.BOSSACCOUNTANT]) ? ([
               <Nav.Link id={COMPONENT_IDS.NAVBAR_DATA_INPUT} as={NavLink} to="/dataInput" key="dataInput">Audited Balance</Nav.Link>,
               <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Workpapers">
                 <NavDropdown.Item id={COMPONENT_IDS.WP_1007} as={NavLink} to="/wp1007"><Table /> 1007</NavDropdown.Item>
@@ -37,16 +44,14 @@ const NavBar = () => {
                 <NavDropdown.Item id={COMPONENT_IDS.WP_4001} as={NavLink} to="/wp4001"><Table /> 4001</NavDropdown.Item>
                 <NavDropdown.Item id={COMPONENT_IDS.WP_4002} as={NavLink} to="/wp4002"><Table /> 4002</NavDropdown.Item>
               </NavDropdown>,
-              <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/clientDataImport" key="clients">Client Data</Nav.Link>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_VISUALIZATION_EXPORT} as={NavLink} to="/visualizationExport" key="visualizationExport">Visualization</Nav.Link>,
             ]) : ''}
-            {Roles.userIsInRole(Meteor.userId(), [ROLE.ADMIN]) ? (
-              [<Nav.Link id={COMPONENT_IDS.NAVBAR_ADMIN} as={NavLink} to="/admin" key="admin">Admin</Nav.Link>,
-                <Nav.Link id={COMPONENT_IDS.NAVBAR_LIST_PROFILES_ADMIN} as={NavLink} to="/profiles" key="profiles">All Profiles</Nav.Link>,
-                <NavDropdown id={COMPONENT_IDS.NAVBAR_MANAGE_DROPDOWN} title="Manage" key="manage-dropdown">
-                  <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_MANAGE_DROPDOWN_DATABASE} key="manage-database" as={NavLink} to="/manage-database"><CloudDownload /> Database</NavDropdown.Item>
-                </NavDropdown>]
-            ) : ''}
+            {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.BOSSACCOUNTANT]) ? ([
+              <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/clientDataImport" key="clients">Client Data</Nav.Link>,
+              <Nav.Link id={COMPONENT_IDS.NAVBAR_MANAGE_DROPDOWN_DATABASE} as={NavLink} to="/manage-database" key="manage-database"><CloudDownload /> Database</Nav.Link>,
+            ]) : ''}
+            {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.CLIENT]) ? ([
+            ]) : ''}
           </Nav>
           <Nav className="justify-content-end">
             {currentUser === '' ? (
