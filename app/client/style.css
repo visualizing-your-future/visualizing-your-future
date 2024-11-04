@@ -216,6 +216,8 @@ body {
   background-color: #e64b37;
   padding: 40px 0;
   font-family: 'Open Sans', sans-serif;
+  bottom: 0;
+
 }
 
 .footer h5 {
