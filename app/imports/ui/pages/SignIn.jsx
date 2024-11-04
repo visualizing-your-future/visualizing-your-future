@@ -101,13 +101,12 @@ const SignIn = () => {
                   className="form-control"
                 />
                 {passcodeError && <Alert variant="danger">{passcodeError}</Alert>}
-                <button type="button" className="btn btn-primary" onClick={handlePasscodeSubmit}>
+                <button type="button" className="btn btn-primary" id="classic-button" onClick={handlePasscodeSubmit}>
                   Submit Again
                 </button>
               </Card.Body>
             </Card>
           )}
-
           <Alert variant="secondary">
             <h6>Don&#39;t have an account? Click <Link to="/signup">here</Link> to create one!</h6>
           </Alert>

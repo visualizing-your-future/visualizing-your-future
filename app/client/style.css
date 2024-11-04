@@ -183,11 +183,6 @@ body {
   margin: 0 10px;
 }
 
-/* Hover state */
-#button-landing:hover {
-  background-color: #C9302C !important;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
-}
 
 #button-container {
   display: flex;
@@ -203,7 +198,7 @@ body {
 }
 
 /* General Buttons */
-.classic-button {
+.btn {
   background-color: #e64b37 !important;
   color: white !important;
   padding: 10px !important;
@@ -211,7 +206,7 @@ body {
 
 }
 /* Hover state */
-.classic-button:hover {
+.btn:hover {
   background-color: #C9302C !important;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
 }

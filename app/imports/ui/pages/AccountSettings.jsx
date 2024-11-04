@@ -230,7 +230,7 @@ const AccountSettings = () => {
                   <Col>
                     <Button
                       id={COMPONENT_IDS.SAVE_ACCOUNT_CHANGES}
-                      className="classic-button"
+                      className="btn"
                       onClick={handleSaveChanges} // Call handleSaveChanges on click
                       style={{ width: '100%' }}
                     >
@@ -244,7 +244,7 @@ const AccountSettings = () => {
                         removeItMethod.callPromise({ collectionName: collectionName, instance: documentID });
                         navigate('/');
                       }}
-                      className="classic-button"
+                      className="btn"
                       style={{ width: '100%' }}
                     >
                       Delete Account

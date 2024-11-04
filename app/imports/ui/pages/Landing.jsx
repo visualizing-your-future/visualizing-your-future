@@ -103,7 +103,7 @@ const Landing = () => {
     <Row className="d-flex justify-content-center mb-4 py-5">
       {buttonDetails.map((button, index) => (
         <Col key={index} xs={12} md={4} className="mb-2 d-flex justify-content-center">
-          <Button onClick={() => handleNavigation(button.path)} className="btn btn-secondary" id="button-landing">
+          <Button onClick={() => handleNavigation(button.path)} className="btn btn-secondary" id="btn">
             {button.text}
           </Button>
         </Col>
