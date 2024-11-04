@@ -202,13 +202,13 @@ body {
   background-color: #e64b37 !important;
   color: white !important;
   padding: 10px !important;
-  border-radius: 5px;
+  border-radius: 3px;
 
 }
 /* Hover state */
 .btn:hover {
   background-color: #C9302C !important;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Footer.js */
