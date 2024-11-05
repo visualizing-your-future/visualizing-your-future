@@ -213,44 +213,53 @@ body {
 
 /* Footer.js */
 .footer {
-  background-color: #e64b37;
-  padding: 40px 0;
+  background-color: #f4efe9;
+  padding: 100px 0;
   font-family: 'Open Sans', sans-serif;
-  bottom: 0;
-
+  color: #000000;
 }
 
 .footer h5 {
   font-size: 1.25rem;
   font-weight: 500;
-  color: #fff;
   margin-bottom: 20px;
-}
+  color: #000000;
 
-.footer ul {
-  padding-left: 0;
-  list-style-type: none;
 }
 
 .footer ul li {
+  padding-left: 0;
+  list-style-type: none;
+  color: #000000;
   margin-bottom: 10px;
   font-size: 1rem;
-  color: white;
 }
 
 .footer a {
-  color: white;
+  color: #000000;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .footer a:hover {
-  color: black;
+  color: #f50000;
+  font-weight: bold;
 }
+
+.social-icon {
+  color: #333; /* Default color */
+  transition: color 0.3s ease; /* Smooth transition */
+}
+
+.social-icon:hover {
+  color: #e64b37 !important; /* Desired hover color, using !important to override any conflicts */
+}
+
+
 
 .footer .list-inline-item a {
   font-size: 1.5rem;
-  color: #ddd;
+  color: #000000;
 }
 
 .footer .list-inline-item a:hover {
@@ -258,7 +267,6 @@ body {
 }
 
 .footer-logo {
-  width: 80px;
   height: auto;
   margin: 10px;
   transition: transform 0.3s ease;
@@ -268,18 +276,7 @@ body {
   transform: scale(1.1);
 }
 
-.text-center {
-  text-align: center;
-}
 
-.footer address {
-  font-style: normal;
-  color: white;
-}
-
-.footer hr {
-  border-color: rgba(255, 255, 255, 0.1);
-}
 
 .footer .py-3 {
   color: #fff;
