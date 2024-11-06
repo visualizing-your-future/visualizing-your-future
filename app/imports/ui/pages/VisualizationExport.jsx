@@ -448,8 +448,8 @@ const VisualizationExport = () => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="single"
-                        key="liquidity"
-                        color="#ff7300"
+                        key1="liquidity"
+                        color1="#ff7300"
                       />
                     </Col>
                     <Col md={6}>
@@ -458,8 +458,8 @@ const VisualizationExport = () => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="single"
-                        key="opex"
-                        color="#82ca9d"
+                        key1="opex"
+                        color1="#82ca9d"
                       />
                       <h6>Years of Solvency Based on Cash Flow</h6>
                       <ChartComponent
@@ -518,8 +518,8 @@ const VisualizationExport = () => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="single"
-                        key="liquidity"
-                        color="#ff7300"
+                        key1="liquidity"
+                        color1="#ff7300"
                       />
                     </Col>
                     <Col md={6}>
@@ -528,8 +528,8 @@ const VisualizationExport = () => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="single"
-                        key="opex"
-                        color="#82ca9d"
+                        key1="opex"
+                        color1="#82ca9d"
                       />
                       <h6>Years of Solvency Based on Cash Flow</h6>
                       <ChartComponent
@@ -588,8 +588,8 @@ const VisualizationExport = () => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="single"
-                        key="liquidity"
-                        color="#ff7300"
+                        key1="liquidity"
+                        color1="#ff7300"
                       />
                     </Col>
                     <Col md={6}>
@@ -598,8 +598,8 @@ const VisualizationExport = () => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="single"
-                        key="opex"
-                        color="#82ca9d"
+                        key1="opex"
+                        color1="#82ca9d"
                       />
                       <h6>Years of Solvency Based on Cash Flow</h6>
                       <ChartComponent
