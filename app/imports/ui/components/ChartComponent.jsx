@@ -14,7 +14,18 @@ const yAxisTickFormatter = (value) => `$${(value / 1_000_000).toFixed(1)} M`;
 
 const ChartComponent = ({ data, chartType, key1, key2, key3, color1, color2, color3 }) => {
   const renderChart = () => {
-    if (chartType === 'dual') {
+    if (chartType === 'single') {
+      return (
+        <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="year" />
+          <YAxis tickFormatter={yAxisTickFormatter} />
+          <Tooltip formatter={(value) => currencyFormatter(value)} />
+          <Legend />
+          <Line type="monotone" dataKey={key1} stroke={color1} activeDot={{ r: 8 }} />
+        </LineChart>
+      );
+    } if (chartType === 'dual') {
       return (
         <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -26,7 +37,7 @@ const ChartComponent = ({ data, chartType, key1, key2, key3, color1, color2, col
           <Line type="monotone" dataKey={key2} stroke={color2} activeDot={{ r: 8 }} />
         </LineChart>
       );
-    } else if (chartType === 'triple') {
+    } if (chartType === 'triple') {
       return (
         <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -39,18 +50,18 @@ const ChartComponent = ({ data, chartType, key1, key2, key3, color1, color2, col
           <Line type="monotone" dataKey={key3} stroke={color3} activeDot={{ r: 8 }} />
         </LineChart>
       );
-    } else {
-      return (
-        <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="year" />
-          <YAxis tickFormatter={yAxisTickFormatter} />
-          <Tooltip formatter={(value) => currencyFormatter(value)} />
-          <Legend />
-          <Line type="monotone" dataKey={key1} stroke={color1} activeDot={{ r: 8 }} />
-        </LineChart>
-      );
     }
+    return (
+      <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="year" />
+        <YAxis tickFormatter={yAxisTickFormatter} />
+        <Tooltip formatter={(value) => currencyFormatter(value)} />
+        <Legend />
+        <Line type="monotone" dataKey={key1} stroke={color1} activeDot={{ r: 8 }} />
+      </LineChart>
+    );
+
   };
 
   return (
