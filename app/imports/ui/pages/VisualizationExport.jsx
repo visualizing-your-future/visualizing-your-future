@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Col, Container, Row, Card, Table, Nav, Form, Button } from 'react-bootstrap';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import ChartComponent from '../components/ChartComponent';
 
 // Currency formatter
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -9,8 +9,6 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 }).format;
 
-const yAxisTickFormatter = (value) => `$${(value / 1_000_000).toFixed(1)} M`;
-// Snapshot data
 const snapshotData = [{
   year: 'YEAR 1',
   assets: 689525419,
@@ -205,103 +203,12 @@ const snapshotData = [{
   changeAE: 0,
 }];
 
-// Hard-coded data for different year projections
 const dataSets = {
   snapshot: snapshotData,
-  '4year': snapshotData.slice(0, 4), // Using first 4 years
-  '8year': snapshotData.slice(0, 8), // Using first 8 years
-  '12year': snapshotData, // All 12 years
+  '4year': snapshotData.slice(0, 4),
+  '8year': snapshotData.slice(0, 8),
+  '12year': snapshotData,
 };
-
-const renderSnapshotTable = (data) => (
-  <div className="table-container">
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>Year</th>
-          <th>Assets</th>
-          <th>Liabilities</th>
-          <th>Net Position</th>
-          <th>Cash on Hand</th>
-          <th>Debt</th>
-          <th>Opex</th>
-          <th>Liquidity</th>
-          <th>Perpetuity</th>
-          <th>Cash In Flow</th>
-          <th>Cash Out Flow</th>
-          <th>Net Cash Flow</th>
-          <th>Budget</th>
-          <th>Actual + Encumbrance</th>
-          <th>Change of Actual + Encumbrance</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((entry, index) => (
-          <tr key={index}>
-            <td>{entry.year}</td>
-            <td>{currencyFormatter(entry.assets)}</td>
-            <td>{currencyFormatter(entry.liabilities)}</td>
-            <td>{currencyFormatter(entry.netPosition)}</td>
-            <td>{currencyFormatter(entry.cashOnHand)}</td>
-            <td>{currencyFormatter(entry.debt)}</td>
-            <td>{currencyFormatter(entry.opex)}</td>
-            <td>{currencyFormatter(entry.liquidity)}</td>
-            <td>{currencyFormatter(entry.perpetuity)}</td>
-            <td>{currencyFormatter(entry.cashInFlow)}</td>
-            <td>{currencyFormatter(entry.cashOutFlow)}</td>
-            <td>{currencyFormatter(entry.netCashFlow)}</td>
-            <td>{currencyFormatter(entry.budget)}</td>
-            <td>{currencyFormatter(entry.actualAndEncumbrance)}</td>
-            <td>{currencyFormatter(entry.changeAE)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  </div>
-);
-// Function to render a dual line chart for comparison (3 options)
-const renderDualChart = (data, key1, key2, key3, color1, color2, color3) => (
-  <ResponsiveContainer width="100%" height={250}>
-    <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="year" />
-      <YAxis tickFormatter={yAxisTickFormatter} /> {/* Use the Y-axis tick formatter */}
-      <Tooltip formatter={(value) => currencyFormatter(value)} />
-      <Legend />
-      <Line type="monotone" dataKey={key1} stroke={color1} activeDot={{ r: 8 }} />
-      <Line type="monotone" dataKey={key2} stroke={color2} activeDot={{ r: 8 }} />
-      <Line type="monotone" dataKey={key3} stroke={color3} activeDot={{ r: 8 }} />
-    </LineChart>
-  </ResponsiveContainer>
-);
-// Function to render a dual line chart for comparison (2 options)
-const renderDoubleChart = (data, key1, key2, color1, color2) => (
-  <ResponsiveContainer width="100%" height={250}>
-    <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="year" />
-      <YAxis tickFormatter={yAxisTickFormatter} /> {/* Use the Y-axis tick formatter */}
-      <Tooltip formatter={(value) => currencyFormatter(value)} />
-      <Legend />
-      <Line type="monotone" dataKey={key1} stroke={color1} activeDot={{ r: 8 }} />
-      <Line type="monotone" dataKey={key2} stroke={color2} activeDot={{ r: 8 }} />
-    </LineChart>
-  </ResponsiveContainer>
-);
-// Function to render single line chart
-// eslint-disable-next-line no-unused-vars
-const renderSingleChart = (data, key, color) => (
-  <ResponsiveContainer width="100%" height={250}>
-    <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="year" />
-      <YAxis tickFormatter={(value) => currencyFormatter(value)} />
-      <Tooltip formatter={(value) => currencyFormatter(value)} />
-      <Legend />
-      <Line type="monotone" dataKey={key} stroke={color} activeDot={{ r: 8 }} />
-    </LineChart>
-  </ResponsiveContainer>
-);
 
 // Comparison Component
 // eslint-disable-next-line react/prop-types
@@ -390,14 +297,68 @@ const Comparison = ({ data }) => {
       </Form>
       {filteredData.length > 0 && (
         <div style={{ marginTop: '40px', height: '110%' }}> {/* Keep square aspect ratio */}
-          {renderDoubleChart(filteredData, selectedMetric1, selectedMetric2, '#8884d8', '#82ca9d', { width: 400, height: 400 })} {/* Pass width and height */}
+          <ChartComponent
+            data={filteredData}
+            chartType="dual"
+            key1={selectedMetric1}
+            key2={selectedMetric2}
+            color1="#8884d8"
+            color2="#82ca9d"
+            width={400}
+            height={400}
+          />
         </div>
       )}
     </Card.Body>
   );
 };
+const renderSnapshotTable = (data) => (
+  <div className="table-container">
+    <Table striped bordered hover>
+      <thead>
+      <tr>
+        <th>Year</th>
+        <th>Assets</th>
+        <th>Liabilities</th>
+        <th>Net Position</th>
+        <th>Cash on Hand</th>
+        <th>Debt</th>
+        <th>Opex</th>
+        <th>Liquidity</th>
+        <th>Perpetuity</th>
+        <th>Cash In Flow</th>
+        <th>Cash Out Flow</th>
+        <th>Net Cash Flow</th>
+        <th>Budget</th>
+        <th>Actual + Encumbrance</th>
+        <th>Change of Actual + Encumbrance</th>
+      </tr>
+      </thead>
+      <tbody>
+      {data.map((entry, index) => (
+        <tr key={index}>
+          <td>{entry.year}</td>
+          <td>{currencyFormatter(entry.assets)}</td>
+          <td>{currencyFormatter(entry.liabilities)}</td>
+          <td>{currencyFormatter(entry.netPosition)}</td>
+          <td>{currencyFormatter(entry.cashOnHand)}</td>
+          <td>{currencyFormatter(entry.debt)}</td>
+          <td>{currencyFormatter(entry.opex)}</td>
+          <td>{currencyFormatter(entry.liquidity)}</td>
+          <td>{currencyFormatter(entry.perpetuity)}</td>
+          <td>{currencyFormatter(entry.cashInFlow)}</td>
+          <td>{currencyFormatter(entry.cashOutFlow)}</td>
+          <td>{currencyFormatter(entry.netCashFlow)}</td>
+          <td>{currencyFormatter(entry.budget)}</td>
+          <td>{currencyFormatter(entry.actualAndEncumbrance)}</td>
+          <td>{currencyFormatter(entry.changeAE)}</td>
+        </tr>
+      ))}
+      </tbody>
+    </Table>
+  </div>
+);
 
-// Main VisualizationExport component
 const VisualizationExport = () => {
   const [activeKey, setActiveKey] = useState('snapshot');
   const [isDataVisible, setIsDataVisible] = useState({
@@ -458,20 +419,62 @@ const VisualizationExport = () => {
                                 <Col md={6}>
                                   <h4>Equity Metrics</h4>
                                   <h6>Net Position</h6>
-                                  {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', 'netPosition', 'green', 'red', 'blue')}
+                                  <ChartComponent
+                                    data={dataSets[activeKey]}
+                                    chartType="triple"
+                                    key1="assets"
+                                    key2="liabilities"
+                                    key3="netPosition"
+                                    color1="green"
+                                    color2="red"
+                                    color3="blue"
+                                  />
                                   <h6>Years of Solvency</h6>
-                                  {renderDualChart(dataSets[activeKey], 'liquidity', 'opex', 'perpetuity', '#8884d8', '#ffc658')}
+                                  <ChartComponent
+                                    data={dataSets[activeKey]}
+                                    chartType="dual"
+                                    key1="liquidity"
+                                    key2="opex"
+                                    color1="#8884d8"
+                                    color2="#ffc658"
+                                  />
                                   <h6>Demand for Capital</h6>
-                                  {renderSingleChart(dataSets[activeKey], 'liquidity', '#ff7300')}
+                                  <ChartComponent
+                                    data={dataSets[activeKey]}
+                                    chartType="single"
+                                    key="liquidity"
+                                    color="#ff7300"
+                                  />
                                 </Col>
                                 <Col md={6}>
                                   <h4>Cash Flow Metrics</h4>
                                   <h6>Financing</h6>
-                                  {renderDoubleChart(dataSets[activeKey], 'cashOnHand', 'debt', '#82ca9d', '#e64b37')}
+                                  <ChartComponent
+                                    data={dataSets[activeKey]}
+                                    chartType="single"
+                                    key="opex"
+                                    color="#82ca9d"
+                                  />
                                   <h6>Years of Solvency Based on Cash Flow</h6>
-                                  {renderDualChart(dataSets[activeKey], 'cashInFlow', 'cashOutFlow', 'netCashFlow', '#8884d8', '#ff7300', 'orange')}
+                                  <ChartComponent
+                                    data={dataSets[activeKey]}
+                                    chartType="dual"
+                                    key1="liquidity"
+                                    key2="debt"
+                                    color1="blue"
+                                    color2="red"
+                                  />
                                   <h6>Budget</h6>
-                                  {renderDualChart(dataSets[activeKey], 'budget', 'actualAndEncumbrance', 'changeAE', '#f17e5d', 'brown', 'pink')}
+                                  <ChartComponent
+                                    data={dataSets[activeKey]}
+                                    chartType="triple"
+                                    key1="budget"
+                                    key2="actualAndEncumbrance"
+                                    key3="changeAE"
+                                    color1="red"
+                                    color2="blue"
+                                    color3="green"
+                                  />
                                 </Col>
                               </Row>
                             </>
@@ -492,20 +495,62 @@ const VisualizationExport = () => {
                     <Col md={6}>
                       <h4>Equity Metrics</h4>
                       <h6>Net Position</h6>
-                      {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', 'netPosition', 'green', 'red', 'blue')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="triple"
+                        key1="assets"
+                        key2="liabilities"
+                        key3="netPosition"
+                        color1="green"
+                        color2="red"
+                        color3="blue"
+                      />
                       <h6>Years of Solvency</h6>
-                      {renderDualChart(dataSets[activeKey], 'liquidity', 'opex', 'perpetuity', '#8884d8', '#ffc658')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="dual"
+                        key1="liquidity"
+                        key2="opex"
+                        color1="#8884d8"
+                        color2="#ffc658"
+                      />
                       <h6>Demand for Capital</h6>
-                      {renderSingleChart(dataSets[activeKey], 'liquidity', '#ff7300')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="single"
+                        key="liquidity"
+                        color="#ff7300"
+                      />
                     </Col>
                     <Col md={6}>
                       <h4>Cash Flow Metrics</h4>
                       <h6>Financing</h6>
-                      {renderDoubleChart(dataSets[activeKey], 'cashOnHand', 'debt', '#82ca9d', '#e64b37')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="single"
+                        key="opex"
+                        color="#82ca9d"
+                      />
                       <h6>Years of Solvency Based on Cash Flow</h6>
-                      {renderDualChart(dataSets[activeKey], 'cashInFlow', 'cashOutFlow', 'netCashFlow', '#8884d8', '#ff7300', 'orange')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="dual"
+                        key1="liquidity"
+                        key2="debt"
+                        color1="blue"
+                        color2="red"
+                      />
                       <h6>Budget</h6>
-                      {renderDualChart(dataSets[activeKey], 'budget', 'actualAndEncumbrance', 'changeAE', '#f17e5d', 'brown', 'pink')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="triple"
+                        key1="budget"
+                        key2="actualAndEncumbrance"
+                        key3="changeAE"
+                        color1="red"
+                        color2="blue"
+                        color3="green"
+                      />
                     </Col>
                   </Row>
                 </>
@@ -520,20 +565,62 @@ const VisualizationExport = () => {
                     <Col md={6}>
                       <h4>Equity Metrics</h4>
                       <h6>Net Position</h6>
-                      {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', 'netPosition', 'green', 'red', 'blue')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="triple"
+                        key1="assets"
+                        key2="liabilities"
+                        key3="netPosition"
+                        color1="green"
+                        color2="red"
+                        color3="blue"
+                      />
                       <h6>Years of Solvency</h6>
-                      {renderDualChart(dataSets[activeKey], 'liquidity', 'opex', 'perpetuity', '#8884d8', '#ffc658')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="dual"
+                        key1="liquidity"
+                        key2="opex"
+                        color1="#8884d8"
+                        color2="#ffc658"
+                      />
                       <h6>Demand for Capital</h6>
-                      {renderSingleChart(dataSets[activeKey], 'liquidity', '#ff7300')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="single"
+                        key="liquidity"
+                        color="#ff7300"
+                      />
                     </Col>
                     <Col md={6}>
                       <h4>Cash Flow Metrics</h4>
                       <h6>Financing</h6>
-                      {renderDoubleChart(dataSets[activeKey], 'cashOnHand', 'debt', '#82ca9d', '#e64b37')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="single"
+                        key="opex"
+                        color="#82ca9d"
+                      />
                       <h6>Years of Solvency Based on Cash Flow</h6>
-                      {renderDualChart(dataSets[activeKey], 'cashInFlow', 'cashOutFlow', 'netCashFlow', '#8884d8', '#ff7300', 'orange')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="dual"
+                        key1="liquidity"
+                        key2="debt"
+                        color1="blue"
+                        color2="red"
+                      />
                       <h6>Budget</h6>
-                      {renderDualChart(dataSets[activeKey], 'budget', 'actualAndEncumbrance', 'changeAE', '#f17e5d', 'brown', 'pink')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="triple"
+                        key1="budget"
+                        key2="actualAndEncumbrance"
+                        key3="changeAE"
+                        color1="red"
+                        color2="blue"
+                        color3="green"
+                      />
                     </Col>
                   </Row>
                 </>
@@ -548,20 +635,62 @@ const VisualizationExport = () => {
                     <Col md={6}>
                       <h4>Equity Metrics</h4>
                       <h6>Net Position</h6>
-                      {renderDualChart(dataSets[activeKey], 'assets', 'liabilities', 'netPosition', 'green', 'red', 'blue')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="triple"
+                        key1="assets"
+                        key2="liabilities"
+                        key3="netPosition"
+                        color1="green"
+                        color2="red"
+                        color3="blue"
+                      />
                       <h6>Years of Solvency</h6>
-                      {renderDualChart(dataSets[activeKey], 'liquidity', 'opex', 'perpetuity', '#8884d8', '#ffc658')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="dual"
+                        key1="liquidity"
+                        key2="opex"
+                        color1="#8884d8"
+                        color2="#ffc658"
+                      />
                       <h6>Demand for Capital</h6>
-                      {renderSingleChart(dataSets[activeKey], 'liquidity', '#ff7300')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="single"
+                        key="liquidity"
+                        color="#ff7300"
+                      />
                     </Col>
                     <Col md={6}>
                       <h4>Cash Flow Metrics</h4>
                       <h6>Financing</h6>
-                      {renderDoubleChart(dataSets[activeKey], 'cashOnHand', 'debt', '#82ca9d', '#e64b37')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="single"
+                        key="opex"
+                        color="#82ca9d"
+                      />
                       <h6>Years of Solvency Based on Cash Flow</h6>
-                      {renderDualChart(dataSets[activeKey], 'cashInFlow', 'cashOutFlow', 'netCashFlow', '#8884d8', '#ff7300', 'orange')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="dual"
+                        key1="liquidity"
+                        key2="debt"
+                        color1="blue"
+                        color2="red"
+                      />
                       <h6>Budget</h6>
-                      {renderDualChart(dataSets[activeKey], 'budget', 'actualAndEncumbrance', 'changeAE', '#f17e5d', 'brown', 'pink')}
+                      <ChartComponent
+                        data={dataSets[activeKey]}
+                        chartType="triple"
+                        key1="budget"
+                        key2="actualAndEncumbrance"
+                        key3="changeAE"
+                        color1="red"
+                        color2="blue"
+                        color3="green"
+                      />
                     </Col>
                   </Row>
                 </>
