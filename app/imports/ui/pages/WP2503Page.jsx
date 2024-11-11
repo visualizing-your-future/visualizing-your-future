@@ -39,8 +39,6 @@ const WP2503Page = () => {
     return total.toFixed(2);
   };
 
-  const year1CompositeRate = year1Data ? calculateCompositeRate(year1Data) : '-';
-
   // Function to calculate year-to-year growth rates for each benefit type
   const calculateGrowthRates = (benefitKey) => {
     const rates = years.map(year => {
@@ -310,6 +308,209 @@ const WP2503Page = () => {
           </tbody>
         </Table>
       </Col>
+      <Row className="mt-5">
+        <Col>
+          <h3>Composite - Growth in All Categories</h3>
+          <Col className="mx-auto" md={2}>
+            <Table bordered responsive>
+              <tbody>
+                <tr>
+                  <td><strong>Multiplier - Composite</strong></td>
+                  <td>1.02</td>
+                </tr>
+              </tbody>
+            </Table>
+          </Col>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <th>Benefit Type</th>
+                {years.map((year) => (
+                  <th key={year}>Year {year}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {benefitTypes.map((benefit) => (
+                <tr key={benefit.key}>
+                  <td>{benefit.label}</td>
+                  {years.map((year) => {
+                    const yearData = wp2503.find(entry => entry.year === year);
+                    return (
+                      <td key={`${benefit.key}-${year}`}>
+                        {yearData ? yearData[benefit.key] : '-'}%
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+              <tr>
+                <td><strong>Composite Rate</strong></td>
+                {years.map((year) => {
+                  const yearData = wp2503.find(entry => entry.year === year);
+                  const compositeRate = yearData ? calculateCompositeRate(yearData) : '-';
+                  return (
+                    <td key={`composite-${year}`}>
+                      <strong>{compositeRate}%</strong>
+                    </td>
+                  );
+                })}
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
+        <Col>
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                {projectedData.penAcc.map((_, index) => (
+                  <th key={`year1-${index + 1}`}>Year {index + 1}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {benefitTypes.map((benefit) => {
+                const values = [];
+                let currentValue = year1Data ? Number(year1Data[benefit.key]) : 0;
+
+                // Track column sums for each year
+                projectedData.penAcc.forEach((_, index) => {
+                  if (!projectedData[`sum-${index}`]) projectedData[`sum-${index}`] = 0;
+                });
+
+                // Generate values for each year by incrementing by 1.019353 and adding to column sum
+                for (let i = 0; i < projectedData.penAcc.length; i++) {
+                  values.push(`${currentValue.toFixed(2)}%`);
+                  projectedData[`sum-${i}`] += currentValue; // Add current value to column sum
+                  currentValue *= 1.019353; // Increment for the next year
+                }
+
+                return (
+                  <tr key={benefit.key}>
+                    {values.map((value, index) => (
+                      <td key={`${benefit.key}-year-${index + 1}`}>{value}</td>
+                    ))}
+                  </tr>
+                );
+              })}
+              <tr>
+                {projectedData.penAcc.map((_, index) => (
+                  <td key={`sum-${index}`}>
+                    <strong>{projectedData[`sum-${index}`].toFixed(2)}%</strong>
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
+      <Row className="mt-5">
+        <Col>
+          <h3>OPEB Only</h3>
+          <Col className="mx-auto" md={2}>
+            <Table bordered responsive>
+              <tbody>
+                <tr>
+                  <td><strong>Multiplier - OPEB only</strong></td>
+                  <td>1.07</td>
+                </tr>
+              </tbody>
+            </Table>
+          </Col>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                <th>Benefit Type</th>
+                {years.map((year) => (
+                  <th key={year}>Year {year}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {benefitTypes.map((benefit) => (
+                <tr key={benefit.key}>
+                  <td>{benefit.label}</td>
+                  {years.map((year) => {
+                    const yearData = wp2503.find(entry => entry.year === year);
+                    return (
+                      <td key={`${benefit.key}-${year}`}>
+                        {yearData ? yearData[benefit.key] : '-'}%
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+              <tr>
+                <td><strong>Composite Rate</strong></td>
+                {years.map((year) => {
+                  const yearData = wp2503.find(entry => entry.year === year);
+                  const compositeRate = yearData ? calculateCompositeRate(yearData) : '-';
+                  return (
+                    <td key={`composite-${year}`}>
+                      <strong>{compositeRate}%</strong>
+                    </td>
+                  );
+                })}
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
+        <Col>
+          <Table striped bordered hover responsive>
+            <thead>
+              <tr>
+                {projectedData.penAcc.map((_, index) => (
+                  <th key={`year-${index + 1}`}>Year {index + 1}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {benefitTypes.map((benefit) => {
+                const values = [];
+                let currentValue = year1Data ? Number(year1Data[benefit.key]) : 0;
+
+                // Create an array to store the column sums and initialize to 0 if not already done
+                if (!projectedData.columnSums) {
+                  projectedData.columnSums = Array(projectedData.penAcc.length).fill(0);
+                }
+
+                // Populate values for each year, increasing only for "Other Post Employment Benefits"
+                for (let i = 0; i < projectedData.penAcc.length; i++) {
+                  if (benefit.key === 'othrPostEmpBen' && i > 0) {
+                    currentValue *= 1.06577; // Increase by 7% for each year after the first
+                  }
+                  values.push(`${currentValue.toFixed(2)}%`);
+                  projectedData.columnSums[i] += currentValue; // Add to the column sum
+                }
+
+                return (
+                  <tr key={benefit.key}>
+                    {values.map((value, index) => (
+                      <td key={`${benefit.key}-year-${index + 1}`}>{value}</td>
+                    ))}
+                  </tr>
+                );
+              })}
+              <tr>
+                {projectedData.columnSums.map((sum, index) => (
+                  <td key={`sum-${index}`}>
+                    <strong>{sum.toFixed(2)}%</strong>
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
+
+      </Row>
     </Container>
   ) : <LoadingSpinner message="Loading Approved Fringe Benefit Rates" />);
 };
