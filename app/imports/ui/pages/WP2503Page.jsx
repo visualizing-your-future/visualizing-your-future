@@ -17,7 +17,8 @@ const WP2503Page = () => {
   }, []);
 
   // Extract unique years from wp2503 data for column headers
-  const years = wp2503.map(entry => entry.year);
+  const years = wp2503.map(entry => entry.year).slice(1);
+  const year1Data = wp2503.find(entry => entry.year === 1);
 
   // Define each benefit type row
   const benefitTypes = [
@@ -38,6 +39,8 @@ const WP2503Page = () => {
     return total.toFixed(2);
   };
 
+  const year1CompositeRate = year1Data ? calculateCompositeRate(year1Data) : '-';
+
   // Function to calculate year-to-year growth rates for each benefit type
   const calculateGrowthRates = (benefitKey) => {
     const rates = years.map(year => {
@@ -47,13 +50,13 @@ const WP2503Page = () => {
 
     const growthRates = rates.slice(1).map((rate, index) => {
       const previousRate = rates[index];
-      return previousRate ? (((rate - previousRate) / previousRate) * 100).toFixed(2) : '-';
+      return previousRate ? (((rate - previousRate) / previousRate) * 100) : '-';
     });
 
     // Calculate the 3-year average growth rate for the last 3 values
     const lastThreeGrowthRates = growthRates.slice(-3);
     const threeYearAverage = lastThreeGrowthRates.every(rate => rate !== '-')
-      ? (lastThreeGrowthRates.reduce((sum, rate) => sum + parseFloat(rate), 0) / 3).toFixed(2)
+      ? (lastThreeGrowthRates.reduce((sum, rate) => sum + parseFloat(rate), 0) / 3)
       : '-';
 
     return { growthRates, threeYearAverage };
@@ -64,18 +67,101 @@ const WP2503Page = () => {
     const year9 = wp2503.find(entry => entry.year === 9);
     if (year9) {
       const year9OthrPostEmpBen = year9.othrPostEmpBen || 0;
-      return ((17 - year9OthrPostEmpBen) / (2041 - 2018)).toFixed(2);
+      return ((17 - year9OthrPostEmpBen) / (2041 - 2018));
     }
     return '-';
   };
 
+  // Function to calculate the average rate for a given benefit type based on available years
+  const calculateAverage = (benefitKey) => {
+    const values = years.map(year => {
+      const yearData = wp2503.find(entry => entry.year === year);
+      return yearData ? parseFloat(yearData[benefitKey]) : 0;
+    });
+
+    const valuesToAverage = values.slice(0, 5);
+
+    return valuesToAverage.length > 0
+      ? (valuesToAverage.reduce((acc, val) => acc + val, 0) / valuesToAverage.length).toFixed(2)
+      : '-';
+  };
+
+  // Get the 3-year average growth rate for Pension Accumulation
+  const pensionAccumulationGrowth = parseFloat(calculateGrowthRates('penAcc').threeYearAverage) / 100;
+  const retireeHealthInsuranceGrowth = parseFloat(calculateGrowthRates('retHlthInsur').threeYearAverage) / 100;
+  const otherPostEmpBenefitGrowth = parseFloat(calculateOtherPostEmpAvg()) || 0;
+  const empHealthFundGrowth = parseFloat(calculateGrowthRates('empHlthFnd').threeYearAverage) / 100;
+  const averageSSRate = calculateAverage('SS');
+  const averageMedicareRate = calculateAverage('medicare');
+  const workersCompGrowth = parseFloat(calculateGrowthRates('wrkComp').threeYearAverage) / 100;
+  const unemploymentCompGrowth = parseFloat(calculateGrowthRates('unempComp').threeYearAverage) / 100;
+  const averagePenAdmRate = calculateAverage('penAdm');
+
+  const projectedData = {
+    penAcc: [[year1Data ? Number(year1Data.penAcc) : 0]],
+    retHlthInsur: [[year1Data ? Number(year1Data.retHlthInsur) : 0]],
+    othrPostEmpBen: [[year1Data ? Number(year1Data.othrPostEmpBen) : 0]],
+    empHlthFnd: [[year1Data ? Number(year1Data.empHlthFnd) : 0]],
+    wrkComp: [[year1Data ? Number(year1Data.wrkComp) : 0]],
+    unempComp: [[year1Data ? Number(year1Data.unempComp) : 0]],
+    SS: [[year1Data ? Number(year1Data.SS) : Number(averageSSRate)]],
+    medicare: [[year1Data ? Number(year1Data.medicare) : Number(averageMedicareRate)]],
+    penAdm: [[year1Data ? Number(year1Data.penAdm) : Number(averagePenAdmRate)]],
+  };
+
+  // Calculate values for subsequent years based on the provided formula
+  for (let year = 2; year <= 12; year++) {
+    const previousPenAccValue = Number(projectedData.penAcc[year - 2][0]);
+    const newPenAccValue = (1 + pensionAccumulationGrowth) * previousPenAccValue;
+    projectedData.penAcc.push([newPenAccValue]);
+
+    const previousRetHlthInsurValue = Number(projectedData.retHlthInsur[year - 2][0]);
+    const newRetHlthInsurValue = (1 + retireeHealthInsuranceGrowth) * previousRetHlthInsurValue;
+    projectedData.retHlthInsur.push([newRetHlthInsurValue]);
+
+    const previousOthrPostEmpBenValue = Number(projectedData.othrPostEmpBen[year - 2][0]);
+    const newOthrPostEmpBenValue = previousOthrPostEmpBenValue + otherPostEmpBenefitGrowth;
+    projectedData.othrPostEmpBen.push([newOthrPostEmpBenValue]);
+
+    const previousEmpHlthFndValue = Number(projectedData.empHlthFnd[year - 2][0]);
+    const newEmpHlthFndValue = (1 + empHealthFundGrowth) * previousEmpHlthFndValue;
+    projectedData.empHlthFnd.push([newEmpHlthFndValue]);
+
+    const previousWrkCompValue = Number(projectedData.wrkComp[year - 2][0]);
+    const newWrkCompValue = (1 + workersCompGrowth) * previousWrkCompValue;
+    projectedData.wrkComp.push([newWrkCompValue]);
+
+    const previousUnempCompValue = Number(projectedData.unempComp[year - 2][0]);
+    const newUnempCompValue = (1 + unemploymentCompGrowth) * previousUnempCompValue;
+    projectedData.unempComp.push([newUnempCompValue]);
+
+    // Keep SS, Medicare, and Pen Admin values constant across years
+    projectedData.SS.push([Number(averageSSRate)]);
+    projectedData.medicare.push([Number(averageMedicareRate)]);
+    projectedData.penAdm.push([Number(averagePenAdmRate)]);
+  }
+
+  // Function to calculate the composite rate for each column in the projected data
+  const calculateCompositeRow = () => projectedData.penAcc.map((_, index) => {
+    const columnSum = Object.keys(projectedData).reduce((sum, key) => {
+      const value = projectedData[key][index][0];
+      return sum + value;
+    }, 0);
+    return columnSum.toFixed(2);
+  });
+
+  // Get the composite row values
+  const compositeRow = calculateCompositeRow();
+
   return (ready ? (
-    <Container id={PAGE_IDS.WP_2503} className="py-3 mx-5">
+    <Container fluid id={PAGE_IDS.WP_2503} className="py-3">
       <Row className="justify-content-start">
         <Col>
-          <Col>
-            <h2>Approved Fringe Benefit Rates</h2>
-          </Col>
+          <h2>Approved Fringe Benefit Rates</h2>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
           <Table striped bordered hover responsive>
             <thead>
               <tr>
@@ -113,38 +199,117 @@ const WP2503Page = () => {
               </tr>
             </tbody>
           </Table>
-
+        </Col>
+        <Col>
           <Table striped bordered hover responsive>
             <thead>
               <tr>
-                <th>Growth of Rates from Y-t-Y</th>
-                {years.slice(1).map((year) => (
-                  <th key={year} aria-hidden="true" />
+                {projectedData.penAcc.map((_, index) => (
+                  <th key={`year1-${index + 1}`}>Year {index + 1}</th>
                 ))}
-                <th>3-Year Average</th>
               </tr>
             </thead>
             <tbody>
-              {benefitTypes.map((benefit) => {
-                const isSpecialCase = benefit.key === 'othrPostEmpBen' || benefit.key === 'penAdm';
-                const { growthRates, threeYearAverage } = isSpecialCase
-                  ? { growthRates: years.slice(1).map(() => ''), threeYearAverage: isSpecialCase && benefit.key === 'othrPostEmpBen' ? calculateOtherPostEmpAvg() : '' } // Change '-' to ''
-                  : calculateGrowthRates(benefit.key);
-
-                return (
-                  <tr key={`growth-${benefit.key}`}>
-                    <td>{benefit.label}</td>
-                    {growthRates.map((growthRate, index) => (
-                      <td key={`${benefit.key}-growth-${index}`}>{growthRate ? `${growthRate}%` : ''}</td>
-                    ))}
-                    <td><strong>{benefit.key === 'penAdm' ? '' : `${threeYearAverage}%`}</strong></td> {/* Conditionally render the 3-year average */}
-                  </tr>
-                );
-              })}
+              <tr>
+                {projectedData.penAcc.map((value, index) => (
+                  <td key={`penAcc-${index}`}>{value[0].toFixed(2)}%</td>
+                ))}
+              </tr>
+              <tr>
+                {projectedData.retHlthInsur.map((value, index) => (
+                  <td key={`retHlthInsur-${index}`}>{value[0].toFixed(2)}%</td>
+                ))}
+              </tr>
+              <tr>
+                {projectedData.othrPostEmpBen.map((value, index) => (
+                  <td key={`othrPostEmpBen-${index}`}>{value[0].toFixed(2)}%</td>
+                ))}
+              </tr>
+              <tr>
+                {projectedData.empHlthFnd.map((value, index) => (
+                  <td key={`empHlthFnd-${index}`}>{value[0].toFixed(2)}%</td>
+                ))}
+              </tr>
+              <tr>
+                {projectedData.SS.map((value, index) => (
+                  <td key={`SS-${index}`}>{value[0].toFixed(2)}%</td>
+                ))}
+              </tr>
+              <tr>
+                {projectedData.medicare.map((value, index) => (
+                  <td key={`medicare-${index}`}>{value[0].toFixed(2)}%</td>
+                ))}
+              </tr>
+              <tr>
+                {projectedData.wrkComp.map((value, index) => (
+                  <td key={`wrkComp-${index}`}>{value[0].toFixed(2)}%</td>
+                ))}
+              </tr>
+              <tr>
+                {projectedData.unempComp.map((value, index) => (
+                  <td key={`unempComp-${index}`}>{value[0].toFixed(2)}%</td>
+                ))}
+              </tr>
+              <tr>
+                {projectedData.penAdm.map((value, index) => (
+                  <td key={`penAdm-${index}`}>{value[0].toFixed(2)}%</td>
+                ))}
+              </tr>
+              <tr>
+                {compositeRow.map((total, index) => (
+                  <td key={`composite-${index}`}><strong>{total}%</strong></td>
+                ))}
+              </tr>
             </tbody>
           </Table>
         </Col>
       </Row>
+
+      <Col md={6}>
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>Growth of Rates from Y-t-Y</th>
+              {years.slice(1).map((year) => (
+                <th key={year} aria-hidden="true" />
+              ))}
+              <th>3-Year Average</th>
+            </tr>
+          </thead>
+          <tbody>
+            {benefitTypes.map((benefit) => {
+              const isSpecialCase = benefit.key === 'othrPostEmpBen' || benefit.key === 'penAdm';
+              const growthData = isSpecialCase
+                ? {
+                  growthRates: years.slice(1).map(() => ''),
+                  threeYearAverage: benefit.key === 'othrPostEmpBen' ? calculateOtherPostEmpAvg() : '',
+                }
+                : calculateGrowthRates(benefit.key);
+
+              const { growthRates, threeYearAverage } = growthData;
+
+              let displayedAverage = '';
+              if (benefit.key !== 'penAdm' && typeof threeYearAverage === 'number') {
+                displayedAverage = `${threeYearAverage.toFixed(2)}%`;
+              }
+
+              return (
+                <tr key={`growth-${benefit.key}`}>
+                  <td>{benefit.label}</td>
+                  {growthRates.map((growthRate, index) => (
+                    <td key={`${benefit.key}-growth-${index}`}>
+                      {typeof growthRate === 'number' ? `${growthRate.toFixed(2)}%` : ''}
+                    </td>
+                  ))}
+                  <td>
+                    <strong>{displayedAverage}</strong>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </Col>
     </Container>
   ) : <LoadingSpinner message="Loading Approved Fringe Benefit Rates" />);
 };
