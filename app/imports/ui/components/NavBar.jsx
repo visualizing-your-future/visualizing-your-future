@@ -15,7 +15,7 @@ const NavBar = () => {
   }), []);
   const menuStyle = { marginBottom: '0px' };
   return (
-    <Navbar bg="light" expand="lg" style={menuStyle} className="justify-content-center px-5">
+    <Navbar bg="light" expand="lg" style={menuStyle} className="navbar-custom justify-content-center px-3">
       <Container className="d-flex justify-content-between custom-navbar-spacing">
         <Navbar.Brand id={COMPONENT_IDS.NAVBAR_LANDING_PAGE} as={NavLink} to="/">
           <img src="/images/logo.png" className="rounded" alt="visualizing your future logo" width={90} />
@@ -25,8 +25,8 @@ const NavBar = () => {
           </div>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls={COMPONENT_IDS.NAVBAR_COLLAPSE} id="nav-toggle" />
-        <Navbar.Collapse id={COMPONENT_IDS.NAVBAR_COLLAPSE}>
-          <Nav className="me-auto justify-content-start">
+        <Navbar.Collapse id={COMPONENT_IDS.NAVBAR_COLLAPSE} className="px-3">
+          <Nav className="me-auto justify-content-start px-3">
             {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.USER]) ? ([
             ]) : ''}
             {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.ADMIN]) ? ([
