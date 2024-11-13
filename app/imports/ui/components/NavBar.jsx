@@ -17,7 +17,6 @@ const NavBar = () => {
   return (
     <Navbar bg="light" expand="lg" style={menuStyle} className="justify-content-center px-5">
       <Container className="d-flex justify-content-between custom-navbar-spacing">
-        {/* Security Questions Component */}
         <Navbar.Brand id={COMPONENT_IDS.NAVBAR_LANDING_PAGE} as={NavLink} to="/">
           <img src="/images/logo.png" className="rounded" alt="visualizing your future logo" width={90} />
           <div className="logo-text ms-2">
@@ -36,15 +35,14 @@ const NavBar = () => {
               <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/clients" key="clients">Client Page (Does not work)</Nav.Link>,
             ]) : ''}
             {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.ACCOUNTANT, ROLE.BOSSACCOUNTANT]) ? ([
-              <Nav.Link id={COMPONENT_IDS.NAVBAR_DATA_INPUT} as={NavLink} to="/dataInput" key="dataInput">Data Input (Temp)</Nav.Link>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_DATA_INPUT} as={NavLink} to="/dataInput" key="dataInput">Audited Balance</Nav.Link>,
-              <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Workpapers">
-                <NavDropdown.Item id={COMPONENT_IDS.WP_1007} as={NavLink} to="/wp1007"><Table /> 1007</NavDropdown.Item>
-                <NavDropdown.Item id={COMPONENT_IDS.WP_1008} as={NavLink} to="/wp1008"><Table /> 1008</NavDropdown.Item>
-                <NavDropdown.Item id={COMPONENT_IDS.WP_2005_2} as={NavLink} to="/wp2005-2"><Table /> 2005-2</NavDropdown.Item>
-                <NavDropdown.Item id={COMPONENT_IDS.WP_2503} as={NavLink} to="/wp2503"><Table /> 2503</NavDropdown.Item>
-                <NavDropdown.Item id={COMPONENT_IDS.WP_4001} as={NavLink} to="/wp4001"><Table /> 4001</NavDropdown.Item>
-                <NavDropdown.Item id={COMPONENT_IDS.WP_4002} as={NavLink} to="/wp4002"><Table /> 4002</NavDropdown.Item>
+              <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Workpapers" key="wp-dropdown">
+                <NavDropdown.Item id={COMPONENT_IDS.WP_1007} as={NavLink} to="/wp1007" key="1007"><Table /> 1007</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.WP_1008} as={NavLink} to="/wp1008" key="1008"><Table /> 1008</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.WP_2005_2} as={NavLink} to="/wp2005-2" key="2005-2"><Table /> 2005-2</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.WP_2503} as={NavLink} to="/wp2503" key="2503"><Table /> 2503</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.WP_4001} as={NavLink} to="/wp4001" key="4001"><Table /> 4001</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.WP_4002} as={NavLink} to="/wp4002" key="4002"><Table /> 4002</NavDropdown.Item>
               </NavDropdown>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_VISUALIZATION_EXPORT} as={NavLink} to="/visualizationExport" key="visualizationExport">Visualization</Nav.Link>,
             ]) : ''}
@@ -63,8 +61,8 @@ const NavBar = () => {
               </NavDropdown>
             ) : (
               <NavDropdown id={COMPONENT_IDS.NAVBAR_CURRENT_USER} title={currentUser} className="custom-login-button">
-                <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_USER_ACCOUNT_SETTINGS} as={NavLink} to="/userAccountSettings"><BoxArrowRight /> Account Settings</NavDropdown.Item>
-                <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_SIGN_OUT} as={NavLink} to="/signout"><BoxArrowRight /> Sign out</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_USER_ACCOUNT_SETTINGS} as={NavLink} to="/userAccountSettings" key="temp3"><BoxArrowRight /> Account Settings</NavDropdown.Item>
+                <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_SIGN_OUT} as={NavLink} to="/signout" key="temp4"><BoxArrowRight /> Sign out</NavDropdown.Item>
               </NavDropdown>
             )}
           </Nav>
