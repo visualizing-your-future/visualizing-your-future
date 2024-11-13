@@ -17,6 +17,7 @@ const NavBar = () => {
   return (
     <Navbar bg="light" expand="lg" style={menuStyle} className="justify-content-center px-5">
       <Container className="d-flex justify-content-between custom-navbar-spacing">
+        {/* Security Questions Component */}
         <Navbar.Brand id={COMPONENT_IDS.NAVBAR_LANDING_PAGE} as={NavLink} to="/">
           <img src="/images/logo.png" className="rounded" alt="visualizing your future logo" width={90} />
           <div className="logo-text ms-2">
@@ -61,7 +62,7 @@ const NavBar = () => {
                 <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN_SIGN_UP} as={NavLink} to="/signup"><PersonPlusFill />Sign up</NavDropdown.Item>
               </NavDropdown>
             ) : (
-              <NavDropdown id={COMPONENT_IDS.NAVBAR_CURRENT_USER} title={currentUser}>
+              <NavDropdown id={COMPONENT_IDS.NAVBAR_CURRENT_USER} title={currentUser} className="custom-login-button">
                 <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_USER_ACCOUNT_SETTINGS} as={NavLink} to="/userAccountSettings"><BoxArrowRight /> Account Settings</NavDropdown.Item>
                 <NavDropdown.Item id={COMPONENT_IDS.NAVBAR_SIGN_OUT} as={NavLink} to="/signout"><BoxArrowRight /> Sign out</NavDropdown.Item>
               </NavDropdown>
