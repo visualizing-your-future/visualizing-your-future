@@ -61,6 +61,7 @@ const ListProfiles = () => {
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Role</th>
+                <th>Clients</th>
               </tr>
             </thead>
             <tbody>
@@ -82,6 +83,7 @@ const ListProfiles = () => {
                 <th>Company Name</th>
                 <th>Client Key</th>
                 <th>Role</th>
+                <th>Clients</th>
               </tr>
             </thead>
             <tbody>

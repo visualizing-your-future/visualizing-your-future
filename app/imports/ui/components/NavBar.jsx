@@ -35,6 +35,7 @@ const NavBar = () => {
               <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/clients" key="clients">Client Page (Does not work)</Nav.Link>,
             ]) : ''}
             {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.ACCOUNTANT, ROLE.BOSSACCOUNTANT]) ? ([
+              <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_LIST} as={NavLink} to="/clientList" key="clientList">Clients</Nav.Link>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_DATA_INPUT} as={NavLink} to="/dataInput" key="dataInput">Audited Balance</Nav.Link>,
               <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Workpapers" key="wp-dropdown">
                 <NavDropdown.Item id={COMPONENT_IDS.WP_1007} as={NavLink} to="/wp1007" key="1007"><Table /> 1007</NavDropdown.Item>
@@ -47,6 +48,7 @@ const NavBar = () => {
               <Nav.Link id={COMPONENT_IDS.NAVBAR_VISUALIZATION_EXPORT} as={NavLink} to="/visualizationExport" key="visualizationExport">Visualization</Nav.Link>,
             ]) : ''}
             {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.BOSSACCOUNTANT]) ? ([
+              <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_LIST} as={NavLink} to="/clientList" key="clientList">Clients</Nav.Link>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/clientDataImport" key="clients">Client Data</Nav.Link>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_MANAGE_DROPDOWN_DATABASE} as={NavLink} to="/manage-database" key="manage-database"><CloudDownload /> Database</Nav.Link>,
             ]) : ''}

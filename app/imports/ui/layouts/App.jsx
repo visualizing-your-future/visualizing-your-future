@@ -24,6 +24,7 @@ import ClientData from '../pages/ClientData';
 import ClientDataImport from '../pages/ClientDataImport';
 import VisualizationExport from '../pages/VisualizationExport';
 import EditProfile from '../pages/EditProfile';
+import ClientList from '../pages/ClientList';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
           <Route path="/profiles" element={<AdminProtectedRoute ready={ready}><ListProfiles /></AdminProtectedRoute>} />
           <Route path="/manage-database" element={<BossAccountantProtectedRoute ready={ready}><ManageDatabase /></BossAccountantProtectedRoute>} />
           <Route path="/clients" element={<AdminProtectedRoute ready={ready}><ClientData /></AdminProtectedRoute>} />
+          <Route path="/clientList" element={<AllAccountantProtectedRoute ready={ready}><ClientList /></AllAccountantProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

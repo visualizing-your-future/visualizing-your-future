@@ -5,6 +5,7 @@ export const COMPONENT_IDS = {
   NAVBAR_DATA_INPUT: 'navbar-data-input', /* Goes to DATA_STUFF pageID */
   NAVBAR_VISUALIZATION_EXPORT: 'navbar-visualization-export',
   NAVBAR_CLIENT_DATA: 'navbar-client-data', /* Goes to CLIENT_DATA_IMPORT pageID */
+  NAVBAR_CLIENT_LIST: 'navbar-client-list',
   NAVBAR_ADD_STUFF: 'navbar-add-stuff',
   NAVBAR_LIST_STUFF: 'navbar-list-stuff',
   NAVBAR_ADMIN: 'navbar-admin',

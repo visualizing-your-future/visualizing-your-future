@@ -4,24 +4,34 @@
     },
     { "email": "admin", "password": "changeme", "role": "ADMIN", "firstName": "Admin", "lastName": "MATRP"
     },
-    { "email": "accountant", "password": "changeme", "role": "ACCOUNTANT" , "firstName": "John", "lastName": "Doe"
+    { "email": "accountant", "password": "changeme", "role": "ACCOUNTANT", "clients": ["client"], "firstName": "John", "lastName": "Doe"
     },
-    { "email": "boss", "password": "changeme", "role": "BOSSACCOUNTANT", "firstName": "Mike", "lastName": "Brown"
+    { "email": "accountant2", "password": "changeme", "role": "ACCOUNTANT", "clients": ["client2"], "firstName": "John", "lastName": "Doe"
+    },
+    { "email": "accountant3", "password": "changeme", "role": "ACCOUNTANT", "clients": ["client","client2"], "firstName": "John", "lastName": "Doe"
+    },
+    { "email": "boss", "password": "changeme", "role": "BOSSACCOUNTANT", "clients": ["client"], "firstName": "Mike", "lastName": "Brown"
+    },
+    { "email": "boss2", "password": "changeme", "role": "BOSSACCOUNTANT", "clients": ["client2"], "firstName": "Mike", "lastName": "Brown"
+    },
+    { "email": "boss3", "password": "changeme", "role": "BOSSACCOUNTANT", "clients": ["client","client2"], "firstName": "Mike", "lastName": "Brown"
     },
     { "email": "client", "password": "changeme", "role": "CLIENT", "firstName": "Sarah", "lastName": "Green"
+    },
+    { "email": "client2", "password": "changeme", "role": "CLIENT", "firstName": "Jessica", "lastName": "Blue"
     }
   ],
 
   "defaultAuditedBalanceData": [
-    { "owner":  "accountant", "year": 1 },
-    { "owner":  "accountant", "year": 2 },
-    { "owner":  "accountant", "year": 3 },
-    { "owner":  "accountant", "year": 4 },
-    { "owner":  "accountant", "year": 5 },
-    { "owner":  "accountant", "year": 6 },
-    { "owner":  "accountant", "year": 7 },
-    { "owner":  "accountant", "year": 8 },
-    { "owner":  "accountant", "year": 1 }
+    { "owner":  "client", "year": 1 },
+    { "owner":  "client", "year": 2 },
+    { "owner":  "client", "year": 3 },
+    { "owner":  "client", "year": 4 },
+    { "owner":  "client", "year": 5 },
+    { "owner":  "client", "year": 6 },
+    { "owner":  "client", "year": 7 },
+    { "owner":  "client", "year": 8 },
+    { "owner":  "client", "year": 1 }
   ],
 
   "defaultWP2503": [

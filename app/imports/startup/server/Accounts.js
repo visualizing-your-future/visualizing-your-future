@@ -8,18 +8,18 @@ import { BossAccountantProfiles } from '../../api/user/BossAccountantProfileColl
 
 /* eslint-disable no-console */
 
-function createUser(email, role, firstName, lastName, password) {
-  console.log(`  Creating user ${email} with role ${role}.`);
+function createUser(email, role, firstName, lastName, password, clients) {
+  console.log(`  Creating user ${email} with role ${role} and clients ${clients}.`);
   if (role === ROLE.ADMIN) {
-    AdminProfiles.define({ email, firstName, lastName, password });
+    AdminProfiles.define({ email, firstName, lastName, password, clients });
   } else if (role === ROLE.USER) { // everyone else is just a user.
-    UserProfiles.define({ email, firstName, lastName, password });
+    UserProfiles.define({ email, firstName, lastName, password, clients });
   } else if (role === ROLE.ACCOUNTANT) {
-    AccountantProfiles.define({ email, firstName, lastName, password });
+    AccountantProfiles.define({ email, firstName, lastName, password, clients });
   } else if (role === ROLE.CLIENT) {
-    ClientProfiles.define({ email, firstName, lastName, password });
+    ClientProfiles.define({ email, firstName, lastName, password, clients });
   } else if (role === ROLE.BOSSACCOUNTANT) {
-    BossAccountantProfiles.define({ email, firstName, lastName, password });
+    BossAccountantProfiles.define({ email, firstName, lastName, password, clients });
   }
 }
 
@@ -27,7 +27,7 @@ function createUser(email, role, firstName, lastName, password) {
 if (Meteor.users.find().count() === 0) {
   if (Meteor.settings.defaultAccounts) {
     console.log('Creating the default user(s)');
-    Meteor.settings.defaultAccounts.forEach(({ email, password, role, firstName, lastName }) => createUser(email, role, firstName, lastName, password));
+    Meteor.settings.defaultAccounts.forEach(({ email, password, role, firstName, lastName, clients }) => createUser(email, role, firstName, lastName, password, clients));
   } else {
     console.log('Cannot initialize the database!  Please invoke meteor with a settings file.');
   }
