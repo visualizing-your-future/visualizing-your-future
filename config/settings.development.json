@@ -23,6 +23,15 @@
   ],
 
   "defaultAuditedBalanceData": [
+    { "owner":  "accountant", "year": 1 },
+    { "owner":  "accountant", "year": 2 },
+    { "owner":  "accountant", "year": 3 },
+    { "owner":  "accountant", "year": 4 },
+    { "owner":  "accountant", "year": 5 },
+    { "owner":  "accountant", "year": 6 },
+    { "owner":  "accountant", "year": 7 },
+    { "owner":  "accountant", "year": 8 },
+    { "owner":  "accountant", "year": 1 },
     { "owner":  "client", "year": 1 },
     { "owner":  "client", "year": 2 },
     { "owner":  "client", "year": 3 },
@@ -31,7 +40,12 @@
     { "owner":  "client", "year": 6 },
     { "owner":  "client", "year": 7 },
     { "owner":  "client", "year": 8 },
-    { "owner":  "client", "year": 1 }
+    { "owner":  "client", "year": 1 },
+    { "owner":  "client2", "year": 11 },
+    { "owner":  "client2", "year": 12 },
+    { "owner":  "client2", "year": 13 },
+    { "owner":  "client2", "year": 14 },
+    { "owner":  "client2", "year": 15 }
   ],
 
   "defaultWP2503": [

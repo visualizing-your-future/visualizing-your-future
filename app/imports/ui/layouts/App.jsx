@@ -25,6 +25,7 @@ import ClientDataImport from '../pages/ClientDataImport';
 import VisualizationExport from '../pages/VisualizationExport';
 import EditProfile from '../pages/EditProfile';
 import ClientList from '../pages/ClientList';
+import DataInputEmail from '../pages/DataInputEmail';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -49,7 +50,8 @@ const App = () => {
           <Route path="/clientDataImport" element={<BossAccountantProtectedRoute ready={ready}><ClientDataImport /></BossAccountantProtectedRoute>} />
           <Route path="/edit/:_id" element={<AdminProtectedRoute ready={ready}><EditProfile /></AdminProtectedRoute>} />
           <Route path="/visualizationExport" element={<AllAccountantProtectedRoute ready={ready}><VisualizationExport /></AllAccountantProtectedRoute>} />
-          <Route path="/dataInput" element={<ProtectedRoute><DataInput /></ProtectedRoute>} />
+          <Route path="/dataInput" element={<AllAccountantProtectedRoute ready={ready}><DataInput /></AllAccountantProtectedRoute>} />
+          <Route path="/dataInput/:_email" element={<AllAccountantProtectedRoute ready={ready}><DataInputEmail /></AllAccountantProtectedRoute>} />
           <Route path="/wp2503" element={<ProtectedRoute><WP2503Page /></ProtectedRoute>} />
           <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
           <Route path="/edit/:_id" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />

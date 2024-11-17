@@ -52,4 +52,5 @@ export const COMPONENT_IDS = {
   WP_2503: 'wp-2503',
   WP_4001: 'wp-4001',
   WP_4002: 'wp-4002',
+  CLIENT_WORKSHEETS: 'client-worksheets',
 };

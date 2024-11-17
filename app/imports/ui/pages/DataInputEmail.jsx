@@ -1,16 +1,20 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
+import { useParams } from 'react-router';
 import { AuditedBalanceData } from '../../api/audited-balance-data/AuditedBalanceDataCollection';
 import DisplayAudBalData from '../components/DisplayAudBalData';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
-const DataInput = () => {
+const DataInputEmail = () => {
+  const email = useParams();
   const { audBalData, ready } = useTracker(() => {
-    const subscription = AuditedBalanceData.subscribeAudBalData();
+    const subscription = AuditedBalanceData.subscribeAudBalDataAdmin();
     const rdy = subscription.ready();
-    const data = AuditedBalanceData.find({}, { sort: { name: 1 } }).fetch();
+    console.log(email);
+    console.log(email._email);
+    const data = AuditedBalanceData.find({ owner: email._email }, { sort: { name: 1 } }).fetch();
     console.log(data);
     return {
       audBalData: data,
@@ -351,4 +355,4 @@ const DataInput = () => {
   ) : <LoadingSpinner message="Loading Data" />);
 };
 
-export default DataInput;
+export default DataInputEmail;

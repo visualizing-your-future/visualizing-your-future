@@ -9,12 +9,11 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 import { ClientProfiles } from '../../api/user/ClientProfileCollection';
 import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
 import { BossAccountantProfiles } from '../../api/user/BossAccountantProfileCollection';
-import ClientProfileItem from '../components/ClientProfileItem';
+import ClientListOfWorksheetsItem from '../components/ClientListOfWorksheetsItem';
 
 const ClientList = () => {
   const { clientList, accountantSubReady, clientSubReady } = useTracker(() => {
     const user = Meteor.user();
-    console.log(Meteor.userId());
     let acctSub;
     let acctSubRdy;
     let clientsFind;
@@ -28,7 +27,6 @@ const ClientList = () => {
       acctSub = AccountantProfiles.subscribeAccountantProfilesUser();
       acctSubRdy = acctSub.ready();
       clientsFind = AccountantProfiles.findOne({ email: user.emails[0].address });
-      console.log(clientsFind);
       // This is required or the app crashes.
       if (clientsFind) {
         clients = clientsFind.clients;
@@ -43,6 +41,7 @@ const ClientList = () => {
       }
     }
 
+    // This is required or the app crashes.
     if (clients) {
       clients.forEach((client) => {
         const test = ClientProfiles.findOne({ email: client });
@@ -68,12 +67,11 @@ const ClientList = () => {
                 <th>Email</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Role</th>
-                <th>Clients</th>
+                <th>Financial Worksheets</th>
               </tr>
             </thead>
             <tbody>
-              {clientList.map((profile) => <ClientProfileItem key={profile._id} profile={profile} />)}
+              {clientList.map((profile) => <ClientListOfWorksheetsItem key={profile._id} profile={profile} />)}
             </tbody>
           </Table>
         </Col>
