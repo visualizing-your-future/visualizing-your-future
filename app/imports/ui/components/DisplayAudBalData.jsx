@@ -97,7 +97,7 @@ const DisplayAudBalData = ({ audBalData }) => {
     <AutoForm schema={bridge} onSubmit={data => submit(audBalData, data)} model={AuditedBalanceData.findOne(audBalData._id)}>
       <Card.Body>
         <Row>
-          Year {audBalData.year}
+          {audBalData.year}
           <hr className="solid" />
         </Row>
         <Row className="align-items-center" style={{ paddingTop: '20px' }}>
