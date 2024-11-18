@@ -11,6 +11,7 @@ const UserProfileItem = ({ profile }) => (
     <td>{profile.firstName}</td>
     <td>{profile.lastName}</td>
     <td>{profile.role}</td>
+    <td>{}</td>
     <td>
       <Link className={COMPONENT_IDS.LIST_PROFILES_EDIT} to={`/edit/${profile._id}`}>Edit</Link>
     </td>

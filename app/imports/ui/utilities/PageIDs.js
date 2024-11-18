@@ -11,6 +11,7 @@ export const PAGE_IDS = {
   ACCOUNT_SETTINGS: 'account-settings',
   EDIT_USER_PROFILE: 'edit-user-profile',
   LIST_PROFILES: 'list-profiles', /* Goes from NAVBAR_LIST_PROFILES_ADMIN */
+  LIST_CLIENTS: 'list-clients',
   EDIT_PROFILE: 'edit-profile',
   MANAGE_DATABASE: 'manage-database',
   NOT_AUTHORIZED: 'not-authorized',

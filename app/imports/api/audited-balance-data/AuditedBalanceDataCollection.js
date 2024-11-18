@@ -261,7 +261,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
 
       /** This subscription publishes all documents regardless of user, but only if the logged in user is the Admin. */
       Meteor.publish(auditedBalanceDataPublications.auditedBalanceDataAdmin, function publish() {
-        if (this.userId && Roles.userIsInRole(this.userId, ROLE.ADMIN)) {
+        if (this.userId && Roles.userIsInRole(this.userId, [ROLE.ADMIN, ROLE.ACCOUNTANT, ROLE.BOSSACCOUNTANT])) {
           return instance._collection.find();
         }
         return this.ready();
@@ -297,7 +297,7 @@ class AuditedBalanceDataCollection extends BaseCollection {
    * @throws { Meteor.Error } If there is no logged in user, or the user is not an Admin or User.
    */
   assertValidRoleForMethod(userId) {
-    this.assertRole(userId, [ROLE.ADMIN, ROLE.USER]);
+    this.assertRole(userId, [ROLE.ADMIN, ROLE.ACCOUNTANT, ROLE.BOSSACCOUNTANT]);
   }
 
   /**

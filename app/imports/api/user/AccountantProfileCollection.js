@@ -26,15 +26,16 @@ class AccountantProfileCollection extends BaseProfileCollection {
    * @param password The password for this user.
    * @param firstName The first name.
    * @param lastName The last name.
+   * @param clients An array of client IDs.
    */
-  define({ email, firstName, lastName, password }) {
+  define({ email, firstName, lastName, password, clients }) {
     if (Meteor.isServer) {
       const username = email;
       const user = this.findOne({ email, firstName, lastName });
       if (!user) {
         const role = ROLE.ACCOUNTANT;
         const userID = Users.define({ username, role, password });
-        return this._collection.insert({ email, firstName, lastName, role, userID });
+        return this._collection.insert({ email, firstName, lastName, role, clients, userID });
       }
       return user._id;
     }
@@ -47,13 +48,14 @@ class AccountantProfileCollection extends BaseProfileCollection {
    * @param email User's email
    * @param firstName User's first name.
    * @param lastName User's last name.
+   * @param clients User's clients.
    */
-  changeRoleDefine({ userID, email, firstName, lastName }) {
+  changeRoleDefine({ userID, email, firstName, lastName, clients }) {
     if (Meteor.isServer) {
       const user = this.findOne({ email, firstName, lastName });
       if (!user) {
         const role = ROLE.ACCOUNTANT;
-        return this._collection.insert({ email, firstName, lastName, role, userID });
+        return this._collection.insert({ email, firstName, lastName, role, clients, userID });
       }
       return user._id;
     }
