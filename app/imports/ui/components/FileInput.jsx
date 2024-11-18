@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Col, Container, Row } from 'react-bootstrap';
 import * as XLSX from 'xlsx';
 
 /** FileInput for users uploading excel file to system. */
-const FileInput = () => {
+const FileInput = ({ onDataLoad }) => {
   const [sheetNames, setSheetNames] = useState([]);
   const [selectedSheet, setSelectedSheet] = useState('');
   const [workbook, setWorkbook] = useState(null);
   const [fileSelected, setFileSelected] = useState(false);
   const [data, setData] = useState([]);
+  // const [jsonText, setJsonText] = useState(''); // State for JSON text display
 
+  // const formRef = useRef(); // To reset the form after submission
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file && file.name.endsWith('.xlsm')) {
@@ -28,10 +31,11 @@ const FileInput = () => {
       reader.readAsBinaryString(file);
     }
   };
-
   const loadSheetData = (wb, sheetName) => {
     const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    // setJsonText(JSON.stringify(jsonData, null, null)); // Print the JSON file as text
     setData(jsonData);
+    onDataLoad(jsonData);
   };
 
   const handleSheetChange = (event) => {
@@ -100,6 +104,15 @@ const FileInput = () => {
     </div>
   );
 
+};
+
+// For optional prop with default value
+FileInput.propTypes = {
+  onDataLoad: PropTypes.func,
+};
+
+FileInput.defaultProps = {
+  onDataLoad: () => {}, // Default empty function
 };
 
 export default FileInput;
