@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Card } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
 import { AuditedBalanceData } from '../../api/audited-balance-data/AuditedBalanceDataCollection';
 import DisplayAudBalData from '../components/DisplayAudBalData';
@@ -26,7 +26,7 @@ const DataInput = () => {
         </Col>
       </Row>
       <Row>
-        <Col className="col-lg-4">
+        <Col className="col-lg-4" style={{ paddingTop: '20px' }}>
           <Row className="fw-bold">
             Fiscal Year
             <hr className="solid" />
@@ -47,7 +47,7 @@ const DataInput = () => {
             <hr className="solid my-0" />
             <h6 className="text-end" style={{ paddingTop: '2px' }}>Total Cash and Cash Equivalents</h6>
           </Row>
-          <Row className="justify-content-start fw-bold">
+          <Row className="justify-content-start fw-bold" style={{ paddingTop: '3px' }}>
             Other Assets
           </Row>
           <Row className="align-items-center ps-3" style={{ paddingTop: '3px' }}>
@@ -154,7 +154,7 @@ const DataInput = () => {
           <Row className="align-items-center ms-3 ps-5" style={{ paddingTop: '17px' }}>
             Land B
           </Row>
-          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '10px' }}>
             Construction in Progress
           </Row>
           <Row className="align-items-center ps-5" style={{ paddingTop: '6px' }}>
@@ -341,11 +341,30 @@ const DataInput = () => {
             <h6 className="text-center">Total Liabilities, Deferred Inflows of Resources</h6>
           </Row>
         </Col>
-        {audBalData.map((data) => (
-          <Col key={data._id}>
-            <DisplayAudBalData audBalData={data} />
-          </Col>
-        ))}
+        <Col lg={8}>
+          <Card className="border-0">
+            <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', paddingBottom: '0px', marginTop: '0' }}>
+              <div style={{ display: 'inline-flex', gap: '5' +
+                  'px', maxWidth: '100%', marginTop: '0' }}>
+                {audBalData.map((data) => (
+                  <div
+                    key={data._id}
+                    style={{
+                      minWidth: '250px',
+                      padding: '0', // Remove all padding
+                      textAlign: 'center',
+                      border: '1px solid #ddd',
+                      borderRadius: '4px',
+                      backgroundColor: '#f8f9fa',
+                    }}
+                  >
+                    <DisplayAudBalData audBalData={data} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
+        </Col>
       </Row>
     </Container>
   ) : <LoadingSpinner message="Loading Data" />);

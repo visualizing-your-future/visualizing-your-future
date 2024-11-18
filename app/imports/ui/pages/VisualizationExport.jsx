@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Col, Container, Row, Card, Table, Nav, Form, Button } from 'react-bootstrap';
+import { withTracker } from 'meteor/react-meteor-data';
 import ChartComponent from '../components/ChartComponent';
-
+import { AuditedBalanceData } from '../../api/audited-balance-data/AuditedBalanceDataCollection';
 // Currency formatter
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -9,232 +10,50 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 }).format;
 
-const snapshotData = [{
-  year: '2013',
-  assets: 689525419,
-  liabilities: 141198657,
-  netPosition: 548326762,
-  cashOnHand: 20091667,
-  debt: 66193143,
-  opex: 35603263,
-  liquidity: 422605819,
-  perpetuity: 1,
-  cashInFlow: 35693705,
-  cashOutFlow: 36110120,
-  netCashFlow: 416415,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2014',
-  assets: 698716700,
-  liabilities: 117607300,
-  netPosition: 581109400,
-  cashOnHand: 22647878,
-  debt: 41686286,
-  opex: 36014771,
-  liquidity: 432669418,
-  perpetuity: 1,
-  cashInFlow: 35567019,
-  cashOutFlow: 36521628,
-  netCashFlow: 954609,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2015',
-  assets: 691355317,
-  liabilities: 116810541,
-  netPosition: 574544776,
-  cashOnHand: 18695599,
-  debt: 41179429,
-  opex: 36803493,
-  liquidity: 428237517,
-  perpetuity: 1,
-  cashInFlow: 35914282,
-  cashOutFlow: 37310350,
-  netCashFlow: 1396068,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2016',
-  assets: 700301819,
-  liabilities: 113248353,
-  netPosition: 587053466,
-  cashOnHand: 21592948,
-  debt: 37672571,
-  opex: 37218414,
-  liquidity: 440034270,
-  perpetuity: 1,
-  cashInFlow: 36670341,
-  cashOutFlow: 37725271,
-  netCashFlow: 1054930,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2017',
-  assets: 701042985,
-  liabilities: 109830826,
-  netPosition: 591212159,
-  cashOnHand: 17757200,
-  debt: 34165714,
-  opex: 37666058,
-  liquidity: 444906527,
-  perpetuity: 1,
-  cashInFlow: 37234517,
-  cashOutFlow: 38172915,
-  netCashFlow: 938399,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2018',
-  assets: 710578887,
-  liabilities: 106283192,
-  netPosition: 604295695,
-  cashOnHand: 20972538,
-  debt: 30658857,
-  opex: 38215618,
-  liquidity: 456901296,
-  perpetuity: 1,
-  cashInFlow: 38102065,
-  cashOutFlow: 38722475,
-  netCashFlow: 620410,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2019',
-  assets: 713017483,
-  liabilities: 102772409,
-  netPosition: 610245073,
-  cashOnHand: 17415528,
-  debt: 27152000,
-  opex: 38832666,
-  liquidity: 461740759,
-  perpetuity: 1,
-  cashInFlow: 38997851,
-  cashOutFlow: 39339523,
-  netCashFlow: 341672,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2020',
-  assets: 722460461,
-  liabilities: 99636285,
-  netPosition: 622824176,
-  cashOnHand: 21208373,
-  debt: 24000000,
-  opex: 39532314,
-  liquidity: 473557604,
-  perpetuity: 1,
-  cashInFlow: 39920149,
-  cashOutFlow: 39684314,
-  netCashFlow: 235835,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2021',
-  assets: 724022577,
-  liabilities: 96626677,
-  netPosition: 627395900,
-  cashOnHand: 17584723,
-  debt: 21000000,
-  opex: 40180479,
-  liquidity: 477532588,
-  perpetuity: 1,
-  cashInFlow: 40349674,
-  cashOutFlow: 40180479,
-  netCashFlow: 169195,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2022',
-  assets: 734013691,
-  liabilities: 93628457,
-  netPosition: 640385234,
-  cashOnHand: 21119245,
-  debt: 18000000,
-  opex: 40840605,
-  liquidity: 488714889,
-  perpetuity: 1,
-  cashInFlow: 40751477,
-  cashOutFlow: 40840605,
-  netCashFlow: 89128,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2023',
-  assets: 737837542,
-  liabilities: 90630473,
-  netPosition: 647207069,
-  cashOnHand: 17193578,
-  debt: 15000000,
-  opex: 41534037,
-  liquidity: 492534740,
-  perpetuity: 1,
-  cashInFlow: 41142891,
-  cashOutFlow: 41534037,
-  netCashFlow: 391145,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}, {
-  year: '2024',
-  assets: 748903774,
-  liabilities: 87628202,
-  netPosition: 661275572,
-  cashOnHand: 20404255,
-  debt: 12000000,
-  opex: 42249646,
-  liquidity: 503602972,
-  perpetuity: 1,
-  cashInFlow: 41534656,
-  cashOutFlow: 42249646,
-  netCashFlow: 714990,
-  budget: 0,
-  actualAndEncumbrance: 0,
-  changeAE: 0,
-}];
-
-const dataSets = {
-  snapshot: snapshotData,
-  '4year': snapshotData.slice(0, 4),
-  '8year': snapshotData.slice(0, 8),
-  '12year': snapshotData,
-};
-
-// Comparison Component
+const renderAuditedDataTable = (data) => (
+  <Table striped bordered hover>
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>Cash Total</th>
+        <th>Other Total</th>
+        <th>Investments Total</th>
+        <th>Loan Fund Total</th>
+        <th>Assets Total</th>
+        <th>Liabilities Total</th>
+        <th>Total Liabilities and Resources</th>
+        <th>Total Net</th>
+      </tr>
+    </thead>
+    <tbody>
+      {data.map((entry, index) => (
+        <tr key={index}>
+          <td>{entry.year}</td>
+          <td>{currencyFormatter(entry.cashTotal || 0)}</td>
+          <td>{currencyFormatter(entry.otherTotal || 0)}</td>
+          <td>{currencyFormatter(entry.investmentsTotal || 0)}</td>
+          <td>{currencyFormatter(entry.loanFundTotal || 0)}</td>
+          <td>{currencyFormatter(entry.assetsTotal || 0)}</td>
+          <td>{currencyFormatter(entry.liabilitiesTotal || 0)}</td>
+          <td>{currencyFormatter(entry.liabInflowRsrcsTotal || 0)}</td>
+          <td>{currencyFormatter(entry.totalNet || 0)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </Table>
+);
+// Comparison Component with projections
 const Comparison = ({ data }) => {
   const [selectedYears, setSelectedYears] = useState([]);
-  const [selectedMetric1, setSelectedMetric1] = useState('netPosition');
-  const [selectedMetric2, setSelectedMetric2] = useState('assets');
+  const [selectedMetric1, setSelectedMetric1] = useState('totalNet');
+  const [selectedMetric2, setSelectedMetric2] = useState('assetsTotal');
   const [projectionPercentage, setProjectionPercentage] = useState(0);
   const [projectionYears, setProjectionYears] = useState(0);
   const [showProjection, setShowProjection] = useState(false);
 
   const handleYearSelect = (year) => {
-    setSelectedYears((prev) => {
-      const isSelected = prev.includes(year);
-      return isSelected ? prev.filter((y) => y !== year) : [...prev, year];
-    });
+    setSelectedYears((prev) => (prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]));
   };
-
-  const handleMetricChange = (metric, isFirstMetric) => {
-    if (isFirstMetric) {
-      setSelectedMetric1(metric);
-    } else {
-      setSelectedMetric2(metric);
-    }
-  };
-
-  const handleProjectionToggle = () => setShowProjection(!showProjection);
 
   const calculateProjections = (baseYearData) => {
     const projections = [];
@@ -251,14 +70,11 @@ const Comparison = ({ data }) => {
         [selectedMetric2]: lastValue2,
       });
     }
-
     return projections;
   };
 
-
   const filteredData = data.filter((entry) => selectedYears.includes(entry.year));
-  const baseYearData = filteredData[0]; // Use the first selected year as base for projections
-
+  const baseYearData = filteredData[0];
   const projectionData = showProjection && baseYearData ? calculateProjections(baseYearData) : [];
 
   return (
@@ -280,40 +96,30 @@ const Comparison = ({ data }) => {
         </div>
         <Form.Group controlId="metric1">
           <Form.Label>Choose First Metric:</Form.Label>
-          <Form.Control as="select" value={selectedMetric1} onChange={(e) => handleMetricChange(e.target.value, true)}>
-            <option value="assets">Assets</option>
-            <option value="liabilities">Liabilities</option>
-            <option value="netPosition">Net Position</option>
-            <option value="cashOnHand">Cash on Hand</option>
-            <option value="debt">Debt</option>
-            <option value="opex">Opex</option>
-            <option value="liquidity">Liquidity</option>
-            <option value="perpetuity">Perpetuity</option>
-            <option value="cashInFlow">Cash In Flow</option>
-            <option value="cashOutFlow">Cash Out Flow</option>
-            <option value="netCashFlow">Net Cash Flow</option>
-            <option value="budget">Budget</option>
-            <option value="actualAndEncumbrance">Actual + Encumbrance</option>
-            <option value="changeAE">Change of Actual + Encumbrance</option>
+          <Form.Control
+            as="select"
+            value={selectedMetric1}
+            onChange={(e) => setSelectedMetric1(e.target.value)}
+          >
+            <option value="assetsTotal">Assets Total</option>
+            <option value="liabilitiesTotal">Liabilities Total</option>
+            <option value="totalNet">Net Position</option>
+            <option value="cashTotal">Cash Total</option>
+            <option value="loanFundTotal">Loan Fund Total</option>
           </Form.Control>
         </Form.Group>
         <Form.Group controlId="metric2">
           <Form.Label>Choose Second Metric:</Form.Label>
-          <Form.Control as="select" value={selectedMetric2} onChange={(e) => handleMetricChange(e.target.value, false)}>
-            <option value="assets">Assets</option>
-            <option value="liabilitites">Liabilities</option>
-            <option value="netPosition">Net Position</option>
-            <option value="cashOnHand">Cash on Hand</option>
-            <option value="debt">Debt</option>
-            <option value="opex">Opex</option>
-            <option value="liquidity">Liquidity</option>
-            <option value="perpetuitiy">Perpetuity</option>
-            <option value="cashInFlow">Cash In Flow</option>
-            <option value="cashOutFlow">Cash Out Flow</option>
-            <option value="netCashFlow">Net Cash Flow</option>
-            <option value="budget">Budget</option>
-            <option value="actualAndEncumbrance">Actual + Encumbrance</option>
-            <option value="changeAE">Change of Actual + Encumbrance</option>
+          <Form.Control
+            as="select"
+            value={selectedMetric2}
+            onChange={(e) => setSelectedMetric2(e.target.value)}
+          >
+            <option value="assetsTotal">Assets Total</option>
+            <option value="liabilitiesTotal">Liabilities Total</option>
+            <option value="totalNet">Net Position</option>
+            <option value="cashTotal">Cash Total</option>
+            <option value="loanFundTotal">Loan Fund Total</option>
           </Form.Control>
         </Form.Group>
         <Form.Group controlId="projectionToggle">
@@ -321,44 +127,32 @@ const Comparison = ({ data }) => {
             type="switch"
             label="Show Projections"
             checked={showProjection}
-            onChange={handleProjectionToggle}
+            onChange={() => setShowProjection(!showProjection)}
           />
         </Form.Group>
         {showProjection && (
-          <Form.Group controlId="projectionControls">
-            <Form.Label>Projection Percentage Increase:</Form.Label>
-            <Form.Control
-              type="number"
-              value={projectionPercentage}
-              onChange={(e) => setProjectionPercentage(parseFloat(e.target.value))}
-            />
-            <Form.Label>Number of Years for Projection:</Form.Label>
-            <Form.Control
-              type="number"
-              value={projectionYears}
-              onChange={(e) => setProjectionYears(parseInt(e.target.value, 10))}
-            />
-          </Form.Group>
+          <>
+            <Form.Group controlId="projectionPercentage">
+              <Form.Label>Projection Percentage Increase:</Form.Label>
+              <Form.Control
+                type="number"
+                value={projectionPercentage}
+                onChange={(e) => setProjectionPercentage(parseFloat(e.target.value))}
+              />
+            </Form.Group>
+            <Form.Group controlId="projectionYears">
+              <Form.Label>Number of Years for Projection:</Form.Label>
+              <Form.Control
+                type="number"
+                value={projectionYears}
+                onChange={(e) => setProjectionYears(parseInt(e.target.value, 10))}
+              />
+            </Form.Group>
+          </>
         )}
         {filteredData.length > 0 && (
-          <div style={{ marginTop: '40px', height: '110%' }}>
-            <ChartComponent
-              data={[...filteredData, ...projectionData]}
-              chartType="dual"
-              key1={selectedMetric1}
-              key2={selectedMetric2}
-              color1="#8884d8"
-              color2="#82ca9d"
-              width={400}
-              height={400}
-            />
-          </div>
-        )}
-      </Form>
-      {filteredData.length > 0 && (
-        <div style={{ marginTop: '40px', height: '110%' }}> {/* Keep square aspect ratio */}
           <ChartComponent
-            data={filteredData}
+            data={[...filteredData, ...projectionData]}
             chartType="dual"
             key1={selectedMetric1}
             key2={selectedMetric2}
@@ -367,59 +161,13 @@ const Comparison = ({ data }) => {
             width={400}
             height={400}
           />
-        </div>
-      )}
+        )}
+      </Form>
     </Card.Body>
   );
 };
-const renderSnapshotTable = (data) => (
-  <div className="table-container">
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>Year</th>
-          <th>Assets</th>
-          <th>Liabilities</th>
-          <th>Net Position</th>
-          <th>Cash on Hand</th>
-          <th>Debt</th>
-          <th>Opex</th>
-          <th>Liquidity</th>
-          <th>Perpetuity</th>
-          <th>Cash In Flow</th>
-          <th>Cash Out Flow</th>
-          <th>Net Cash Flow</th>
-          <th>Budget</th>
-          <th>Actual + Encumbrance</th>
-          <th>Change of Actual + Encumbrance</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((entry, index) => (
-          <tr key={index}>
-            <td>{entry.year}</td>
-            <td>{currencyFormatter(entry.assets)}</td>
-            <td>{currencyFormatter(entry.liabilities)}</td>
-            <td>{currencyFormatter(entry.netPosition)}</td>
-            <td>{currencyFormatter(entry.cashOnHand)}</td>
-            <td>{currencyFormatter(entry.debt)}</td>
-            <td>{currencyFormatter(entry.opex)}</td>
-            <td>{currencyFormatter(entry.liquidity)}</td>
-            <td>{currencyFormatter(entry.perpetuity)}</td>
-            <td>{currencyFormatter(entry.cashInFlow)}</td>
-            <td>{currencyFormatter(entry.cashOutFlow)}</td>
-            <td>{currencyFormatter(entry.netCashFlow)}</td>
-            <td>{currencyFormatter(entry.budget)}</td>
-            <td>{currencyFormatter(entry.actualAndEncumbrance)}</td>
-            <td>{currencyFormatter(entry.changeAE)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  </div>
-);
 
-const VisualizationExport = () => {
+const VisualizationExport = ({ auditedData }) => {
   const [activeKey, setActiveKey] = useState('snapshot');
   const [isDataVisible, setIsDataVisible] = useState({
     snapshot: true,
@@ -427,6 +175,13 @@ const VisualizationExport = () => {
     '8year': false,
     '12year': false,
   });
+
+  const dataSets = {
+    snapshot: auditedData,
+    '4year': auditedData.slice(0, 4),
+    '8year': auditedData.slice(0, 8),
+    '12year': auditedData,
+  };
 
   const toggleDataVisibility = (key) => {
     setIsDataVisible((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -467,20 +222,15 @@ const VisualizationExport = () => {
                   <Button onClick={() => toggleDataVisibility('snapshot')} variant="link">
                     {isDataVisible.snapshot ? 'Hide Data' : 'Show Data'}
                   </Button>
-                  {isDataVisible.snapshot && renderSnapshotTable(dataSets.snapshot)}
-                  <Row>
-                    <Col>
-                      <Card className="mt-3" />
-                    </Col>
-                  </Row>
+                  {isDataVisible.snapshot && renderAuditedDataTable(dataSets.snapshot)}
                 </>
               )}
-              {activeKey === '4year' && (
+              {['4year', '8year', '12year'].includes(activeKey) && (
                 <>
-                  <Button onClick={() => toggleDataVisibility('4year')} variant="link">
-                    {isDataVisible['4year'] ? 'Hide Data' : 'Show Data'}
+                  <Button onClick={() => toggleDataVisibility(activeKey)} variant="link">
+                    {isDataVisible[activeKey] ? 'Hide Data' : 'Show Data'}
                   </Button>
-                  {isDataVisible['4year'] && renderSnapshotTable(dataSets['4year'])}
+                  {isDataVisible[activeKey] && renderAuditedDataTable(dataSets[activeKey])}
                   <Row>
                     <Col md={6}>
                       <h4>Equity Metrics</h4>
@@ -488,9 +238,9 @@ const VisualizationExport = () => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="triple"
-                        key1="assets"
-                        key2="liabilities"
-                        key3="netPosition"
+                        key1="assetsTotal"
+                        key2="liabilitiesTotal"
+                        key3="totalNet"
                         color1="green"
                         color2="red"
                         color3="blue"
@@ -499,7 +249,7 @@ const VisualizationExport = () => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="dual"
-                        key1="liquidity"
+                        key1="assetsTotal"
                         key2="opex"
                         color1="#8884d8"
                         color2="#ffc658"
@@ -508,7 +258,7 @@ const VisualizationExport = () => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="single"
-                        key1="liquidity"
+                        key1="assetsTotal"
                         color1="#ff7300"
                       />
                     </Col>
@@ -525,8 +275,8 @@ const VisualizationExport = () => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="dual"
-                        key1="liquidity"
-                        key2="debt"
+                        key1="assetsTotal"
+                        key2="loanFundTotal"
                         color1="blue"
                         color2="red"
                       />
@@ -545,147 +295,7 @@ const VisualizationExport = () => {
                   </Row>
                 </>
               )}
-              {activeKey === '8year' && (
-                <>
-                  <Button onClick={() => toggleDataVisibility('8year')} variant="link">
-                    {isDataVisible['8year'] ? 'Hide Data' : 'Show Data'}
-                  </Button>
-                  {isDataVisible['8year'] && renderSnapshotTable(dataSets['8year'])}
-                  <Row>
-                    <Col md={6}>
-                      <h4>Equity Metrics</h4>
-                      <h6>Net Position</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="triple"
-                        key1="assets"
-                        key2="liabilities"
-                        key3="netPosition"
-                        color1="green"
-                        color2="red"
-                        color3="blue"
-                      />
-                      <h6>Years of Solvency</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="dual"
-                        key1="liquidity"
-                        key2="opex"
-                        color1="#8884d8"
-                        color2="#ffc658"
-                      />
-                      <h6>Demand for Capital</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="single"
-                        key1="liquidity"
-                        color1="#ff7300"
-                      />
-                    </Col>
-                    <Col md={6}>
-                      <h4>Cash Flow Metrics</h4>
-                      <h6>Financing</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="single"
-                        key1="opex"
-                        color1="#82ca9d"
-                      />
-                      <h6>Years of Solvency Based on Cash Flow</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="dual"
-                        key1="liquidity"
-                        key2="debt"
-                        color1="blue"
-                        color2="red"
-                      />
-                      <h6>Budget</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="triple"
-                        key1="budget"
-                        key2="actualAndEncumbrance"
-                        key3="changeAE"
-                        color1="red"
-                        color2="blue"
-                        color3="green"
-                      />
-                    </Col>
-                  </Row>
-                </>
-              )}
-              {activeKey === '12year' && (
-                <>
-                  <Button onClick={() => toggleDataVisibility('12year')} variant="link">
-                    {isDataVisible['12year'] ? 'Hide Data' : 'Show Data'}
-                  </Button>
-                  {isDataVisible['12year'] && renderSnapshotTable(dataSets['12year'])}
-                  <Row>
-                    <Col md={6}>
-                      <h4>Equity Metrics</h4>
-                      <h6>Net Position</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="triple"
-                        key1="assets"
-                        key2="liabilities"
-                        key3="netPosition"
-                        color1="green"
-                        color2="red"
-                        color3="blue"
-                      />
-                      <h6>Years of Solvency</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="dual"
-                        key1="liquidity"
-                        key2="opex"
-                        color1="#8884d8"
-                        color2="#ffc658"
-                      />
-                      <h6>Demand for Capital</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="single"
-                        key1="liquidity"
-                        color1="#ff7300"
-                      />
-                    </Col>
-                    <Col md={6}>
-                      <h4>Cash Flow Metrics</h4>
-                      <h6>Financing</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="single"
-                        key1="opex"
-                        color1="#82ca9d"
-                      />
-                      <h6>Years of Solvency Based on Cash Flow</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="dual"
-                        key1="liquidity"
-                        key2="debt"
-                        color1="blue"
-                        color2="red"
-                      />
-                      <h6>Budget</h6>
-                      <ChartComponent
-                        data={dataSets[activeKey]}
-                        chartType="triple"
-                        key1="budget"
-                        key2="actualAndEncumbrance"
-                        key3="changeAE"
-                        color1="red"
-                        color2="blue"
-                        color3="green"
-                      />
-                    </Col>
-                  </Row>
-                </>
-              )}
-              {activeKey === 'comparison' && <Comparison data={snapshotData} />}
+              {activeKey === 'comparison' && <Comparison data={auditedData} />}
             </Card.Body>
           </Card>
         </Col>
@@ -694,4 +304,14 @@ const VisualizationExport = () => {
   );
 };
 
-export default VisualizationExport;
+export default withTracker(() => {
+  // Subscribe to the collection
+  Meteor.subscribe('AuditedBalanceData');
+
+  // Fetch data from the collection
+  const auditedData = AuditedBalanceData.find({}).fetch();
+
+  return {
+    auditedData,
+  };
+})(VisualizationExport);
