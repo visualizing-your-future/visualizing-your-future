@@ -14,7 +14,7 @@ const DeleteAccountConfirmation = (show, onHide, collectionName, documentID) => 
   const [typedUsername, setTypedUsername] = useState('');
   const [deleteEnabled, setDeleteEnabled] = useState(false);
   const navigate = useNavigate();
-  const username = 'accountUsername'; // Replace with the actual username
+  const username = collectionName; // Replace with the actual username
 
   const handleUsernameChange = (e) => {
     const input = e.target.value;
@@ -24,7 +24,7 @@ const DeleteAccountConfirmation = (show, onHide, collectionName, documentID) => 
 
   const handleDeleteAccount = () => {
     removeItMethod.callPromise({ collectionName: collectionName, instance: documentID });
-    navigate('/');
+    navigate('../pages/Landing');
     onHide();
     // <Alert variant="success" dismissible>The account has been successfully delete!</Alert>;
   };
@@ -41,7 +41,7 @@ const DeleteAccountConfirmation = (show, onHide, collectionName, documentID) => 
           </p>
           <Form>
             <Form.Group controlId="confirmUsername">
-              <Form.Label>Please re-type the username to confirm this action.</Form.Label>
+              <Form.Label>Please re-type the username to confirm this action. Type: {collectionName}</Form.Label>
               <Form.Control
                 type="text"
                 value={typedUsername}
