@@ -85,9 +85,8 @@ const Comparison = ({ data }) => {
           {data.map((entry, index) => (
             <Button
               key={index}
-              variant={selectedYears.includes(entry.year) ? 'button-square' : 'button-square'}
+              className={`button-square ${selectedYears.includes(entry.year) ? 'selected' : ''}`}
               style={{ marginRight: '15px' }}
-              active={selectedYears.includes(entry.year)}
               onClick={() => handleYearSelect(entry.year)}
             >
               {entry.year}
