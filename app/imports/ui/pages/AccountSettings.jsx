@@ -16,10 +16,11 @@ import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
 import { BossAccountantProfiles } from '../../api/user/BossAccountantProfileCollection';
 import { ClientProfiles } from '../../api/user/ClientProfileCollection';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { removeItMethod, updateMethod } from '../../api/base/BaseCollection.methods';
+import { updateMethod } from '../../api/base/BaseCollection.methods';
 import { ROLE } from '../../api/role/Role';
 import MultiFactorAuthentication from '../components/MultiFactorAuthentication';
-import SecurityQuestions from '../components/SecurityQuestions'; // Import the MFA component
+import SecurityQuestions from '../components/SecurityQuestions';
+import DeleteAccountConfirmation from '../components/DeteleAccountConfirmation';
 
 /**
  * AccountSettings Component
@@ -27,7 +28,7 @@ import SecurityQuestions from '../components/SecurityQuestions'; // Import the M
  * The user data is retrieved based on their role (admin or user).
  */
 const AccountSettings = () => {
-  // Set the page title
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   document.title = 'Visualizing Your Future - Account Settings';
 
   const navigate = useNavigate();
@@ -240,15 +241,21 @@ const AccountSettings = () => {
                   <Col>
                     <Button
                       id={COMPONENT_IDS.DELETE_USER_ACCOUNT}
-                      onClick={() => {
-                        removeItMethod.callPromise({ collectionName: collectionName, instance: documentID });
-                        navigate('/');
-                      }}
                       className="btn"
                       style={{ width: '100%' }}
+                      variant="danger"
+                      onClick={() => setShowDeleteModal(true)}
                     >
                       Delete Account
                     </Button>
+                    {showDeleteModal && (
+                      <DeleteAccountConfirmation
+                        show={showDeleteModal}
+                        onHide={() => setShowDeleteModal(false)}
+                        collectionName={collectionName}
+                        documentID={documentID}
+                      />
+                    )}
                   </Col>
                 </Row>
               </Card.Body>
