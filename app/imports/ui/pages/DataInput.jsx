@@ -19,7 +19,7 @@ const DataInput = () => {
   }, []);
 
   return (ready ? (
-    <Container id={PAGE_IDS.DATA_STUFF} className="py-3 mx-5">
+    <Container id={PAGE_IDS.DATA_STUFF} className="py-3 justify-content-center">
       <Row className="justify-content-center pb-3">
         <Col className="text-center">
           <h2>Audited Balance Sheet Temp</h2>
@@ -123,7 +123,7 @@ const DataInput = () => {
             <hr className="solid my-0" />
             Investments
           </Row>
-          <Row className="justify-content-start ps-3 fw-bold">
+          <Row className="justify-content-start ps-3 fw-bold" style={{ paddingTop: '23px' }}>
             Capital Assets, Net:
           </Row>
           <Row className="align-content-center ps-5 fw-bold">
@@ -246,7 +246,7 @@ const DataInput = () => {
           <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
             Net OPEB Liability
           </Row>
-          <Row className="align-items-center ps-5 fw-bold" style={{ paddingTop: '17px' }}>
+          <Row className="align-items-center ps-5 fw-bold" style={{ paddingTop: '25px' }}>
             Line of Credit
           </Row>
           <Row className="align-items-center ms-3 ps-5" style={{ paddingTop: '17px' }}>
