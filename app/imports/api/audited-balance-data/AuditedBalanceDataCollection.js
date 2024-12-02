@@ -206,10 +206,10 @@ class AuditedBalanceDataCollection extends BaseCollection {
       'expenses.$.other': { type: Number, defaultValue: 0, optional: true },
       expensesTotal: { type: Number, optional: true },
 
-      salary: { type: Number, optional: true },
-      management: { type: Number, optional: true },
-      supServ: { type: Number, optional: true },
-      benAdv: { type: Number, optional: true },
+      salary: { type: Number, defaultValue: 0, optional: true },
+      management: { type: Number, defaultValue: 0, optional: true },
+      supServ: { type: Number, defaultValue: 0, optional: true },
+      benAdv: { type: Number, defaultValue: 0, optional: true },
     }));
   }
 
