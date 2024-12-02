@@ -139,9 +139,35 @@ if (Meteor.isServer) {
           fc.integer({ min: 0, max: 1000 }),
           fc.integer({ min: 0, max: 1000 }),
           fc.integer({ min: 0, max: 1000 }),
-          (owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv) => {
+          (
+            owner,
+            year,
+            cashStuff,
+            other,
+            investments,
+            loanFund,
+            assets,
+            land,
+            compBAssets,
+            rstrCash,
+            pensionRsrcs,
+            OPEBRsrcs,
+            liabilities,
+            longTermInYear,
+            longTermAftYear,
+            pensionRsrcsInflow,
+            OPEBRsrcsInflow,
+            commitConting,
+            revenue,
+            expenses,
+            salary,
+            management,
+            supServ,
+            benAdv,
+          ) => {
             const definitionData =
-              { owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv };
+              { owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+                pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv };
             testDefine(collection, definitionData);
           },
         ),
@@ -276,10 +302,12 @@ if (Meteor.isServer) {
       const supServ = faker.datatype.number({ min: 0, max: 1000 });
       const benAdv = faker.datatype.number({ min: 0, max: 1000 });
       const docID1 = collection.define({
-        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
+        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+        pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
       });
       const docID2 = collection.define({
-        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
+        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+        pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
       });
       expect(docID1).to.not.equal(docID2);
     });
@@ -411,7 +439,8 @@ if (Meteor.isServer) {
       const supServ = faker.datatype.number({ min: 0, max: 1000 });
       const benAdv = faker.datatype.number({ min: 0, max: 1000 });
       const docID = collection.define({
-        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
+        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+        pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
       });
       // console.log(collection.findDoc(docID));
       fc.assert(
