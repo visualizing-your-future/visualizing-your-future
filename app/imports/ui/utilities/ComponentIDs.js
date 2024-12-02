@@ -2,7 +2,8 @@ export const COMPONENT_IDS = {
   LIST_STUFF_EDIT: 'list-stuff-edit',
   LIST_PROFILES_EDIT: 'list-profiles-edit',
   MANAGE_DATABASE_DUMP: 'manage-database-dump',
-  NAVBAR_DATA_INPUT: 'navbar-data-input', /* Goes to DATA_STUFF pageID */
+  NAVBAR_AUDBAL_INPUT: 'navbar-audbal-input', /* Goes to DATA_STUFF pageID */
+  NAVBAR_BUDGETPL_INPUT: 'navbar-audbal-input',
   NAVBAR_VISUALIZATION_EXPORT: 'navbar-visualization-export',
   NAVBAR_CLIENT_DATA: 'navbar-client-data', /* Goes to CLIENT_DATA_IMPORT pageID */
   NAVBAR_CLIENT_LIST: 'navbar-client-list',

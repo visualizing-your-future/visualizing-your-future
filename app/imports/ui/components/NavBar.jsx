@@ -4,7 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { NavLink } from 'react-router-dom';
 import { Roles } from 'meteor/alanning:roles';
 import { Container, Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { BoxArrowRight, CloudDownload, PersonFill, PersonPlusFill, Table } from 'react-bootstrap-icons';
+import { BoxArrowRight, CloudDownload, PersonFill, PersonPlusFill, Table, FileSpreadsheet } from 'react-bootstrap-icons';
 import { ROLE } from '../../api/role/Role';
 import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 
@@ -40,7 +40,10 @@ const NavBar = () => {
             ]) : ''}
             {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.ACCOUNTANT, ROLE.BOSSACCOUNTANT]) ? ([
               // <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_LIST} as={NavLink} to="/clientList" key="clientList">Clients</Nav.Link>,
-              <Nav.Link id={COMPONENT_IDS.NAVBAR_DATA_INPUT} as={NavLink} to="/dataInput" key="dataInput">Audited Balance</Nav.Link>,
+              <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Data Input" key="data-dropdown">
+                <Nav.Link id={COMPONENT_IDS.NAVBAR_AUDBAL_INPUT} as={NavLink} to="/dataInput" key="audBal"><FileSpreadsheet /> Audited Balance</Nav.Link>
+                <Nav.Link id={COMPONENT_IDS.NAVBAR_BUDGETPL_INPUT} as={NavLink} to="/budgetPLInput" key="budgetPL"><FileSpreadsheet /> Budget P&L Input</Nav.Link>
+              </NavDropdown>,
               <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Workpapers" key="wp-dropdown">
                 <NavDropdown.Item id={COMPONENT_IDS.WP_1007} as={NavLink} to="/wp1007" key="1007"><Table /> 1007</NavDropdown.Item>
                 <NavDropdown.Item id={COMPONENT_IDS.WP_1008} as={NavLink} to="/wp1008" key="1008"><Table /> 1008</NavDropdown.Item>

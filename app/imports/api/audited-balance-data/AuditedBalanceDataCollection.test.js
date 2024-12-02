@@ -118,9 +118,30 @@ if (Meteor.isServer) {
             rstrFedFun: fc.integer({ min: 0, max: 1000 }),
             unRstr: fc.integer({ min: 0, max: 1000 }),
           })),
-          (owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting) => {
+          fc.array(fc.record({
+            investPort: fc.integer({ min: 0, max: 1000 }),
+            revs: fc.integer({ min: 0, max: 1000 }),
+            genFund: fc.integer({ min: 0, max: 1000 }),
+            coreOpBudget: fc.integer({ min: 0, max: 1000 }),
+          })),
+          fc.array(fc.record({
+            personnel: fc.integer({ min: 0, max: 1000 }),
+            program: fc.integer({ min: 0, max: 1000 }),
+            contracts: fc.integer({ min: 0, max: 1000 }),
+            grants: fc.integer({ min: 0, max: 1000 }),
+            travel: fc.integer({ min: 0, max: 1000 }),
+            equip: fc.integer({ min: 0, max: 1000 }),
+            overhead: fc.integer({ min: 0, max: 1000 }),
+            deptServ: fc.integer({ min: 0, max: 1000 }),
+            other: fc.integer({ min: 0, max: 1000 }),
+          })),
+          fc.integer({ min: 0, max: 1000 }),
+          fc.integer({ min: 0, max: 1000 }),
+          fc.integer({ min: 0, max: 1000 }),
+          fc.integer({ min: 0, max: 1000 }),
+          (owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv) => {
             const definitionData =
-              { owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting };
+              { owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv };
             testDefine(collection, definitionData);
           },
         ),
@@ -231,11 +252,34 @@ if (Meteor.isServer) {
           unRstr: faker.datatype.number({ min: 0, max: 1000 }),
         },
       ];
+      const revenue = [
+        { investPort: faker.datatype.number({ min: 0, max: 1000 }),
+          revs: faker.datatype.number({ min: 0, max: 1000 }),
+          genFund: faker.datatype.number({ min: 0, max: 1000 }),
+          coreOpBudget: faker.datatype.number({ min: 0, max: 1000 }),
+        },
+      ];
+      const expenses = [
+        { personnel: faker.datatype.number({ min: 0, max: 1000 }),
+          program: faker.datatype.number({ min: 0, max: 1000 }),
+          contracts: faker.datatype.number({ min: 0, max: 1000 }),
+          grants: faker.datatype.number({ min: 0, max: 1000 }),
+          travel: faker.datatype.number({ min: 0, max: 1000 }),
+          equip: faker.datatype.number({ min: 0, max: 1000 }),
+          overhead: faker.datatype.number({ min: 0, max: 1000 }),
+          deptServ: faker.datatype.number({ min: 0, max: 1000 }),
+          other: faker.datatype.number({ min: 0, max: 1000 }),
+        },
+      ];
+      const salary = faker.datatype.number({ min: 0, max: 1000 });
+      const management = faker.datatype.number({ min: 0, max: 1000 });
+      const supServ = faker.datatype.number({ min: 0, max: 1000 });
+      const benAdv = faker.datatype.number({ min: 0, max: 1000 });
       const docID1 = collection.define({
-        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting,
+        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
       });
       const docID2 = collection.define({
-        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting,
+        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
       });
       expect(docID1).to.not.equal(docID2);
     });
@@ -343,8 +387,31 @@ if (Meteor.isServer) {
           unRstr: faker.datatype.number({ min: 0, max: 1000 }),
         },
       ];
+      const revenue = [
+        { investPort: faker.datatype.number({ min: 0, max: 1000 }),
+          revs: faker.datatype.number({ min: 0, max: 1000 }),
+          genFund: faker.datatype.number({ min: 0, max: 1000 }),
+          coreOpBudget: faker.datatype.number({ min: 0, max: 1000 }),
+        },
+      ];
+      const expenses = [
+        { personnel: faker.datatype.number({ min: 0, max: 1000 }),
+          program: faker.datatype.number({ min: 0, max: 1000 }),
+          contracts: faker.datatype.number({ min: 0, max: 1000 }),
+          grants: faker.datatype.number({ min: 0, max: 1000 }),
+          travel: faker.datatype.number({ min: 0, max: 1000 }),
+          equip: faker.datatype.number({ min: 0, max: 1000 }),
+          overhead: faker.datatype.number({ min: 0, max: 1000 }),
+          deptServ: faker.datatype.number({ min: 0, max: 1000 }),
+          other: faker.datatype.number({ min: 0, max: 1000 }),
+        },
+      ];
+      const salary = faker.datatype.number({ min: 0, max: 1000 });
+      const management = faker.datatype.number({ min: 0, max: 1000 });
+      const supServ = faker.datatype.number({ min: 0, max: 1000 });
+      const benAdv = faker.datatype.number({ min: 0, max: 1000 });
       const docID = collection.define({
-        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting,
+        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
       });
       // console.log(collection.findDoc(docID));
       fc.assert(
@@ -438,6 +505,27 @@ if (Meteor.isServer) {
             rstrFedFun: fc.integer({ min: 0, max: 1000 }),
             unRstr: fc.integer({ min: 0, max: 1000 }),
           })),
+          fc.array(fc.record({
+            investPort: fc.integer({ min: 0, max: 1000 }),
+            revs: fc.integer({ min: 0, max: 1000 }),
+            genFund: fc.integer({ min: 0, max: 1000 }),
+            coreOpBudget: fc.integer({ min: 0, max: 1000 }),
+          })),
+          fc.array(fc.record({
+            personnel: fc.integer({ min: 0, max: 1000 }),
+            program: fc.integer({ min: 0, max: 1000 }),
+            contracts: fc.integer({ min: 0, max: 1000 }),
+            grants: fc.integer({ min: 0, max: 1000 }),
+            travel: fc.integer({ min: 0, max: 1000 }),
+            equip: fc.integer({ min: 0, max: 1000 }),
+            overhead: fc.integer({ min: 0, max: 1000 }),
+            deptServ: fc.integer({ min: 0, max: 1000 }),
+            other: fc.integer({ min: 0, max: 1000 }),
+          })),
+          fc.integer({ min: 0, max: 1000 }),
+          fc.integer({ min: 0, max: 1000 }),
+          fc.integer({ min: 0, max: 1000 }),
+          fc.integer({ min: 0, max: 1000 }),
           (
             newCashStuff,
             newOther,
@@ -455,6 +543,12 @@ if (Meteor.isServer) {
             newPensionRsrcsInflow,
             newOPEBRsrcsInflow,
             newCommitConting,
+            newRevenue,
+            newExpenses,
+            newSalary,
+            newManagement,
+            newSupServ,
+            newBenAdv,
           ) => {
             // console.log('update', index, stuffConditions[index]);
             const updateData = {
@@ -474,6 +568,12 @@ if (Meteor.isServer) {
               pensionRsrcsInflow: newPensionRsrcsInflow,
               OPEBRsrcsInflow: newOPEBRsrcsInflow,
               commitConting: newCommitConting,
+              revenue: newRevenue,
+              expenses: newExpenses,
+              salary: newSalary,
+              management: newManagement,
+              supServ: newSupServ,
+              benAdv: newBenAdv,
             };
             testDataUpdate(collection, docID, updateData);
           },

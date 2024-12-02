@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
 import DataInput from '../pages/DataInput';
+import BudgetPLInput from '../pages/BudgetPLInput';
 import WP2503Page from '../pages/WP2503Page';
 import Admin from '../pages/Admin';
 import ListProfiles from '../pages/ListProfiles';
@@ -52,6 +53,7 @@ const App = () => {
           <Route path="/visualizationExport" element={<AllAccountantProtectedRoute ready={ready}><VisualizationExport /></AllAccountantProtectedRoute>} />
           <Route path="/dataInput" element={<AllAccountantProtectedRoute ready={ready}><DataInput /></AllAccountantProtectedRoute>} />
           <Route path="/dataInput/:_email" element={<AllAccountantProtectedRoute ready={ready}><DataInputEmail /></AllAccountantProtectedRoute>} />
+          <Route path="/budgetPLInput" element={<AllAccountantProtectedRoute ready={ready}><BudgetPLInput /></AllAccountantProtectedRoute>} />
           <Route path="/wp2503" element={<ProtectedRoute><WP2503Page /></ProtectedRoute>} />
           <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
           <Route path="/edit/:_id" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />

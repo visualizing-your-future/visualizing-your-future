@@ -6,7 +6,8 @@ export const PAGE_IDS = {
   HOME_USER: 'home-user',
   HOME_ADMIN: 'home-admin',
   LIST_STUFF: 'list-stuff',
-  DATA_STUFF: 'data-stuff', /* Goes from NAVBAR_DATA_INPUT */
+  DATA_STUFF: 'data-stuff', /* Goes from NAVBAR_AUDBAL_INPUT */
+  BUDGET_PL: 'budget-pl',
   ADMIN: 'list-stuff-admin',
   ACCOUNT_SETTINGS: 'account-settings',
   EDIT_USER_PROFILE: 'edit-user-profile',

@@ -11,7 +11,6 @@ const DataInput = () => {
     const subscription = AuditedBalanceData.subscribeAudBalData();
     const rdy = subscription.ready();
     const data = AuditedBalanceData.find({}, { sort: { name: 1 } }).fetch();
-    console.log(data);
     return {
       audBalData: data,
       ready: rdy,
@@ -22,7 +21,7 @@ const DataInput = () => {
     <Container id={PAGE_IDS.DATA_STUFF} className="py-3 justify-content-center">
       <Row className="justify-content-center pb-3">
         <Col className="text-center">
-          <h2>Audited Balance Sheet Temp</h2>
+          <h2>Audited Balance Sheet Input</h2>
         </Col>
       </Row>
       <Row>
@@ -345,7 +344,8 @@ const DataInput = () => {
           <Card className="border-0">
             <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', paddingBottom: '0px', marginTop: '0' }}>
               <div style={{ display: 'inline-flex', gap: '5' +
-                  'px', maxWidth: '100%', marginTop: '0' }}>
+                  'px', maxWidth: '100%', marginTop: '0' }}
+              >
                 {audBalData.map((data) => (
                   <div
                     key={data._id}

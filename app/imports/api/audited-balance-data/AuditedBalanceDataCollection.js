@@ -178,35 +178,53 @@ class AuditedBalanceDataCollection extends BaseCollection {
       totalNet: { type: Number, optional: true },
 
       totalLiabInRsrc: { type: Number, optional: true },
+
+      revenue: {
+        type: Array,
+        optional: true,
+      },
+      'revenue.$': Object,
+      'revenue.$.investPort': { type: Number, defaultValue: 0, optional: true },
+      'revenue.$.revs': { type: Number, defaultValue: 0, optional: true },
+      'revenue.$.genFund': { type: Number, defaultValue: 0, optional: true },
+      'revenue.$.coreOpBudget': { type: Number, defaultValue: 0, optional: true },
+      revenueTotal: { type: Number, optional: true },
+
+      expenses: {
+        type: Array,
+        optional: true,
+      },
+      'expenses.$': Object,
+      'expenses.$.personnel': { type: Number, defaultValue: 0, optional: true },
+      'expenses.$.program': { type: Number, defaultValue: 0, optional: true },
+      'expenses.$.contracts': { type: Number, defaultValue: 0, optional: true },
+      'expenses.$.grants': { type: Number, defaultValue: 0, optional: true },
+      'expenses.$.travel': { type: Number, defaultValue: 0, optional: true },
+      'expenses.$.equip': { type: Number, defaultValue: 0, optional: true },
+      'expenses.$.overhead': { type: Number, defaultValue: 0, optional: true },
+      'expenses.$.deptServ': { type: Number, defaultValue: 0, optional: true },
+      'expenses.$.other': { type: Number, defaultValue: 0, optional: true },
+      expensesTotal: { type: Number, optional: true },
+
+      salary: { type: Number, optional: true },
+      management: { type: Number, optional: true },
+      supServ: { type: Number, optional: true },
+      benAdv: { type: Number, optional: true },
     }));
   }
 
-  define({ owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting }) {
+  define({ owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+    pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv }) {
     const docID = this._collection.insert({
-      owner,
-      year,
-      cashStuff,
-      other,
-      investments,
-      loanFund,
-      assets,
-      land,
-      compBAssets,
-      rstrCash,
-      pensionRsrcs,
-      OPEBRsrcs,
-      liabilities,
-      longTermInYear,
-      longTermAftYear,
-      pensionRsrcsInflow,
-      OPEBRsrcsInflow,
-      commitConting,
+      owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+      pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
     });
     this.updateTotals(docID);
     return docID;
   }
 
-  update(docID, { cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting }) {
+  update(docID, { cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+    pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv }) {
     const updateData = {};
     if (_.isArray(cashStuff)) { updateData.cashStuff = cashStuff; }
     if (_.isArray(other)) { updateData.other = other; }
@@ -224,6 +242,12 @@ class AuditedBalanceDataCollection extends BaseCollection {
     updateData.pensionRsrcsInflow = pensionRsrcsInflow;
     updateData.OPEBRsrcsInflow = OPEBRsrcsInflow;
     if (_.isArray(commitConting)) { updateData.commitConting = commitConting; }
+    if (_.isArray(revenue)) { updateData.revenue = revenue; }
+    if (_.isArray(expenses)) { updateData.expenses = expenses; }
+    updateData.salary = salary;
+    updateData.management = management;
+    updateData.supServ = supServ;
+    updateData.benAdv = benAdv;
     this._collection.update(docID, { $set: updateData });
 
     // Call the updateTotals method to update the totals
@@ -303,7 +327,6 @@ class AuditedBalanceDataCollection extends BaseCollection {
   /**
    * Returns an object representing the definition of docID in a format appropriate to the restoreOne or define function.
    * @param docID
-   * @return {{owner: (*|number), condition: *, quantity: *, name}}
    */
   dumpOne(docID) {
     const doc = this.findDoc(docID);
@@ -341,27 +364,21 @@ class AuditedBalanceDataCollection extends BaseCollection {
     const commitConting = doc.commitConting;
     const totalNet = doc.totalNet;
     const totalLiabInRsrc = doc.totalLiabInRsrc;
+    const revenue = doc.revenue;
+    const revenueTotal = doc.revenueTotal;
+    const expenses = doc.expenses;
+    const expensesTotal = doc.expensesTotal;
+    const salary = doc.salary;
+    const management = doc.management;
+    const supServ = doc.supServ;
+    const benAdv = doc.benAdv;
     const year = doc.year;
     const owner = doc.owner;
     return {
-      totalLiabInRsrc, totalNet,
-      commitConting, liabInflowRsrcsTotal,
-      OPEBRsrcsInflow, pensionRsrcsInflow,
-      allLiabilitiesTotal, longTermAftYearTotal,
-      longTermAftYear, longTermInYearTotal,
-      longTermInYear, liabilitiesTotal,
-      liabilities, totAssetsAndRsrcs,
-      OPEBRsrcs, pensionRsrcs,
-      otherAssetsTotal, rstrCash,
-      capAssetsTotal, compBAssetsTotal,
-      compBAssets, landTotal,
-      land, assetsTotal,
-      assets, investLoanTotal,
-      loanFundTotal, loanFund,
-      investmentsTotal, investments,
-      otherTotal, other,
-      cashTotal, cashStuff,
-      year, owner };
+      totalLiabInRsrc, totalNet, commitConting, liabInflowRsrcsTotal, OPEBRsrcsInflow, pensionRsrcsInflow, allLiabilitiesTotal, longTermAftYearTotal, longTermAftYear,
+      longTermInYearTotal, longTermInYear, liabilitiesTotal, liabilities, totAssetsAndRsrcs, OPEBRsrcs, pensionRsrcs, otherAssetsTotal, rstrCash, capAssetsTotal, compBAssetsTotal,
+      compBAssets, landTotal, land, assetsTotal, assets, investLoanTotal, loanFundTotal, loanFund, investmentsTotal, investments, otherTotal, other, cashTotal, cashStuff,
+      revenue, revenueTotal, expenses, expensesTotal, salary, management, supServ, benAdv, year, owner };
   }
 
   sumArray(array) {
@@ -387,6 +404,8 @@ class AuditedBalanceDataCollection extends BaseCollection {
     const pensionRsrcsInflow = doc.pensionRsrcsInflow;
     const OPEBRsrcsInflow = doc.OPEBRsrcsInflow;
     const totalCommitConting = this.sumArray(doc.commitConting);
+    const totalRevenue = this.sumArray(doc.revenue);
+    const totalExpenses = this.sumArray(doc.expenses);
 
     this._collection.update(docId, {
       $set: {
@@ -408,6 +427,8 @@ class AuditedBalanceDataCollection extends BaseCollection {
         liabInflowRsrcsTotal: totalLiab + totalLongTermInYear + totalLongTermAftYear + pensionRsrcsInflow + OPEBRsrcsInflow,
         totalNet: totalCommitConting,
         totalLiabInRsrc: totalLiab + totalLongTermInYear + totalLongTermAftYear + pensionRsrcsInflow + OPEBRsrcsInflow + totalCommitConting,
+        revenueTotal: totalRevenue,
+        expensesTotal: totalExpenses,
       },
     });
   }
