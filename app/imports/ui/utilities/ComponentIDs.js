@@ -4,6 +4,7 @@ export const COMPONENT_IDS = {
   MANAGE_DATABASE_DUMP: 'manage-database-dump',
   NAVBAR_AUDBAL_INPUT: 'navbar-audbal-input', /* Goes to DATA_STUFF pageID */
   NAVBAR_BUDGETPL_INPUT: 'navbar-audbal-input',
+  NAVBAR_DATA_TEST: 'navbar-data-test',
   NAVBAR_VISUALIZATION_EXPORT: 'navbar-visualization-export',
   NAVBAR_CLIENT_DATA: 'navbar-client-data', /* Goes to CLIENT_DATA_IMPORT pageID */
   NAVBAR_CLIENT_LIST: 'navbar-client-list',

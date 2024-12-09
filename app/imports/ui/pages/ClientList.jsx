@@ -64,7 +64,7 @@ const ClientList = () => {
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>Email</th>
+                <th>Role</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Financial Worksheets</th>
