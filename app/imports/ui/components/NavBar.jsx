@@ -30,9 +30,9 @@ const NavBar = () => {
             {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.USER]) ? ([
             ]) : ''}
             {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.ADMIN]) ? ([
-              <Nav.Link id={COMPONENT_IDS.NAVBAR_ADMIN} as={NavLink} to="/admin" key="admin">Admin (WIP)</Nav.Link>,
+              // <Nav.Link id={COMPONENT_IDS.NAVBAR_ADMIN} as={NavLink} to="/admin" key="admin">Admin (WIP)</Nav.Link>,
               <Nav.Link id={COMPONENT_IDS.NAVBAR_LIST_PROFILES_ADMIN} as={NavLink} to="/profiles" key="profiles">Edit User Accounts</Nav.Link>,
-              <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/notfound" key="notfound">Client Page (in-progress)</Nav.Link>,
+              // <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/notfound" key="notfound">Client Page (in-progress)</Nav.Link>,
               // <Nav.Link id={COMPONENT_IDS.NAVBAR_CLIENT_DATA} as={NavLink} to="/clients" key="clients">Client Page (in-progress)</Nav.Link>,
             ]) : ''}
             {currentUser && Roles.userIsInRole(Meteor.userId(), [ROLE.ADMIN, ROLE.ACCOUNTANT, ROLE.BOSSACCOUNTANT]) ? ([
