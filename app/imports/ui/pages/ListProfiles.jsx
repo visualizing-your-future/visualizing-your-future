@@ -4,15 +4,15 @@ import { Col, Container, Row, Table } from 'react-bootstrap';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { UserProfiles } from '../../api/user/UserProfileCollection';
-import UserProfileItem from '../components/UserProfileItem';
+// import UserProfileItem from '../components/UserProfileItem';
 import { AdminProfiles } from '../../api/user/AdminProfileCollection';
-import AdminProfileItem from '../components/AdminProfileItem';
+// import AdminProfileItem from '../components/AdminProfileItem';
 import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
-import AccountantProfileItem from '../components/AccountantProfileItem';
+// import AccountantProfileItem from '../components/AccountantProfileItem';
 import { ClientProfiles } from '../../api/user/ClientProfileCollection';
-import ClientProfileItem from '../components/ClientProfileItem';
+// import ClientProfileItem from '../components/ClientProfileItem';
 import { BossAccountantProfiles } from '../../api/user/BossAccountantProfileCollection';
-import BossAccountantProfileItem from '../components/BossAccountantProfileItem';
+// import BossAccountantProfileItem from '../components/BossAccountantProfileItem';
 
 /* Renders a table containing all of the Users documents. Use <UserProfileItem> to render each row. */
 const ListProfiles = () => {
@@ -49,6 +49,21 @@ const ListProfiles = () => {
       bossAccountantSubReady: bossAcctSubRdy,
     };
   }, []);
+
+  // Renders info for profile but leaves admin und editable
+  const renderProfileRow = (profile, isAdmin = false) => (
+    <tr key={profile._id}>
+      <td>{profile.email}</td>
+      <td>{profile.firstName}</td>
+      <td>{profile.lastName}</td>
+      <td>{profile.role}</td>
+      <td>{profile.clients}</td>
+      <td>
+        {!isAdmin && <a href={`/edit/${profile._id}`}>Edit</a>}
+      </td>
+    </tr>
+  );
+
   return ((userSubReady && adminSubReady && accountantSubReady && clientSubReady && bossAccountantSubReady) ? (
     <Container id={PAGE_IDS.LIST_PROFILES} className="py-3">
       <Row className="justify-content-center">
@@ -62,13 +77,14 @@ const ListProfiles = () => {
                 <th>Last Name</th>
                 <th>Role</th>
                 <th>Clients</th>
+                <th>Edit</th>
               </tr>
             </thead>
             <tbody>
-              {userProfileItems.map((profile) => <UserProfileItem key={profile._id} profile={profile} />)}
-              {accountantProfileItems.map((profile) => <AccountantProfileItem key={profile._id} profile={profile} />)}
-              {bossAccountantProfileItems.map((profile) => <BossAccountantProfileItem key={profile._id} profile={profile} />)}
-              {adminProfileItems.map((profile) => <AdminProfileItem key={profile._id} profile={profile} />)}
+              {userProfileItems.map((profile) => renderProfileRow(profile))}
+              {accountantProfileItems.map((profile) => renderProfileRow(profile))}
+              {bossAccountantProfileItems.map((profile) => renderProfileRow(profile))}
+              {adminProfileItems.map((profile) => renderProfileRow(profile, true))}
             </tbody>
           </Table>
         </Col>
@@ -87,7 +103,7 @@ const ListProfiles = () => {
               </tr>
             </thead>
             <tbody>
-              {clientProfileItems.map((profile) => <ClientProfileItem key={profile._id} profile={profile} />)}
+              {clientProfileItems.map((profile) => renderProfileRow(profile))}
             </tbody>
           </Table>
         </Col>

@@ -30,6 +30,8 @@ const AccountSettings = () => {
   // Set the page title
   document.title = 'Visualizing Your Future - Account Settings';
   const navigate = useNavigate();
+  // Determine if the logged-in user is an admin
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), ROLE.ADMIN);
 
   // Define schema for the form using SimpleSchema for validation
   const schema = new SimpleSchema({
@@ -109,7 +111,6 @@ const AccountSettings = () => {
   const [showModal, setShowModal] = useState(false);
   const [typedConfirmation, setTypedConfirmation] = useState('');
   const [deleteEnabled, setDeleteEnabled] = useState(false);
-
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
@@ -267,6 +268,7 @@ const AccountSettings = () => {
                       onClick={handleOpenModal}
                       className="btn"
                       style={{ width: '100%' }}
+                      disabled={isAdmin}
                     >
                       Delete Account
                     </Button>
