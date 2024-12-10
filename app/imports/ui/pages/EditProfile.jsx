@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import swal from 'sweetalert';
-import { Card, Col, Container, Row, Button } from 'react-bootstrap';
+import { Card, Col, Container, Row, Button, Modal, Form, Alert } from 'react-bootstrap';
 import { AutoForm, ErrorsField, SubmitField, TextField, SelectField } from 'uniforms-bootstrap5';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
@@ -24,6 +24,12 @@ const EditProfile = () => {
   const _docId = useParams();
   const navigate = useNavigate();
   const roleTypes = ['Admin', 'User', 'Accountant', 'Client', 'BossAccountant'];
+  const [showModal, setShowModal] = useState(false);
+  const [typedConfirmation, setTypedConfirmation] = useState('');
+  const [deleteEnabled, setDeleteEnabled] = useState(false);
+  const [showAlert, setShowAlert] = useState(false); // State for alert visibility
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
 
   /** Account settings the user can change. */
   const schema = new SimpleSchema({
@@ -128,6 +134,28 @@ const EditProfile = () => {
     navigate('/profiles');
   };
 
+  // checks to see if the user has typed the input correctly
+  const handleInputChange = (e) => {
+    const input = e.target.value;
+    setTypedConfirmation(input);
+    setDeleteEnabled(input === 'DELETE'); // Update as per your requirement
+  };
+
+  // Delete the current users account and redirects them after
+  const handleDeleteAccount = () => {
+    removeItMethod.callPromise({ collectionName, instance: _docId })
+      .then(() => {
+        setShowAlert(true); // Show alert
+        setTimeout(() => {
+          setShowAlert(false); // Hide alert after 3 seconds
+          navigate('/profiles'); // Navigate to home
+        }, 1000);
+      })
+      .finally(() => {
+        handleCloseModal();
+      });
+  };
+
   return subReady ? (
     <Container id={PAGE_IDS.EDIT_USER_PROFILE} className="py-3">
       <Row className="justify-content-center">
@@ -155,15 +183,55 @@ const EditProfile = () => {
                 <Row>
                   &nbsp;
                 </Row>
+                {showAlert && (
+                  <Alert variant="success" dismissible onClose={() => setShowAlert(false)}>
+                    The account has been successfully deleted!
+                  </Alert>
+                )}
                 <Button
-                  id={COMPONENT_IDS.DELETE_USER_ACCOUNT}
-                  onClick={() => {
-                    removeItMethod.callPromise({ collectionName: collectionName, instance: _docId });
-                    navigate('/profiles');
-                  }}
+                  id="modal-pop-up-button"
+                  onClick={handleOpenModal}
+                  className="btn"
+                  style={{ width: '100%' }}
                 >
                   Delete Account
                 </Button>
+                <Modal id={COMPONENT_IDS.DELETE_USER_ACCOUNT} show={showModal} onHide={handleCloseModal} centered>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Confirm Account Deletion</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <p>
+                      Are you sure you want to delete your account? This action cannot be undone.
+                    </p>
+                    <Form>
+                      <Form.Group controlId="confirmDeletion">
+                        <Form.Label>
+                          To confirm, type <strong>DELETE</strong> below:
+                        </Form.Label>
+                        <Form.Control
+                          type="text"
+                          value={typedConfirmation}
+                          onChange={handleInputChange}
+                          placeholder="Type DELETE to confirm"
+                        />
+                      </Form.Group>
+                    </Form>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                      Cancel
+                    </Button>
+                    <Button
+                      id="delete-user-button"
+                      variant="danger"
+                      disabled={!deleteEnabled}
+                      onClick={handleDeleteAccount}
+                    >
+                      Delete
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
               </Card.Body>
             </Card>
           </AutoForm>
