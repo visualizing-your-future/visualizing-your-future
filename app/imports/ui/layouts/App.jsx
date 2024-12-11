@@ -28,7 +28,7 @@ import ClientDataImport from '../pages/ClientDataImport';
 import VisualizationExport from '../pages/VisualizationExport';
 import EditProfile from '../pages/EditProfile';
 import ClientList from '../pages/ClientList';
-
+import DataTest from '../pages/DataTest';
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
   const { ready } = useTracker(() => {
@@ -54,6 +54,8 @@ const App = () => {
           <Route path="/visualizationExport" element={<AllAccountantProtectedRoute ready={ready}><VisualizationExport /></AllAccountantProtectedRoute>} />
           <Route path="/dataInput" element={<AllAccountantProtectedRoute ready={ready}><DataInput /></AllAccountantProtectedRoute>} />
           <Route path="/dataInput/:_email/:_worksheetName" element={<AllAccountantProtectedRoute ready={ready}><DataInputEmail /></AllAccountantProtectedRoute>} />
+          <Route path="/dataTest" element={<AllAccountantProtectedRoute ready={ready}><DataTest /></AllAccountantProtectedRoute>} />
+          <Route path="/dataTest/:_email/:_worksheetName" element={<AllAccountantProtectedRoute ready={ready}><DataTest /></AllAccountantProtectedRoute>} />
           <Route path="/budgetPLInput" element={<AllAccountantProtectedRoute ready={ready}><BudgetPLInput /></AllAccountantProtectedRoute>} />
           <Route path="/wp2503" element={<AllAccountantProtectedRoute ready={ready}><WP2503Page /></AllAccountantProtectedRoute>} />
           <Route path="/wp2503/:_email/:_worksheetName" element={<AllAccountantProtectedRoute ready={ready}><WP2503PageEmail /></AllAccountantProtectedRoute>} />

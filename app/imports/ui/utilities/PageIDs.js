@@ -21,6 +21,7 @@ export const PAGE_IDS = {
   SIGN_OUT: 'sign-out',
   SIGN_UP: 'sign-up',
   DATA_INPUT: 'data-input',
+  DATA_TEST: 'data-test',
   WP_1007: 'wp-1007',
   WP_1008: 'wp-1008',
   WP_2005_2: 'wp-2005-2',
