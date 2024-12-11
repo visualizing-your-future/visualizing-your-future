@@ -141,6 +141,7 @@ if (Meteor.isServer) {
           fc.integer({ min: 0, max: 1000 }),
           (
             owner,
+            worksheetName,
             year,
             cashStuff,
             other,
@@ -166,7 +167,7 @@ if (Meteor.isServer) {
             benAdv,
           ) => {
             const definitionData =
-              { owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+              { owner, worksheetName, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
                 pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv };
             testDefine(collection, definitionData);
           },
@@ -177,6 +178,7 @@ if (Meteor.isServer) {
 
     it('Can define duplicates', function test2() {
       const owner = faker.internet.email();
+      const worksheetName = faker.lorem.words();
       const year = faker.datatype.number({ min: 0, max: 10 });
       const cashStuff = [
         { pettyCash: faker.datatype.number({ min: 0, max: 1000 }),
@@ -302,11 +304,11 @@ if (Meteor.isServer) {
       const supServ = faker.datatype.number({ min: 0, max: 1000 });
       const benAdv = faker.datatype.number({ min: 0, max: 1000 });
       const docID1 = collection.define({
-        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+        owner, worksheetName, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
         pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
       });
       const docID2 = collection.define({
-        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+        owner, worksheetName, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
         pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
       });
       expect(docID1).to.not.equal(docID2);
@@ -314,6 +316,7 @@ if (Meteor.isServer) {
 
     it('Can update', function test3(done) {
       const owner = faker.internet.email();
+      const worksheetName = faker.lorem.words();
       const year = faker.datatype.number({ min: 0, max: 10 });
       const cashStuff = [
         { pettyCash: faker.datatype.number({ min: 0, max: 1000 }),
@@ -439,7 +442,7 @@ if (Meteor.isServer) {
       const supServ = faker.datatype.number({ min: 0, max: 1000 });
       const benAdv = faker.datatype.number({ min: 0, max: 1000 });
       const docID = collection.define({
-        owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+        owner, worksheetName, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
         pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
       });
       // console.log(collection.findDoc(docID));
