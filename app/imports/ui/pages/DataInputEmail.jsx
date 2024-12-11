@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Card } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
 import { useParams } from 'react-router';
 import { AuditedBalanceData } from '../../api/audited-balance-data/AuditedBalanceDataCollection';
@@ -8,14 +8,12 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
 const DataInputEmail = () => {
-  const email = useParams();
+  const email = useParams()._email;
+  const worksheetName = useParams()._worksheetName;
   const { audBalData, ready } = useTracker(() => {
     const subscription = AuditedBalanceData.subscribeAudBalDataAdmin();
     const rdy = subscription.ready();
-    console.log(email);
-    console.log(email._email);
-    const data = AuditedBalanceData.find({ owner: email._email }, { sort: { name: 1 } }).fetch();
-    console.log(data);
+    const data = AuditedBalanceData.find({ owner: email, worksheetName: worksheetName }, { sort: { name: 1 } }).fetch();
     return {
       audBalData: data,
       ready: rdy,
@@ -23,14 +21,14 @@ const DataInputEmail = () => {
   }, []);
 
   return (ready ? (
-    <Container id={PAGE_IDS.DATA_STUFF} className="py-3 mx-5">
+    <Container id={PAGE_IDS.DATA_STUFF} className="py-3 justify-content-center">
       <Row className="justify-content-center pb-3">
         <Col className="text-center">
-          <h2>Audited Balance Sheet Temp</h2>
+          <h2>Audited Balance Sheet Input</h2>
         </Col>
       </Row>
       <Row>
-        <Col className="col-lg-4">
+        <Col className="col-lg-4" style={{ paddingTop: '20px' }}>
           <Row className="fw-bold">
             Fiscal Year
             <hr className="solid" />
@@ -51,7 +49,7 @@ const DataInputEmail = () => {
             <hr className="solid my-0" />
             <h6 className="text-end" style={{ paddingTop: '2px' }}>Total Cash and Cash Equivalents</h6>
           </Row>
-          <Row className="justify-content-start fw-bold">
+          <Row className="justify-content-start fw-bold" style={{ paddingTop: '3px' }}>
             Other Assets
           </Row>
           <Row className="align-items-center ps-3" style={{ paddingTop: '3px' }}>
@@ -127,7 +125,7 @@ const DataInputEmail = () => {
             <hr className="solid my-0" />
             Investments
           </Row>
-          <Row className="justify-content-start ps-3 fw-bold">
+          <Row className="justify-content-start ps-3 fw-bold" style={{ paddingTop: '23px' }}>
             Capital Assets, Net:
           </Row>
           <Row className="align-content-center ps-5 fw-bold">
@@ -158,7 +156,7 @@ const DataInputEmail = () => {
           <Row className="align-items-center ms-3 ps-5" style={{ paddingTop: '17px' }}>
             Land B
           </Row>
-          <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
+          <Row className="align-items-center ps-5" style={{ paddingTop: '10px' }}>
             Construction in Progress
           </Row>
           <Row className="align-items-center ps-5" style={{ paddingTop: '6px' }}>
@@ -250,7 +248,7 @@ const DataInputEmail = () => {
           <Row className="align-items-center ps-5" style={{ paddingTop: '17px' }}>
             Net OPEB Liability
           </Row>
-          <Row className="align-items-center ps-5 fw-bold" style={{ paddingTop: '17px' }}>
+          <Row className="align-items-center ps-5 fw-bold" style={{ paddingTop: '25px' }}>
             Line of Credit
           </Row>
           <Row className="align-items-center ms-3 ps-5" style={{ paddingTop: '17px' }}>
@@ -345,11 +343,31 @@ const DataInputEmail = () => {
             <h6 className="text-center">Total Liabilities, Deferred Inflows of Resources</h6>
           </Row>
         </Col>
-        {audBalData.map((data) => (
-          <Col key={data._id}>
-            <DisplayAudBalData audBalData={data} />
-          </Col>
-        ))}
+        <Col lg={8}>
+          <Card className="border-0">
+            <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', paddingBottom: '0px', marginTop: '0' }}>
+              <div style={{ display: 'inline-flex', gap: '5' +
+                  'px', maxWidth: '100%', marginTop: '0' }}
+              >
+                {audBalData.map((data) => (
+                  <div
+                    key={data._id}
+                    style={{
+                      minWidth: '250px',
+                      padding: '0', // Remove all padding
+                      textAlign: 'center',
+                      border: '1px solid #ddd',
+                      borderRadius: '4px',
+                      backgroundColor: '#f8f9fa',
+                    }}
+                  >
+                    <DisplayAudBalData audBalData={data} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
+        </Col>
       </Row>
     </Container>
   ) : <LoadingSpinner message="Loading Data" />);

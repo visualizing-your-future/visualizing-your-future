@@ -7,8 +7,10 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Footer from '../components/Footer';
 import Landing from '../pages/Landing';
 import DataInput from '../pages/DataInput';
+import DataInputEmail from '../pages/DataInputEmail';
 import BudgetPLInput from '../pages/BudgetPLInput';
 import WP2503Page from '../pages/WP2503Page';
+import WP2503PageEmail from '../pages/WP2503PageEmail';
 import Admin from '../pages/Admin';
 import ListProfiles from '../pages/ListProfiles';
 import NotFound from '../pages/NotFound';
@@ -26,7 +28,6 @@ import ClientDataImport from '../pages/ClientDataImport';
 import VisualizationExport from '../pages/VisualizationExport';
 import EditProfile from '../pages/EditProfile';
 import ClientList from '../pages/ClientList';
-import DataInputEmail from '../pages/DataInputEmail';
 
 /** Top-level layout component for this application. Called in imports/startup/client/startup.jsx. */
 const App = () => {
@@ -52,9 +53,10 @@ const App = () => {
           <Route path="/edit/:_id" element={<AdminProtectedRoute ready={ready}><EditProfile /></AdminProtectedRoute>} />
           <Route path="/visualizationExport" element={<AllAccountantProtectedRoute ready={ready}><VisualizationExport /></AllAccountantProtectedRoute>} />
           <Route path="/dataInput" element={<AllAccountantProtectedRoute ready={ready}><DataInput /></AllAccountantProtectedRoute>} />
-          <Route path="/dataInput/:_email" element={<AllAccountantProtectedRoute ready={ready}><DataInputEmail /></AllAccountantProtectedRoute>} />
+          <Route path="/dataInput/:_email/:_worksheetName" element={<AllAccountantProtectedRoute ready={ready}><DataInputEmail /></AllAccountantProtectedRoute>} />
           <Route path="/budgetPLInput" element={<AllAccountantProtectedRoute ready={ready}><BudgetPLInput /></AllAccountantProtectedRoute>} />
-          <Route path="/wp2503" element={<ProtectedRoute><WP2503Page /></ProtectedRoute>} />
+          <Route path="/wp2503" element={<AllAccountantProtectedRoute ready={ready}><WP2503Page /></AllAccountantProtectedRoute>} />
+          <Route path="/wp2503/:_email/:_worksheetName" element={<AllAccountantProtectedRoute ready={ready}><WP2503PageEmail /></AllAccountantProtectedRoute>} />
           <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
           <Route path="/edit/:_id" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
           <Route path="/visualizationExport" element={<ProtectedRoute><VisualizationExport /></ProtectedRoute>} />

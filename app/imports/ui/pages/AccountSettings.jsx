@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, Col, Container, Row, Alert, Button } from 'react-bootstrap';
+import { Card, Col, Modal, Form, Container, Row, Alert, Button } from 'react-bootstrap';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema from 'simpl-schema';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
@@ -29,8 +29,9 @@ import SecurityQuestions from '../components/SecurityQuestions'; // Import the M
 const AccountSettings = () => {
   // Set the page title
   document.title = 'Visualizing Your Future - Account Settings';
-
   const navigate = useNavigate();
+  // Determine if the logged-in user is an admin
+  const isAdmin = Roles.userIsInRole(Meteor.userId(), ROLE.ADMIN);
 
   // Define schema for the form using SimpleSchema for validation
   const schema = new SimpleSchema({
@@ -58,7 +59,6 @@ const AccountSettings = () => {
       docID;
     const usrId = Meteor.userId();
     const username = Meteor.user()?.username;
-
     if (Roles.userIsInRole(usrId, ROLE.ADMIN)) {
       sub = AdminProfiles.subscribeAdmin();
       subRdy = sub.ready();
@@ -107,6 +107,31 @@ const AccountSettings = () => {
   const [mfaStatus, setMfaStatus] = useState(false); // Local state for MFA status
   const [securityQuestion, setSecurityQuestion] = useState('');
   const [securityAnswer, setSecurityAnswer] = useState('');
+
+  const [showModal, setShowModal] = useState(false);
+  const [typedConfirmation, setTypedConfirmation] = useState('');
+  const [deleteEnabled, setDeleteEnabled] = useState(false);
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
+  // checks to see if the user has typed the input correctly
+  const handleInputChange = (e) => {
+    const input = e.target.value;
+    setTypedConfirmation(input);
+    setDeleteEnabled(input === 'DELETE'); // Update as per your requirement
+  };
+
+  // Delete the current users account and redirects them after
+  const handleDeleteAccount = () => {
+    removeItMethod.callPromise({ collectionName, instance: documentID })
+      .then(() => {
+        navigate('/');
+      })
+      .finally(() => {
+        handleCloseModal();
+      });
+  };
+
   /**
    * useEffect Hook
    * - Syncs the `mfaStatus` with the user document or localStorage.
@@ -239,16 +264,50 @@ const AccountSettings = () => {
                   </Col>
                   <Col>
                     <Button
-                      id={COMPONENT_IDS.DELETE_USER_ACCOUNT}
-                      onClick={() => {
-                        removeItMethod.callPromise({ collectionName: collectionName, instance: documentID });
-                        navigate('/');
-                      }}
+                      id="modal-pop-up-button"
+                      onClick={handleOpenModal}
                       className="btn"
                       style={{ width: '100%' }}
+                      disabled={isAdmin}
                     >
                       Delete Account
                     </Button>
+                    <Modal id={COMPONENT_IDS.DELETE_USER_ACCOUNT} show={showModal} onHide={handleCloseModal} centered>
+                      <Modal.Header closeButton>
+                        <Modal.Title>Confirm Account Deletion</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <p>
+                          Are you sure you want to delete your account? This action cannot be undone.
+                        </p>
+                        <Form>
+                          <Form.Group controlId="confirmDeletion">
+                            <Form.Label>
+                              To confirm, type <strong>DELETE</strong> below:
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              value={typedConfirmation}
+                              onChange={handleInputChange}
+                              placeholder="Type DELETE to confirm"
+                            />
+                          </Form.Group>
+                        </Form>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseModal}>
+                          Cancel
+                        </Button>
+                        <Button
+                          id="delete-user-button"
+                          variant="danger"
+                          disabled={!deleteEnabled}
+                          onClick={handleDeleteAccount}
+                        >
+                          Delete
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
                   </Col>
                 </Row>
               </Card.Body>

@@ -15,6 +15,8 @@ class AuditedBalanceDataCollection extends BaseCollection {
   constructor() {
     super('AuditedBalanceData', new SimpleSchema({
       owner: String,
+      worksheetType: String,
+      worksheetName: String,
       year: Number,
       cashStuff: {
         type: Array,
@@ -213,10 +215,10 @@ class AuditedBalanceDataCollection extends BaseCollection {
     }));
   }
 
-  define({ owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+  define({ owner, worksheetName, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
     pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv }) {
     const docID = this._collection.insert({
-      owner, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
+      owner, worksheetType: 'Audited Balance Data', worksheetName, year, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear,
       pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv,
     });
     this.updateTotals(docID);
@@ -374,11 +376,13 @@ class AuditedBalanceDataCollection extends BaseCollection {
     const benAdv = doc.benAdv;
     const year = doc.year;
     const owner = doc.owner;
+    const worksheetType = doc.worksheetType;
+    const worksheetName = doc.worksheetName;
     return {
       totalLiabInRsrc, totalNet, commitConting, liabInflowRsrcsTotal, OPEBRsrcsInflow, pensionRsrcsInflow, allLiabilitiesTotal, longTermAftYearTotal, longTermAftYear,
       longTermInYearTotal, longTermInYear, liabilitiesTotal, liabilities, totAssetsAndRsrcs, OPEBRsrcs, pensionRsrcs, otherAssetsTotal, rstrCash, capAssetsTotal, compBAssetsTotal,
       compBAssets, landTotal, land, assetsTotal, assets, investLoanTotal, loanFundTotal, loanFund, investmentsTotal, investments, otherTotal, other, cashTotal, cashStuff,
-      revenue, revenueTotal, expenses, expensesTotal, salary, management, supServ, benAdv, year, owner };
+      revenue, revenueTotal, expenses, expensesTotal, salary, management, supServ, benAdv, year, owner, worksheetType, worksheetName };
   }
 
   sumArray(array) {
