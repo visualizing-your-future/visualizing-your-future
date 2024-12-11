@@ -10,6 +10,9 @@ const ClientListOfWorksheetsItem = ({ profile }) => (
       {profile.worksheetsAuditedBalance.map((worksheet) => (
         <Link className={COMPONENT_IDS.CLIENT_WORKSHEETS} to={`/dataInput/${profile.clientEmail}/${worksheet}`}>{worksheet}<br /></Link>
       ))}
+      {profile.worksheets2503.map((worksheet) => (
+        <Link className={COMPONENT_IDS.CLIENT_WORKSHEETS} to={`/wp2503/${profile.clientEmail}/${worksheet}`}>{worksheet}<br /></Link>
+      ))}
     </td>
   </tr>
 );
@@ -18,10 +21,8 @@ const ClientListOfWorksheetsItem = ({ profile }) => (
 ClientListOfWorksheetsItem.propTypes = {
   profile: PropTypes.shape({
     clientEmail: PropTypes.string,
-    worksheetsAuditedBalance: PropTypes.string,
-    worksheets2503: PropTypes.string,
-    // lastName: PropTypes.string,
-    // role: PropTypes.string,
+    worksheetsAuditedBalance: PropTypes.arrayOf(PropTypes.string),
+    worksheets2503: PropTypes.arrayOf(PropTypes.string),
     _id: PropTypes.string,
   }).isRequired,
 };

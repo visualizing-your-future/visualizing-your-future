@@ -55,8 +55,8 @@ const App = () => {
           <Route path="/dataInput" element={<AllAccountantProtectedRoute ready={ready}><DataInput /></AllAccountantProtectedRoute>} />
           <Route path="/dataInput/:_email/:_worksheetName" element={<AllAccountantProtectedRoute ready={ready}><DataInputEmail /></AllAccountantProtectedRoute>} />
           <Route path="/budgetPLInput" element={<AllAccountantProtectedRoute ready={ready}><BudgetPLInput /></AllAccountantProtectedRoute>} />
-          <Route path="/wp2503" element={<ProtectedRoute><WP2503Page /></ProtectedRoute>} />
-          <Route path="/wp2503/:_email" element={<AllAccountantProtectedRoute><WP2503PageEmail /></AllAccountantProtectedRoute>} />
+          <Route path="/wp2503" element={<AllAccountantProtectedRoute ready={ready}><WP2503Page /></AllAccountantProtectedRoute>} />
+          <Route path="/wp2503/:_email/:_worksheetName" element={<AllAccountantProtectedRoute ready={ready}><WP2503PageEmail /></AllAccountantProtectedRoute>} />
           <Route path="/clientDataImport" element={<ProtectedRoute><ClientDataImport /></ProtectedRoute>} />
           <Route path="/edit/:_id" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
           <Route path="/visualizationExport" element={<ProtectedRoute><VisualizationExport /></ProtectedRoute>} />

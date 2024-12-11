@@ -10,9 +10,10 @@ import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
 import { BossAccountantProfiles } from '../../api/user/BossAccountantProfileCollection';
 import ClientListOfWorksheetsItem from '../components/ClientListOfWorksheetsItem';
 import { AuditedBalanceData } from '../../api/audited-balance-data/AuditedBalanceDataCollection';
+import { WP2503 } from '../../api/WP2503/WP2503';
 
 const ClientList = () => {
-  const { clientWorksheetList, accountantSubReady, auditedBalanceDataSubReady } = useTracker(() => {
+  const { clientWorksheetList, accountantSubReady, auditedBalanceDataSubReady, wp2503SubReady } = useTracker(() => {
     const user = Meteor.user();
     let acctSub;
     let acctSubRdy;
@@ -20,6 +21,8 @@ const ClientList = () => {
     let clients;
     const auditedBalanceDataSub = AuditedBalanceData.subscribeAudBalDataAdmin();
     const audBalDataSubRdy = auditedBalanceDataSub.ready();
+    const wp2503Sub = WP2503.subscribeWP2503Admin();
+    const wp2503SubRdy = wp2503Sub.ready();
     const clntList = [];
 
     if (Roles.userIsInRole(user, ROLE.ACCOUNTANT)) {
@@ -49,17 +52,17 @@ const ClientList = () => {
           worksheets2503: [],
         };
         AuditedBalanceData.find({ owner: client }).fetch().forEach((worksheet) => {
-          if (worksheet.worksheetType === 'Audited Balance Data') {
-            if (!newClient.worksheetsAuditedBalance.includes(worksheet.worksheetName)) {
-              newClient.worksheetsAuditedBalance.push(worksheet.worksheetName);
-            }
-          } else if (worksheet.worksheetType === '2503') {
-            if (!newClient.worksheets2503.includes(worksheet.worksheetName)) {
-              newClient.worksheets2503.push(worksheet.worksheetName);
-            }
+          if (!newClient.worksheetsAuditedBalance.includes(worksheet.worksheetName)) {
+            newClient.worksheetsAuditedBalance.push(worksheet.worksheetName);
+          }
+        });
+        WP2503.find({ owner: client }).fetch().forEach((worksheet) => {
+          if (!newClient.worksheets2503.includes(worksheet.worksheetName)) {
+            newClient.worksheets2503.push(worksheet.worksheetName);
           }
         });
         clntList.push(newClient);
+        console.log(clntList);
       });
     }
 
@@ -67,9 +70,10 @@ const ClientList = () => {
       clientWorksheetList: clntList,
       accountantSubReady: acctSubRdy,
       auditedBalanceDataSubReady: audBalDataSubRdy,
+      wp2503SubReady: wp2503SubRdy,
     };
   }, []);
-  return (auditedBalanceDataSubReady && accountantSubReady) ? (
+  return (accountantSubReady && auditedBalanceDataSubReady && wp2503SubReady) ? (
     <Container id={PAGE_IDS.LIST_CLIENTS} className="py-3">
       <Row className="justify-content-center">
         <Col md={7}>

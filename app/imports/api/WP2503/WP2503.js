@@ -14,6 +14,9 @@ export const wp2503Publications = {
 class WP2503Collection extends BaseCollection {
   constructor() {
     super('WP2503', new SimpleSchema({
+      owner: String,
+      worksheetType: String,
+      worksheetName: String,
       year: Number,
       penAcc: Number,
       retHlthInsur: Number,
@@ -31,9 +34,9 @@ class WP2503Collection extends BaseCollection {
    * Defines a new WP2503 item.
    * @param name the name of the item.
    */
-  define({ year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm }) {
+  define({ owner, worksheetName, year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm }) {
     const docID = this._collection.insert({
-      year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm,
+      owner, worksheetType: '2503', worksheetName, year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm,
     });
     return docID;
   }
@@ -117,7 +120,7 @@ class WP2503Collection extends BaseCollection {
 
       /** This subscription publishes all documents regardless of user, but only if the logged in user is the Admin. */
       Meteor.publish(wp2503Publications.wp2503Admin, function publish() {
-        if (this.userId && Roles.userIsInRole(this.userId, ROLE.ADMIN)) {
+        if (this.userId && Roles.userIsInRole(this.userId, [ROLE.ADMIN, ROLE.ACCOUNTANT, ROLE.BOSSACCOUNTANT])) {
           return instance._collection.find();
         }
         return this.ready();
@@ -153,7 +156,7 @@ class WP2503Collection extends BaseCollection {
    * @throws { Meteor.Error } If there is no logged in user, or the user is not an Admin or User.
    */
   assertValidRoleForMethod(userId) {
-    this.assertRole(userId, [ROLE.ADMIN, ROLE.USER]);
+    this.assertRole(userId, [ROLE.ADMIN, ROLE.ACCOUNTANT, ROLE.BOSSACCOUNTANT]);
   }
 
   /**
@@ -162,6 +165,9 @@ class WP2503Collection extends BaseCollection {
    */
   dumpOne(docID) {
     const doc = this.findDoc(docID);
+    const owner = doc.owner;
+    const worksheetType = doc.worksheetType;
+    const worksheetName = doc.worksheetName;
     const year = doc.year;
     const penAcc = doc.penAcc;
     const retHlthInsur = doc.retHlthInsur;
@@ -172,7 +178,7 @@ class WP2503Collection extends BaseCollection {
     const wrkComp = doc.wrkComp;
     const unempComp = doc.unempComp;
     const penAdm = doc.penAdm;
-    return { year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm };
+    return { owner, worksheetType, worksheetName, year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm };
   }
 }
 

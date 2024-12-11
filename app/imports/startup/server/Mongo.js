@@ -21,7 +21,7 @@ if (Stuffs.count() === 0) {
 // Initialize the AuditedBalanceDataCollection if empty.
 if (AuditedBalanceData.count() === 0) {
   if (Meteor.settings.defaultAuditedBalanceData) {
-    console.log('Creating default data.');
+    console.log('Creating default data for Audited Balance Data.');
     Meteor.settings.defaultAuditedBalanceData.forEach(data => addData(data, AuditedBalanceData));
   }
 }
@@ -29,7 +29,7 @@ if (AuditedBalanceData.count() === 0) {
 // Initialize the WP2503Collection if empty.
 if (WP2503.count() === 0) {
   if (Meteor.settings.defaultWP2503) {
-    console.log('Creating default data.');
+    console.log('Creating default data for WP2503.');
     Meteor.settings.defaultWP2503.forEach(data => addData(data, WP2503));
   }
 }
