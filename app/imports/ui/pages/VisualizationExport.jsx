@@ -175,6 +175,8 @@ const VisualizationExport = ({ auditedData }) => {
     '12year': false,
   });
 
+  const [showEquityBox, setShowEquityBox] = useState(false);
+
   const dataSets = {
     snapshot: auditedData,
     '4year': auditedData.slice(0, 4),
@@ -233,23 +235,37 @@ const VisualizationExport = ({ auditedData }) => {
                   <Row>
                     <Col md={6}>
                       <h4>Equity Metrics</h4>
-                      <h6>Net Position</h6>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <h6>Net Position</h6>
+                        <Button
+                          onClick={() => setShowEquityBox(!showEquityBox)}
+                          variant="link"
+                        >
+                          {showEquityBox ? 'Hide Equity' : 'Show Equity'}
+                        </Button>
+                      </div>
                       <ChartComponent
                         data={dataSets[activeKey]}
-                        chartType="triple"
+                        chartType="dual"
                         key1="assetsTotal"
                         key2="liabilitiesTotal"
-                        key3="totalNet"
                         color1="green"
                         color2="red"
-                        color3="blue"
                       />
+                      {showEquityBox && (
+                        <div className="equity-box">
+                          <h6>Equity</h6>
+                          {dataSets[activeKey].map((entry, index) => (
+                            <p key={index}>Year {entry.year}: {currencyFormatter(entry.assetsTotal - entry.liabilitiesTotal)}</p>
+                          ))}
+                        </div>
+                      )}
                       <h6>Years of Solvency</h6>
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="dual"
                         key1="assetsTotal"
-                        key2="opex"
+                        key2="revenueTotal"
                         color1="#8884d8"
                         color2="#ffc658"
                       />
@@ -267,7 +283,7 @@ const VisualizationExport = ({ auditedData }) => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="single"
-                        key1="opex"
+                        key1="revenueTotal"
                         color1="#82ca9d"
                       />
                       <h6>Years of Solvency Based on Cash Flow</h6>
@@ -283,7 +299,7 @@ const VisualizationExport = ({ auditedData }) => {
                       <ChartComponent
                         data={dataSets[activeKey]}
                         chartType="triple"
-                        key1="budget"
+                        key1="totalRevenue"
                         key2="actualAndEncumbrance"
                         key3="changeAE"
                         color1="red"
