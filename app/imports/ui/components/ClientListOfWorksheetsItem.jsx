@@ -5,13 +5,11 @@ import { COMPONENT_IDS } from '../utilities/ComponentIDs';
 
 const ClientListOfWorksheetsItem = ({ profile }) => (
   <tr>
-    <td>{profile.email}</td>
-    <td>{profile.firstName}</td>
-    <td>{profile.lastName}</td>
+    <td>{profile.clientEmail}</td>
     <td>
-      <Link className={COMPONENT_IDS.CLIENT_WORKSHEETS} to={`/dataInput/${profile.email}`}>Audited Balance</Link>
-      <br />
-      <Link className={COMPONENT_IDS.CLIENT_WORKSHEETS} to={`/dataInput/${profile.email}`}>WP2503 (DOES NOT WORK YET)</Link>
+      {profile.worksheetsAuditedBalance.map((worksheet) => (
+        <Link className={COMPONENT_IDS.CLIENT_WORKSHEETS} to={`/dataInput/${profile.clientEmail}/${worksheet}`}>{worksheet}<br /></Link>
+      ))}
     </td>
   </tr>
 );
@@ -19,10 +17,11 @@ const ClientListOfWorksheetsItem = ({ profile }) => (
 // Require a document to be passed to this component.
 ClientListOfWorksheetsItem.propTypes = {
   profile: PropTypes.shape({
-    email: PropTypes.string,
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    role: PropTypes.string,
+    clientEmail: PropTypes.string,
+    worksheetsAuditedBalance: PropTypes.string,
+    worksheets2503: PropTypes.string,
+    // lastName: PropTypes.string,
+    // role: PropTypes.string,
     _id: PropTypes.string,
   }).isRequired,
 };

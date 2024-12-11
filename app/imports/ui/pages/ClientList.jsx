@@ -6,22 +6,21 @@ import { Col, Container, Row, Table } from 'react-bootstrap';
 import { ROLE } from '../../api/role/Role';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
-import { ClientProfiles } from '../../api/user/ClientProfileCollection';
 import { AccountantProfiles } from '../../api/user/AccountantProfileCollection';
 import { BossAccountantProfiles } from '../../api/user/BossAccountantProfileCollection';
 import ClientListOfWorksheetsItem from '../components/ClientListOfWorksheetsItem';
+import { AuditedBalanceData } from '../../api/audited-balance-data/AuditedBalanceDataCollection';
 
 const ClientList = () => {
-  const { clientList, accountantSubReady, clientSubReady } = useTracker(() => {
+  const { clientWorksheetList, accountantSubReady, auditedBalanceDataSubReady } = useTracker(() => {
     const user = Meteor.user();
     let acctSub;
     let acctSubRdy;
     let clientsFind;
     let clients;
-    const clientSub = ClientProfiles.subscribeClientProfilesAdmin();
-    const clientSubRdy = clientSub.ready();
-    const clientProfiles = ClientProfiles.find({}).fetch();
-    const clientListObjects = [];
+    const auditedBalanceDataSub = AuditedBalanceData.subscribeAudBalDataAdmin();
+    const audBalDataSubRdy = auditedBalanceDataSub.ready();
+    const clntList = [];
 
     if (Roles.userIsInRole(user, ROLE.ACCOUNTANT)) {
       acctSub = AccountantProfiles.subscribeAccountantProfilesUser();
@@ -44,19 +43,33 @@ const ClientList = () => {
     // This is required or the app crashes.
     if (clients) {
       clients.forEach((client) => {
-        const test = ClientProfiles.findOne({ email: client });
-        clientListObjects.push(test);
+        const newClient = {
+          clientEmail: client,
+          worksheetsAuditedBalance: [],
+          worksheets2503: [],
+        };
+        AuditedBalanceData.find({ owner: client }).fetch().forEach((worksheet) => {
+          if (worksheet.worksheetType === 'Audited Balance Data') {
+            if (!newClient.worksheetsAuditedBalance.includes(worksheet.worksheetName)) {
+              newClient.worksheetsAuditedBalance.push(worksheet.worksheetName);
+            }
+          } else if (worksheet.worksheetType === '2503') {
+            if (!newClient.worksheets2503.includes(worksheet.worksheetName)) {
+              newClient.worksheets2503.push(worksheet.worksheetName);
+            }
+          }
+        });
+        clntList.push(newClient);
       });
     }
 
     return {
-      clientList: clientListObjects,
+      clientWorksheetList: clntList,
       accountantSubReady: acctSubRdy,
-      clientProfileItems: clientProfiles,
-      clientSubReady: clientSubRdy,
+      auditedBalanceDataSubReady: audBalDataSubRdy,
     };
   }, []);
-  return (clientSubReady && accountantSubReady) ? (
+  return (auditedBalanceDataSubReady && accountantSubReady) ? (
     <Container id={PAGE_IDS.LIST_CLIENTS} className="py-3">
       <Row className="justify-content-center">
         <Col md={7}>
@@ -64,14 +77,12 @@ const ClientList = () => {
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>Email</th>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th>Client Email</th>
                 <th>Financial Worksheets</th>
               </tr>
             </thead>
             <tbody>
-              {clientList.map((profile) => <ClientListOfWorksheetsItem key={profile._id} profile={profile} />)}
+              {clientWorksheetList.map((profile) => <ClientListOfWorksheetsItem key={profile._id} profile={profile} />)}
             </tbody>
           </Table>
         </Col>
