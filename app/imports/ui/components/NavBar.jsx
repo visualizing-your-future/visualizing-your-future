@@ -43,7 +43,7 @@ const NavBar = () => {
               <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Data Input" key="data-dropdown">
                 <Nav.Link id={COMPONENT_IDS.NAVBAR_AUDBAL_INPUT} as={NavLink} to="/dataInput" key="audBal"><FileSpreadsheet /> Audited Balance</Nav.Link>
                 <Nav.Link id={COMPONENT_IDS.NAVBAR_BUDGETPL_INPUT} as={NavLink} to="/budgetPLInput" key="budgetPL"><FileSpreadsheet /> Budget P&L Input</Nav.Link>
-                <Nav.Link id={COMPONENT_IDS.NAVBAR_DATA_TEST} as={NavLink} to="/DataTest" key="DataTest">Data Test</Nav.Link>
+                {/* <Nav.Link id={COMPONENT_IDS.NAVBAR_DATA_TEST} as={NavLink} to="/DataTest" key="DataTest">Data Test</Nav.Link> */}
               </NavDropdown>,
               <NavDropdown id={COMPONENT_IDS.NAVBAR_LOGIN_DROPDOWN} title="Workpapers" key="wp-dropdown">
                 <NavDropdown.Item id={COMPONENT_IDS.WP_1007} as={NavLink} to="/wp1007" key="1007"><Table /> 1007</NavDropdown.Item>
