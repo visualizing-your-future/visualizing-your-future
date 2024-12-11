@@ -113,7 +113,7 @@ const DataInput = () => {
         <Col md={4}>
           <Form.Group>
             <Form.Label>Upload Excel File:</Form.Label>
-            <Form.Control type="file" accept=".xlsx, .xls, .xlsm" onChange={handleFileUpload} />
+            <Form.Control type="file" accept=".xlsx, .xls, .xlsm, .csv" onChange={handleFileUpload} />
           </Form.Group>
         </Col>
         {/* Sheet selection dropdown */}
