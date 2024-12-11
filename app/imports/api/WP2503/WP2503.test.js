@@ -27,6 +27,8 @@ if (Meteor.isServer) {
     it('Can define and removeIt', function test1(done) {
       fc.assert(
         fc.property(
+          fc.lorem({ maxCount: 1 }),
+          fc.lorem({ maxCount: 1 }),
           fc.integer({ min: 1, max: 10 }),
           fc.integer({ min: 1, max: 10 }),
           fc.integer({ min: 1, max: 10 }),
@@ -37,7 +39,7 @@ if (Meteor.isServer) {
           fc.integer({ min: 1, max: 10 }),
           fc.integer({ min: 1, max: 10 }),
           fc.integer({ min: 1, max: 10 }),
-          (year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm) => {
+          (owner, worksheetName, year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm) => {
             const definitionData = { year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm };
             testDefine(collection, definitionData);
           },
@@ -47,6 +49,8 @@ if (Meteor.isServer) {
     });
 
     it('Can define duplicates', function test2() {
+      const owner = faker.internet.email();
+      const worksheetName = faker.lorem.words();
       const year = faker.datatype.number({ min: 1, max: 5 });
       const penAcc = faker.datatype.number({ min: 1, max: 5 });
       const retHlthInsur = faker.datatype.number({ min: 1, max: 5 });
@@ -57,12 +61,14 @@ if (Meteor.isServer) {
       const wrkComp = faker.datatype.number({ min: 1, max: 5 });
       const unempComp = faker.datatype.number({ min: 1, max: 5 });
       const penAdm = faker.datatype.number({ min: 1, max: 5 });
-      const docID1 = collection.define({ year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm });
-      const docID2 = collection.define({ year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm });
+      const docID1 = collection.define({ owner, worksheetName, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm });
+      const docID2 = collection.define({ owner, worksheetName, year, penAcc, retHlthInsur, othrPostEmpBen, empHlthFnd, SS, medicare, wrkComp, unempComp, penAdm });
       expect(docID1).to.not.equal(docID2);
     });
 
     it('Can update', function test3(done) {
+      const owner = faker.internet.email();
+      const worksheetName = faker.lorem.words();
       const year = faker.datatype.number({
         min: 1,
         max: 10,
@@ -104,6 +110,8 @@ if (Meteor.isServer) {
         max: 10,
       });
       const docID = collection.define({
+        owner,
+        worksheetName,
         year,
         penAcc,
         retHlthInsur,

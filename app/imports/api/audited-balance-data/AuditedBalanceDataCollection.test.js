@@ -28,6 +28,7 @@ if (Meteor.isServer) {
       fc.assert(
         fc.property(
           fc.lorem({ maxCount: 1 }),
+          fc.lorem({ maxCount: 1 }),
           fc.integer({ min: 0, max: 10 }),
           fc.array(fc.record({
             pettyCash: fc.integer({ min: 0, max: 1000 }),
