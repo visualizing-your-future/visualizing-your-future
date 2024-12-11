@@ -11,6 +11,7 @@ const BossAccountantProfileItem = ({ profile }) => (
     <td>{profile.firstName}</td>
     <td>{profile.lastName}</td>
     <td>{profile.role}</td>
+    <td>{profile.clients.toString() || 'No ClientList'}</td>
     <td>
       <Link className={COMPONENT_IDS.LIST_PROFILES_EDIT} to={`/edit/${profile._id}`}>Edit</Link>
     </td>
@@ -24,6 +25,7 @@ BossAccountantProfileItem.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     role: PropTypes.string,
+    clients: PropTypes.arrayOf(PropTypes.string),
     _id: PropTypes.string,
   }).isRequired,
 };

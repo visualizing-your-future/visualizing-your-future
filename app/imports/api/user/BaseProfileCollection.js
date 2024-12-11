@@ -16,6 +16,12 @@ class BaseProfileCollection extends BaseCollection {
       firstName: String,
       lastName: String,
       role: String,
+      clients: {
+        type: Array,
+        optional: true,
+        defaultValue: [],
+      },
+      'clients.$': String,
       userID: /^[23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz]{17}$/,
     })));
   }

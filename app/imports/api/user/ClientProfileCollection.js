@@ -139,7 +139,7 @@ class ClientProfileCollection extends BaseProfileCollection {
 
       /** This subscription publishes all documents regardless of user, but only if the logged in user is the Admin. */
       Meteor.publish(clientProfilePublications.clientProfileAdmin, function publish() {
-        if (this.userId && Roles.userIsInRole(this.userId, ROLE.ADMIN)) {
+        if (this.userId && Roles.userIsInRole(this.userId, [ROLE.ADMIN, ROLE.ACCOUNTANT, ROLE.BOSSACCOUNTANT])) {
           return instance._collection.find();
         }
         return this.ready();

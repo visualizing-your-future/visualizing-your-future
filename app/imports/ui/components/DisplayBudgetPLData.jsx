@@ -12,17 +12,18 @@ const bridge = new SimpleSchema2Bridge(AuditedBalanceData._schema);
 const sumArray = (array) => array.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
 
 const submit = (audBalData, data) => {
-  const { cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting } = data;
+  const { cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow,
+    OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv } = data;
   const docID = audBalData._id;
   const collectionName = AuditedBalanceData.getCollectionName();
-  const updateData = { id: docID, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear, longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting };
+  const updateData = { id: docID, cashStuff, other, investments, loanFund, assets, land, compBAssets, rstrCash, pensionRsrcs, OPEBRsrcs, liabilities, longTermInYear,
+    longTermAftYear, pensionRsrcsInflow, OPEBRsrcsInflow, commitConting, revenue, expenses, salary, management, supServ, benAdv };
   updateMethod.callPromise({ collectionName, updateData })
     .catch(error => swal('Error', error.message, 'error'))
     .then(() => swal('Success', 'Item updated successfully', 'success'));
 };
 
-const DisplayAudBalData = ({ audBalData }) => {
-  const [totalCash, setTotalCash] = useState(0);
+const DisplayBudgetPLData = ({ audBalData }) => {
   const [totalOther, setTotalOther] = useState(0);
   const [totalInvestments, setTotalInvestments] = useState(0);
   const [totalLoanFund, setTotalLoanFund] = useState(0);
@@ -39,9 +40,10 @@ const DisplayAudBalData = ({ audBalData }) => {
   const [totalLiabInflowRsrcs, setTotalLiabInflowRsrcs] = useState(0);
   const [totalCommitConting, setTotalCommitConting] = useState(0);
   const [totalLiabInRsrc, setTotalLiabInRsrc] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [totalExpenses, setTotalExpenses] = useState(0);
 
   useEffect(() => {
-    const cashArray = audBalData.cashStuff || [];
     const otherArray = audBalData.other || [];
     const investmentsArray = audBalData.investments || [];
     const loanFundArray = audBalData.loanFund || [];
@@ -57,7 +59,8 @@ const DisplayAudBalData = ({ audBalData }) => {
     const pensionRsrcsInflow = audBalData.pensionRsrcsInflow || 0;
     const OPEBRsrcsInflow = audBalData.OPEBRsrcsInflow || 0;
     const commitContingArray = audBalData.commitConting || [];
-    const cashTotal = sumArray(cashArray);
+    const revenueArray = audBalData.revenue || [];
+    const expensesArray = audBalData.expenses || [];
     const otherTotal = sumArray(otherArray);
     const investmentsTotal = investmentsArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
     const loanFundTotal = loanFundArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
@@ -74,8 +77,9 @@ const DisplayAudBalData = ({ audBalData }) => {
     const liabDefInflowRsrcsTotal = liabilitiesTotal + pensionRsrcsInflow + OPEBRsrcsInflow;
     const commitContingTotal = commitContingArray.reduce((sum, item) => sum + Object.values(item).reduce((innerSum, value) => innerSum + (typeof value === 'number' ? value : 0), 0), 0);
     const liabInRsrcTotal = liabDefInflowRsrcsTotal + commitContingTotal;
+    const revenueTotal = sumArray(revenueArray);
+    const expensesTotal = sumArray(expensesArray);
 
-    setTotalCash(cashTotal);
     setTotalOther(otherTotal);
     setTotalInvestments(investmentsTotal);
     setTotalLoanFund(loanFundTotal);
@@ -92,6 +96,8 @@ const DisplayAudBalData = ({ audBalData }) => {
     setTotalLiabInflowRsrcs(liabDefInflowRsrcsTotal);
     setTotalCommitConting(commitContingTotal);
     setTotalLiabInRsrc(liabInRsrcTotal);
+    setTotalRevenue(revenueTotal);
+    setTotalExpenses(expensesTotal);
   }, [audBalData]);
   return (
     <AutoForm schema={bridge} onSubmit={data => submit(audBalData, data)} model={AuditedBalanceData.findOne(audBalData._id)}>
@@ -102,428 +108,287 @@ const DisplayAudBalData = ({ audBalData }) => {
         </Row>
         <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
-            <NumField name="cashStuff.0.pettyCash" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="revenue.0.investPort" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="cashStuff.0.cash" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="revenue.0.revs" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="cashStuff.0.cashBankCred" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="revenue.0.genFund" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <h6>$ {totalCash.toFixed(2)}</h6>
+            <NumField name="revenue.0.coreOpBudget" style={{ height: '25px' }} decimal label={null} />
+          </Col>
+        </Row>
+        <Row className="align-items-center">
+          <Col>
+            <h6>$ {totalRevenue.toFixed(2)}</h6>
           </Col>
         </Row>
         <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
-            <NumField name="other.0.actRec" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="expenses.0.personnel" style={{ height: '25px' }} decimal label={null} />
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '20px' }}>
+          <Col>
+            Salary Temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '30px' }}>
+          <Col>
+            Pension Accum Temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Retiree Health Insur Temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Other post emp temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Employees health fund temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Social Security temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            medicare temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            workers comp temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            unemp workers comp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            pension admin temp
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="other.0.dueFromFund" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center ">
-          <Col>
-            <NumField name="other.0.intDivRec" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center ">
-          <Col>
-            <NumField name="other.0.invPrepaid" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center ">
-          <Col>
-            <NumField name="other.0.notesDueInYr" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center ">
-          <Col>
-            <NumField name="other.0.notesDueAftYr" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center ">
-          <Col>
-            <NumField name="other.0.secDep" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="other.0.cashHeldByInvMng" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <h6>$ {totalOther.toFixed(2)}</h6>
+            Fringe Benefits temp
           </Col>
         </Row>
         <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
-            <NumField name="investments.0.mutFun" style={{ height: '25px' }} decimal label={null} />
+            Personnel Fringe admin Temp
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="investments.0.comFun" style={{ height: '25px' }} decimal label={null} />
+            Personnel Fringe admin staff Temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '15px' }}>
+          <Col>
+            Salary Temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '20px' }}>
+          <Col>
+            Pension Accum Temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Retiree Health Insur Temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Other post emp temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Employees health fund temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Social Security temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            medicare temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            workers comp temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            unemp workers comp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            pension admin temp
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="investments.0.hdgFun" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="investments.0.privEqt" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="investments.0.comnTrustFun" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="investments.0.comPrefStock" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="investments.0.privDbt" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="investments.0.other" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <h6>$ {totalInvestments.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="align-items-center ">
-          <Col>
-            <NumField name="loanFund.0.usTreas" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="loanFund.0.usAgenc" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <h6>$ {totalLoanFund.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="justify-content-start" style={{ paddingTop: '18px' }}>
-          <Col>
-            <hr className="solid my-0" />
-            <h6>$ {totalInvestLoan.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="align-items-center" style={{ paddingTop: '67px' }}>
-          <Col>
-            <NumField name="assets.0.bldngs" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="assets.0.leashldImprv" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="assets.0.frnFixEqp" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="assets.0.accumDepr" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <h6>$ {totalAssets.toFixed(2)}</h6>
+            Fringe Benefits temp
           </Col>
         </Row>
         <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
-            <NumField name="land.0.landA" style={{ height: '25px' }} decimal label={null} />
+            Personnel Fringe management staff Temp
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="land.0.landB" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center ">
-          <Col>
-            <NumField name="land.0.cnstrProg" style={{ height: '25px' }} decimal label={null} />
+            Personnel Fringe management Temp
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <h6>$ {totalLand.toFixed(2)}</h6>
+            <NumField name="salary" style={{ height: '25px' }} decimal label={null} />
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '20px' }}>
+          <Col>
+            Pension Accum Temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Retiree Health Insur Temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Other post emp temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Employees health fund temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            Social Security temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            medicare temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            workers comp temp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            unemp workers comp
+          </Col>
+        </Row>
+        <Row className="text-start" style={{ paddingTop: '3px' }}>
+          <Col>
+            pension admin temp
+          </Col>
+        </Row>
+        <Row className="align-items-center">
+          <Col>
+            Fringe Benefits temp
+          </Col>
+        </Row>
+        <Row className="align-items-center">
+          <Col>
+            Personnel Fringe management Temp
           </Col>
         </Row>
         <Row className="align-items-center" style={{ paddingTop: '20px' }}>
           <Col>
-            <NumField name="compBAssets.0.bldngs" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="expenses.0.program" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="compBAssets.0.leashldImprv" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="expenses.0.contracts" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="compBAssets.0.frnFixEqp" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="expenses.0.grants" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="compBAssets.0.vehcl" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="expenses.0.travel" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="compBAssets.0.accumDepr" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="expenses.0.equip" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="compBAssets.0.land" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="expenses.0.overhead" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <h6>$ {totalCompBAssets.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="justify-content-start" style={{ paddingTop: '3px' }}>
-          <Col>
-            <hr className="solid my-0" />
-            <h6>$ {totalCapAssets.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="justify-content-start" style={{ paddingTop: '2px' }}>
-          <Col>
-            <NumField name="rstrCash" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="expenses.0.deptServ" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <h6>$ {totalOtherAssets.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="justify-content-start">
-          <Col>
-            <NumField name="pensionRsrcs" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="justify-content-start">
-          <Col>
-            <NumField name="OPEBRsrcs" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="expenses.0.other" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <h6>$ {totalAssetsAndRsrcs.toFixed(2)}</h6>
+            <h6>$ {totalExpenses.toFixed(2)}</h6>
           </Col>
         </Row>
-        <Row className="align-items-center" style={{ paddingTop: '18px' }}>
+        <Row className="align-items-center" style={{ paddingTop: '5px' }}>
           <Col>
-            <NumField name="liabilities.0.acntPayAccLia" style={{ height: '25px' }} decimal label={null} />
+            Surplus temp
           </Col>
         </Row>
-        <Row className="align-items-center">
+        <Row className="align-items-center" style={{ paddingTop: '30px' }}>
           <Col>
-            <NumField name="liabilities.0.dueToFun" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="liabilities.0.dueToOthFun" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center" style={{ paddingTop: '41px' }}>
-          <Col>
-            <NumField name="longTermInYear.0.accrVac" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="management" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="longTermInYear.0.wrkComp" style={{ height: '25px' }} decimal label={null} />
+            <NumField name="supServ" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Row className="align-items-center">
           <Col>
-            <NumField name="longTermInYear.0.acrManRetPln" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermInYear.0.acrLeasGuarOb" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermInYear.0.capLeasOb" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermInYear.0.notPayBuilA" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermInYear.0.netPenLia" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermInYear.0.netOPEBLia" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center" style={{ paddingTop: '41px' }}>
-          <Col>
-            <NumField name="longTermInYear.0.lineOfCredA" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermInYear.0.lineOfCredB" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermInYear.0.debtServ" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <h6>$ {totalLongTermInYear.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="align-items-center" style={{ paddingTop: '18px' }}>
-          <Col>
-            <NumField name="longTermAftYear.0.accrVac" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermAftYear.0.wrkComp" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermAftYear.0.acrManRetPln" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermAftYear.0.acrLeasGuarOb" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermAftYear.0.capLeasOb" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermAftYear.0.notPayBuilA" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermAftYear.0.netPenLia" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermAftYear.0.netOPEBLia" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center" style={{ paddingTop: '40px' }}>
-          <Col>
-            <NumField name="longTermAftYear.0.lineOfCredA" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermAftYear.0.lineOfCredB" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="longTermAftYear.0.debtServ" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <h6>$ {totalLongTermAftYear.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <hr className="solid my-0" />
-            <h6>$ {totalLiabilities.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="pensionRsrcsInflow" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="OPEBRsrcsInflow" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <hr className="solid my-0" />
-            <h6>$ {totalLiabInflowRsrcs.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="align-items-center" style={{ paddingTop: '44px' }}>
-          <Col>
-            <NumField name="commitConting.0.invCapAssNetDbt" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="commitConting.0.rstrFedFun" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <NumField name="commitConting.0.unRstr" style={{ height: '25px' }} decimal label={null} />
-          </Col>
-        </Row>
-        <Row className="align-items-center">
-          <Col>
-            <hr className="solid my-0" />
-            <h6>$ {totalCommitConting.toFixed(2)}</h6>
-          </Col>
-        </Row>
-        <Row className="align-items-center" style={{ paddingTop: '1px' }}>
-          <Col>
-            <hr className="solid my-0" />
-            <h6>$ {totalLiabInRsrc.toFixed(2)}</h6>
+            <NumField name="benAdv" style={{ height: '25px' }} decimal label={null} />
           </Col>
         </Row>
         <Col>
@@ -537,7 +402,7 @@ const DisplayAudBalData = ({ audBalData }) => {
 };
 
 // Require a document to be passed to this component.
-DisplayAudBalData.propTypes = {
+DisplayBudgetPLData.propTypes = {
   audBalData: PropTypes.shape({
     owner: PropTypes.string,
     year: PropTypes.number,
@@ -649,7 +514,24 @@ DisplayAudBalData.propTypes = {
     totalNet: PropTypes.number,
     totalLiabInRsrc: PropTypes.number,
     _id: PropTypes.string,
+    revenue: PropTypes.arrayOf(PropTypes.shape({
+      investPort: PropTypes.number,
+      revs: PropTypes.number,
+      genFund: PropTypes.number,
+      coreOpBudget: PropTypes.number,
+    })),
+    expenses: PropTypes.arrayOf(PropTypes.shape({
+      personnel: PropTypes.number,
+      program: PropTypes.number,
+      contracts: PropTypes.number,
+      grants: PropTypes.number,
+      travel: PropTypes.number,
+      equip: PropTypes.number,
+      overhead: PropTypes.number,
+      deptServ: PropTypes.number,
+      other: PropTypes.number,
+    })),
   }).isRequired,
 };
 
-export default DisplayAudBalData;
+export default DisplayBudgetPLData;
